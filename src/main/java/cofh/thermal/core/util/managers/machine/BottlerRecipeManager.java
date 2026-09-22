@@ -203,9 +203,9 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var recipes = recipeManager.byType(BOTTLER_RECIPE.get());
-        for (var entry : recipes.entrySet()) {
-            addRecipe(entry.getValue().value());
+        var recipes = recipeManager.getAllRecipesFor(BOTTLER_RECIPE.get());
+        for (var entry : recipes) {
+            addRecipe(entry.value());
         }
 
         int energy = (int) (getDefaultEnergy() * getDefaultScale());

@@ -151,9 +151,9 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var recipes = recipeManager.byType(BREWER_RECIPE.get());
-        for (var entry : recipes.entrySet()) {
-            addRecipe(entry.getValue().value());
+        var recipes = recipeManager.getAllRecipesFor(BREWER_RECIPE.get());
+        for (var entry : recipes) {
+            addRecipe(entry.value());
         }
 
         if (defaultPotionRecipes) {

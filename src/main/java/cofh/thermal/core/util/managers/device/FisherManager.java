@@ -64,9 +64,9 @@ public class FisherManager extends AbstractManager {
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var boosts = recipeManager.byType(FISHER_BOOST.get());
-        for (var entry : boosts.entrySet()) {
-            addBoost(entry.getValue().value());
+        var boosts = recipeManager.getAllRecipesFor(FISHER_BOOST.get());
+        for (var entry : boosts) {
+            addBoost(entry.value());
         }
     }
     // endregion

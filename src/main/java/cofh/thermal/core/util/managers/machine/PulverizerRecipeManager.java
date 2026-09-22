@@ -90,17 +90,17 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var recipes = recipeManager.byType(PULVERIZER_RECIPE.get());
-        for (var entry : recipes.entrySet()) {
-            addRecipe(entry.getValue().value());
+        var recipes = recipeManager.getAllRecipesFor(PULVERIZER_RECIPE.get());
+        for (var entry : recipes) {
+            addRecipe(entry.value());
         }
-        var recycle = recipeManager.byType(PULVERIZER_RECYCLE_RECIPE.get());
-        for (var entry : recycle.entrySet()) {
-            addRecipe(entry.getValue().value(), BaseMachineRecipe.RecipeType.DISENCHANT);
+        var recycle = recipeManager.getAllRecipesFor(PULVERIZER_RECYCLE_RECIPE.get());
+        for (var entry : recycle) {
+            addRecipe(entry.value(), BaseMachineRecipe.RecipeType.DISENCHANT);
         }
-        var catalysts = recipeManager.byType(PULVERIZER_CATALYST.get());
-        for (var entry : catalysts.entrySet()) {
-            addCatalyst(entry.getValue().value());
+        var catalysts = recipeManager.getAllRecipesFor(PULVERIZER_CATALYST.get());
+        for (var entry : catalysts) {
+            addCatalyst(entry.value());
         }
 
         if (defaultFurnaceRecipes) {
@@ -141,7 +141,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
 
     protected void createConvertedRecipes(RecipeManager recipeManager) {
 
-        for (var recipe : recipeManager.byType(RecipeType.BLASTING).values()) {
+        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.BLASTING)) {
             getConversionIngredients(recipe.value());
         }
         for (var ingredientSet : conversionIngredients.entrySet()) {

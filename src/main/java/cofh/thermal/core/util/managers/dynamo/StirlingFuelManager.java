@@ -78,9 +78,9 @@ public class StirlingFuelManager extends SingleItemFuelManager {
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var recipes = recipeManager.byType(STIRLING_FUEL.get());
-        for (var entry : recipes.entrySet()) {
-            addFuel(entry.getValue().value());
+        var recipes = recipeManager.getAllRecipesFor(STIRLING_FUEL.get());
+        for (var entry : recipes) {
+            addFuel(entry.value());
         }
         createConvertedRecipes(recipeManager);
     }

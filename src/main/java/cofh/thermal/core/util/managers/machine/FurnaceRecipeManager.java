@@ -78,9 +78,9 @@ public class FurnaceRecipeManager extends SingleItemRecipeManager {
                 addRecipe(recipe.value());
             }
         }
-        var recipes = recipeManager.byType(FURNACE_RECIPE.get());
-        for (var entry : recipes.entrySet()) {
-            addRecipe(entry.getValue().value());
+        var recipes = recipeManager.getAllRecipesFor(FURNACE_RECIPE.get());
+        for (var entry : recipes) {
+            addRecipe(entry.value());
         }
     }
     // endregion
@@ -95,7 +95,7 @@ public class FurnaceRecipeManager extends SingleItemRecipeManager {
 
     protected void createConvertedRecipes(RecipeManager recipeManager) {
 
-        for (var recipe : recipeManager.byType(RecipeType.SMELTING).values()) {
+        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.SMELTING)) {
             createConvertedRecipe(recipe.value());
         }
     }

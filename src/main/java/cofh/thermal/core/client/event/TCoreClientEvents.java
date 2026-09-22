@@ -23,7 +23,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.joml.Matrix4f;
@@ -37,7 +37,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_TYPE;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static cofh.thermal.lib.util.ThermalAugmentRules.*;
 
-@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_THERMAL)
+@EventBusSubscriber (value = Dist.CLIENT, modid = ID_THERMAL)
 public class TCoreClientEvents {
 
     private TCoreClientEvents() {

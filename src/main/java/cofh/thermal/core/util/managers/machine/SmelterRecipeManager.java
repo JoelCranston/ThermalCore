@@ -242,17 +242,17 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
     public void refresh(RecipeManager recipeManager) {
 
         clear();
-        var recipes = recipeManager.byType(SMELTER_RECIPE.get());
-        for (var entry : recipes.entrySet()) {
-            addRecipe(entry.getValue().value(), BaseMachineRecipe.RecipeType.CATALYZED);
+        var recipes = recipeManager.getAllRecipesFor(SMELTER_RECIPE.get());
+        for (var entry : recipes) {
+            addRecipe(entry.value(), BaseMachineRecipe.RecipeType.CATALYZED);
         }
-        var recycle = recipeManager.byType(SMELTER_RECYCLE_RECIPE.get());
-        for (var entry : recycle.entrySet()) {
-            addRecipe(entry.getValue().value(), BaseMachineRecipe.RecipeType.DISENCHANT);
+        var recycle = recipeManager.getAllRecipesFor(SMELTER_RECYCLE_RECIPE.get());
+        for (var entry : recycle) {
+            addRecipe(entry.value(), BaseMachineRecipe.RecipeType.DISENCHANT);
         }
-        var catalysts = recipeManager.byType(SMELTER_CATALYST.get());
-        for (var entry : catalysts.entrySet()) {
-            addCatalyst(entry.getValue().value());
+        var catalysts = recipeManager.getAllRecipesFor(SMELTER_CATALYST.get());
+        for (var entry : catalysts) {
+            addCatalyst(entry.value());
         }
 
         if (defaultFurnaceRecipes) {
@@ -331,7 +331,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
 
     protected void createConvertedRecipes(RecipeManager recipeManager) {
 
-        for (var recipe : recipeManager.byType(RecipeType.BLASTING).values()) {
+        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.BLASTING)) {
             convertRecipe(recipe.value());
         }
     }
