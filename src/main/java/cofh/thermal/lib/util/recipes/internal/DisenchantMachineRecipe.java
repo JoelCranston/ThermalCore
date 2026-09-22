@@ -1,5 +1,8 @@
 package cofh.thermal.lib.util.recipes.internal;
 
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.core.Holder;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import cofh.lib.api.inventory.IItemStackHolder;
 import cofh.thermal.lib.util.recipes.IMachineInventory;
 import net.minecraft.world.item.ItemStack;
@@ -25,13 +28,12 @@ public class DisenchantMachineRecipe extends BaseMachineRecipe {
 
     private int getEnchantmentXp(ItemStack stack) {
 
+        // 1.21: enchantments are the ENCHANTMENTS component keyed by Holder, and "is a curse"
+        // is the minecraft:curse tag rather than a flag on the enchantment.
         int encXP = 0;
-        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
-        for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            int level = entry.getValue();
-            if (!enchantment.isCurse()) {
-                encXP += enchantment.getMinCost(level);
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : stack.getEnchantments().entrySet()) {
+            if (!entry.getKey().is(EnchantmentTags.CURSE)) {
+                encXP += entry.getKey().value().getMinCost(entry.getIntValue());
             }
         }
         return encXP;

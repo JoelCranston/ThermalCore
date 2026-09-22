@@ -53,7 +53,7 @@ public class ChargedSoilBlock extends SoilBlock {
         if (charge < 4) {
             worldIn.setBlock(pos, state.setValue(CHARGED, charge + 1), 2);
         } else if (worldIn instanceof ServerLevel) {
-            state.getBlock().tick(state, (ServerLevel) worldIn, pos, worldIn.random);
+            worldIn.scheduleTick(pos, state.getBlock(), 1);
         }
     }
 

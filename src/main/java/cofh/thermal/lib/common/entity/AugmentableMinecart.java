@@ -82,7 +82,7 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
 
         CompoundTag nbt = ItemHelper.getCustomData(stack);
         if (nbt.contains(TAG_AUGMENTS)) {
-            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), ProxyUtils.registryAccess(), nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
+            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
         }
         updateAugmentState();
 
@@ -95,12 +95,12 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
         CompoundTag nbt = ItemHelper.getCustomData(stack);
 
         if (ThermalCoreConfig.keepAugments.get() && augSize() > 0) {
-            getItemInv().writeSlotsToNBTUnordered(ProxyUtils.registryAccess(), ProxyUtils.registryAccess(), nbt, TAG_AUGMENTS, invSize() - augSize());
+            getItemInv().writeSlotsToNBTUnordered(ProxyUtils.registryAccess(), nbt, TAG_AUGMENTS, invSize() - augSize());
             if (stack.getItem() instanceof IAugmentableItem augmentableItem) {
                 List<ItemStack> items = getAugmentsAsList();
                 augmentableItem.updateAugmentState(stack, items);
             }
-            filter.write(ProxyUtils.registryAccess(), ProxyUtils.registryAccess(), nbt);
+            filter.write(ProxyUtils.registryAccess(), nbt);
         }
         // The blob is a component copy now, so it has to be stored back explicitly.
         ItemHelper.setCustomData(stack, nbt);

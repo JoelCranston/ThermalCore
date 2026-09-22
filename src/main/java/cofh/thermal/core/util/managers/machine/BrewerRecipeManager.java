@@ -1,5 +1,14 @@
 package cofh.thermal.core.util.managers.machine;
 
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.Holder;
+import java.util.Optional;
 import cofh.core.common.fluid.PotionFluid;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.fluid.IFluidStackHolder;
@@ -175,14 +184,40 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
         return convertedRecipes;
     }
 
+    // 1.21: PotionBrewing.POTION_MIXES is gone - brewing is a per-server PotionBrewing instance
+    // whose mixes are not enumerable, so the conversions are discovered by asking it to mix each
+    // potion with each item it accepts as an ingredient.
     protected void createConvertedRecipes() {
 
-        for (PotionBrewing.Mix<Potion> mix : PotionBrewing.POTION_MIXES) {
-            createConvertedRecipe(mix.from, mix.ingredient, mix.to);
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+            return;
+        }
+        PotionBrewing brewing = server.potionBrewing();
+        List<ItemStack> reagents = new ArrayList<>();
+        for (Item item : BuiltInRegistries.ITEM) {
+            ItemStack stack = new ItemStack(item);
+            if (brewing.isIngredient(stack)) {
+                reagents.add(stack);
+            }
+        }
+        for (Holder<Potion> inputPotion : BuiltInRegistries.POTION.holders().toList()) {
+            ItemStack input = PotionContents.createItemStack(Items.POTION, inputPotion);
+            for (ItemStack reagent : reagents) {
+                ItemStack output = brewing.mix(reagent, input);
+                if (output.isEmpty()) {
+                    continue;
+                }
+                Optional<Holder<Potion>> outputPotion = output.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion();
+                if (outputPotion.isEmpty() || outputPotion.get().is(inputPotion)) {
+                    continue;
+                }
+                createConvertedRecipe(inputPotion, Ingredient.of(reagent.getItem()), outputPotion.get());
+            }
         }
     }
 
-    protected boolean createConvertedRecipe(Potion inputPotion, Ingredient reagent, Potion outputPotion) {
+    protected boolean createConvertedRecipe(Holder<Potion> inputPotion, Ingredient reagent, Holder<Potion> outputPotion) {
 
         if (inputPotion == null || reagent == null || outputPotion == null) {
             return false;
@@ -191,9 +226,9 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
         return true;
     }
 
-    protected RecipeHolder<BrewerRecipe> convert(Potion inputPotion, Ingredient reagent, Potion outputPotion) {
+    protected RecipeHolder<BrewerRecipe> convert(Holder<Potion> inputPotion, Ingredient reagent, Holder<Potion> outputPotion) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode() + "_" + outputPotion.hashCode()),
                 new BrewerRecipe(defaultEnergy, 0.0F,
                         Collections.singletonList(reagent),
                         Collections.singletonList(FluidIngredient.of(PotionFluid.getPotionAsFluid(defaultPotion, inputPotion))),
