@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.lib.api.block.entity.IAreaEffectTile;
@@ -135,9 +136,9 @@ public class DeviceSoilInfuserBlockEntity extends AugmentableBlockEntity impleme
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         process = nbt.getInt(TAG_PROCESS);
         processMax = nbt.getInt(TAG_PROCESS_MAX);
@@ -145,9 +146,9 @@ public class DeviceSoilInfuserBlockEntity extends AugmentableBlockEntity impleme
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putInt(TAG_PROCESS, process);
         nbt.putInt(TAG_PROCESS_MAX, processMax);

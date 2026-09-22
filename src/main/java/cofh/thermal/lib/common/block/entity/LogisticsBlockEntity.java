@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.util.control.IRedstoneControllableTile;
@@ -45,18 +46,18 @@ public class LogisticsBlockEntity extends BlockEntityCoFH implements ISecurableT
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         securityControl.read(nbt);
         redstoneControl.read(nbt);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         securityControl.write(nbt);
         redstoneControl.write(nbt);

@@ -1,5 +1,7 @@
 package cofh.thermal.lib.common.block.entity;
 
+import cofh.core.util.ProxyUtils;
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.common.item.IAugmentableItem;
@@ -208,18 +210,18 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
             getEnergyStorage().writeWithParams(nbt);
         }
         if (keepItems()) {
-            getItemInv().writeSlotsToNBT(nbt, 0, invSize() - augSize());
+            getItemInv().writeSlotsToNBT(ProxyUtils.registryAccess(), nbt, 0, invSize() - augSize());
         }
         if (ThermalCoreConfig.keepAugments.get() && augSize() > 0) {
-            getItemInv().writeSlotsToNBTUnordered(nbt, TAG_AUGMENTS, invSize() - augSize());
+            getItemInv().writeSlotsToNBTUnordered(ProxyUtils.registryAccess(), nbt, TAG_AUGMENTS, invSize() - augSize());
             if (stack.getItem() instanceof IAugmentableItem augmentableItem) {
                 List<ItemStack> items = getAugmentsAsList();
                 augmentableItem.updateAugmentState(stack, items);
             }
-            filter.write(nbt);
+            filter.write(ProxyUtils.registryAccess(), nbt);
         }
         if (keepFluids()) {
-            getTankInv().write(nbt);
+            getTankInv().write(ProxyUtils.registryAccess(), nbt);
         }
         // TODO: Keep XP?
 
@@ -500,25 +502,25 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         isActive = nbt.getBoolean(TAG_ACTIVE);
 
         enchantments = nbt.getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
 
-        inventory.read(nbt);
+        inventory.read(registries, nbt);
 
         if (nbt.contains(TAG_AUGMENTS)) {
-            inventory.readSlotsUnordered(nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
+            inventory.readSlotsUnordered(registries, nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
         }
         updateAugmentState();
 
-        tankInv.read(nbt);
+        tankInv.read(registries, nbt);
         energyStorage.read(nbt);
         xpStorage.read(nbt);
-        filter.read(nbt);
+        filter.read(registries, nbt);
 
         securityControl.read(nbt);
         redstoneControl.read(nbt);
@@ -527,19 +529,19 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putBoolean(TAG_ACTIVE, isActive);
 
         nbt.put(TAG_ENCHANTMENTS, enchantments);
 
-        inventory.write(nbt);
-        tankInv.write(nbt);
+        inventory.write(registries, nbt);
+        tankInv.write(registries, nbt);
         getEnergyStorage().write(nbt);
         getXpStorage().write(nbt);
-        filter.write(nbt);
+        filter.write(registries, nbt);
 
         securityControl.write(nbt);
         redstoneControl.write(nbt);
@@ -673,7 +675,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
             spawnXpOrbs(level, storedXp - xpStorage.getStored(), Vec3.atBottomCenterOf(worldPosition));
         }
 
-        CompoundTag filterNBT = filter.write(new CompoundTag());
+        CompoundTag filterNBT = filter.write(ProxyUtils.registryAccess(), new CompoundTag());
         filter = FilterRegistry.getFilter(getAttributeModString(augmentNBT, TAG_FILTER_TYPE), filterNBT, this);
     }
 

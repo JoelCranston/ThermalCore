@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.lib.api.block.entity.ITickableTile;
@@ -206,9 +207,9 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
 
-        super.onDataPacket(net, pkt);
+        super.onDataPacket(net, pkt, registries);
 
         if (level != null) {
             level.getModelDataManager().requestRefresh(this);
@@ -261,9 +262,9 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         fuelMax = nbt.getInt(TAG_FUEL_MAX);
         fuel = nbt.getInt(TAG_FUEL);
@@ -275,9 +276,9 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putInt(TAG_FUEL_MAX, fuelMax);
         nbt.putInt(TAG_FUEL, fuel);

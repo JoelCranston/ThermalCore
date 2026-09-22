@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.common.network.packet.client.TileStatePacket;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
@@ -489,9 +490,9 @@ public abstract class MachineBlockEntity extends Reconfigurable4WayBlockEntity i
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         wasActive = nbt.getBoolean(TAG_ACTIVE_PREV);
 
@@ -501,9 +502,9 @@ public abstract class MachineBlockEntity extends Reconfigurable4WayBlockEntity i
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putBoolean(TAG_ACTIVE_PREV, wasActive);
 

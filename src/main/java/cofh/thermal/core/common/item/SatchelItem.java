@@ -192,7 +192,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
                 return !BANNED_ITEMS.contains(stack.getItem());
             }
         };
-        inventory.read(containerTag);
+        inventory.read(ProxyUtils.registryAccess(), containerTag);
         return inventory;
     }
 

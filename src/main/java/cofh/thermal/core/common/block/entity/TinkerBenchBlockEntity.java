@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.common.fluid.PotionFluid;
 import cofh.core.util.filter.EmptyFilter;
 import cofh.core.util.filter.IFilter;
@@ -204,17 +205,17 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         mode = nbt.getByte(TAG_MODE);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putByte(TAG_MODE, mode);
     }

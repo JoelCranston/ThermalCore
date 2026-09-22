@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.InventoryHelper;
 import cofh.lib.api.block.entity.IAreaEffectTile;
@@ -204,18 +205,18 @@ public class DeviceFisherBlockEntity extends DeviceBlockEntity implements ITicka
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         process = nbt.getInt(TAG_PROCESS);
         valid = nbt.getBoolean(TAG_VALID);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putInt(TAG_PROCESS, process);
         nbt.putBoolean(TAG_VALID, valid);

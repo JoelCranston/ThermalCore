@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.control.*;
 import cofh.lib.util.helpers.MathHelper;
@@ -119,9 +120,9 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
 
-        super.onDataPacket(net, pkt);
+        super.onDataPacket(net, pkt, registries);
 
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
         if (level != null) {
@@ -236,9 +237,9 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
 
     // region NBT
     @Override
-    public void load(CompoundTag nbt) {
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.load(nbt);
+        super.loadAdditional(nbt, registries);
 
         reconfigControl.setFacing(Direction.from3DDataValue(nbt.getByte(TAG_FACING)));
         reconfigControl.read(nbt);
@@ -252,9 +253,9 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
 
         nbt.putByte(TAG_FACING, (byte) reconfigControl.getFacing().get3DDataValue());
         reconfigControl.write(nbt);
