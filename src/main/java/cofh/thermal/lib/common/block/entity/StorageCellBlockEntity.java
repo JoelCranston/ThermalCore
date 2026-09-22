@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.control.*;
@@ -268,13 +269,13 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
 
     // region AUGMENTS
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
         // If at max, do some convenience.
         boolean maxIn = amountInput == getMaxInput();
         boolean maxOut = amountOutput == getMaxOutput();
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
 
         if (maxIn) {
             amountInput = getMaxInput();

@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
@@ -205,9 +206,9 @@ public class DeviceSoilInfuserBlockEntity extends AugmentableBlockEntity impleme
     }
 
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
         float baseMod = getAttributeModWithDefault(augmentNBT, TAG_AUGMENT_BASE_MOD, 1.0F);
 
         processMax = BASE_PROCESS_MAX * (1 + radius);

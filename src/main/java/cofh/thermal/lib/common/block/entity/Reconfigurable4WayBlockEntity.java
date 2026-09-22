@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.core.HolderLookup;
 import cofh.core.util.control.IReconfigurableTile;
 import cofh.core.util.control.ITransferControllableTile;
@@ -316,9 +317,9 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
     }
 
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
 
         if (!reconfigControlFeature) {
             transferControl.disable();

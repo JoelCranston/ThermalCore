@@ -558,7 +558,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         redstoneControl.write(nbt);
 
         if (!renderFluid.isEmpty()) {
-            nbt.put(TAG_RENDER_FLUID, renderFluid.writeToNBT(new CompoundTag()));
+            nbt.put(TAG_RENDER_FLUID, renderFluid.save(registries));
         }
     }
     // endregion

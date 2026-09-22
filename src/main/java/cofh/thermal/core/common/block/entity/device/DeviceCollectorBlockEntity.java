@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.InventoryHelper;
 import cofh.lib.api.block.entity.IAreaEffectTile;
@@ -190,9 +191,9 @@ public class DeviceCollectorBlockEntity extends DeviceBlockEntity implements ITi
     }
 
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
 
         area = null;
     }

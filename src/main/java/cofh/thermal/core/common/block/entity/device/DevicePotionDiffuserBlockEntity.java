@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import java.util.ArrayList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.HolderLookup;
@@ -404,9 +405,9 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
     }
 
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
 
         area = null;
     }

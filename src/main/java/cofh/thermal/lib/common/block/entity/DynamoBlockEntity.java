@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
@@ -324,11 +325,11 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
     }
 
     @Override
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
         creativeEnergy = false;
 
-        super.finalizeAttributes(enchantmentMap);
+        super.finalizeAttributes(enchantments);
         float baseMod = getAttributeModWithDefault(augmentNBT, TAG_AUGMENT_BASE_MOD, 1.0F);
         float processMod = getAttributeModWithDefault(augmentNBT, TAG_AUGMENT_DYNAMO_POWER, 1.0F);
         float totalMod = baseMod * processMod;
