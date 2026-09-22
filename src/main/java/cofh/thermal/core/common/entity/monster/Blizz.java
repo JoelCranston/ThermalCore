@@ -1,5 +1,10 @@
 package cofh.thermal.core.common.entity.monster;
 
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 import cofh.thermal.core.common.config.ThermalClientConfig;
 import cofh.thermal.core.common.entity.projectile.BlizzProjectile;
 import net.minecraft.core.BlockPos;
@@ -25,10 +30,9 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -42,6 +46,8 @@ import static cofh.thermal.core.init.registries.TCoreSounds.*;
 import static cofh.thermal.lib.util.ThermalFlags.FLAG_MOB_BLIZZ;
 
 public class Blizz extends Monster {
+
+    private static final int FROST_RADIUS = 3;
 
     private static final EntityDataAccessor<Byte> ANGRY = SynchedEntityData.defineId(Blizz.class, EntityDataSerializers.BYTE);
 
@@ -57,7 +63,7 @@ public class Blizz extends Monster {
         this.moveControl = new FlyingMoveControl(this, 20, true);
         this.navigation = new FlyingPathNavigation(this, world);
         //this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.LAVA, -1.0F);
+        this.setPathfindingMalus(PathType.LAVA, -1.0F);
 
         this.xpReward = 10;
     }
@@ -86,10 +92,10 @@ public class Blizz extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
-        super.defineSynchedData();
-        this.entityData.define(ANGRY, (byte) 0);
+        super.defineSynchedData(builder);
+        builder.define(ANGRY, (byte) 0);
     }
 
     @Override
@@ -128,14 +134,30 @@ public class Blizz extends Monster {
     }
 
     @Override
-    protected void onChangedBlock(BlockPos pos) {
+    // 1.21: Frost Walker is a datapack enchantment effect (minecraft:replace_disk) and there
+    // is no FrostWalkerEnchantment to call; this is that same disk at the level-1 radius. Soul
+    // speed is handled by super, which runs the location-changed enchantment effects.
+    protected void onChangedBlock(ServerLevel level, BlockPos pos) {
 
-        FrostWalkerEnchantment.onEntityMoved(this, level, pos, 1);
+        super.onChangedBlock(level, pos);
 
-        if (this.shouldRemoveSoulSpeed(this.getBlockStateOn())) {
-            this.removeSoulSpeed();
+        if (!onGround()) {
+            return;
         }
-        this.tryAddSoulSpeed();
+        BlockState ice = Blocks.FROSTED_ICE.defaultBlockState();
+        BlockPos center = pos.below();
+        for (BlockPos cur : BlockPos.betweenClosed(center.offset(-FROST_RADIUS, 0, -FROST_RADIUS), center.offset(FROST_RADIUS, 0, FROST_RADIUS))) {
+            if (cur.distToCenterSqr(getX(), cur.getY() + 0.5D, getZ()) >= FROST_RADIUS * FROST_RADIUS) {
+                continue;
+            }
+            BlockState state = level.getBlockState(cur);
+            if (state.getBlock() == Blocks.WATER && state.getFluidState().isSource() && level.getBlockState(cur.above()).isAir()
+                    && ice.canSurvive(level, cur) && level.isUnobstructed(ice, cur, CollisionContext.empty())) {
+                BlockPos frozen = cur.immutable();
+                level.setBlockAndUpdate(frozen, ice);
+                level.scheduleTick(frozen, Blocks.FROSTED_ICE, Mth.nextInt(getRandom(), 60, 120));
+            }
+        }
     }
 
     @Override
