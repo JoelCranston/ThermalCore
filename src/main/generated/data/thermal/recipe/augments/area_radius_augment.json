@@ -24,6 +24,7 @@
     " G "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:area_radius_augment"
   }
 }

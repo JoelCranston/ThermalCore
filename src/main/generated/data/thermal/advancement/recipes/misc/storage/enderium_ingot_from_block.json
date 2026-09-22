@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:enderium_ingot"
-            ]
+            "items": "thermal:enderium_ingot"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:enderium_block"
-            ]
+            "items": "thermal:enderium_block"
           }
         ]
       },

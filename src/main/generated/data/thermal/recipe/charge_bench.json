@@ -27,6 +27,7 @@
     "XPX"
   ],
   "result": {
+    "count": 1,
     "id": "thermal:charge_bench"
   }
 }

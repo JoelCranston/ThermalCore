@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:beetroot"
-            ]
+            "items": "minecraft:beetroot"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:beetroot_block"
-            ]
+            "items": "thermal:beetroot_block"
           }
         ]
       },

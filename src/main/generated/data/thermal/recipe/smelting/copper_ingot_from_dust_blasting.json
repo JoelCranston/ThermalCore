@@ -7,6 +7,7 @@
     "item": "thermal:copper_dust"
   },
   "result": {
+    "count": 1,
     "id": "minecraft:copper_ingot"
   }
 }

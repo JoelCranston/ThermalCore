@@ -24,6 +24,7 @@
     " L "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:machine_speed_augment"
   }
 }

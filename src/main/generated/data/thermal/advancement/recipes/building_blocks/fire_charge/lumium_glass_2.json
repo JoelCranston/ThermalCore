@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:dusts/lumium"
+            "items": "#c:dusts/lumium"
           }
         ]
       },
@@ -15,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:ingots/lumium"
+            "items": "#c:ingots/lumium"
           }
         ]
       },

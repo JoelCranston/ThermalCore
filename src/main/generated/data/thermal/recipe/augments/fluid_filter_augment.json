@@ -21,6 +21,7 @@
     " c "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:fluid_filter_augment"
   }
 }

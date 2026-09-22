@@ -24,6 +24,7 @@
     "RIR"
   ],
   "result": {
+    "count": 1,
     "id": "thermal:fluid_tank_augment"
   }
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:signalum_dust"
-            ]
+            "items": "thermal:signalum_dust"
           }
         ]
       },

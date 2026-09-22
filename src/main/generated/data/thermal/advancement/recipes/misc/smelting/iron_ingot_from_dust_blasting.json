@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:iron_dust"
-            ]
+            "items": "thermal:iron_dust"
           }
         ]
       },

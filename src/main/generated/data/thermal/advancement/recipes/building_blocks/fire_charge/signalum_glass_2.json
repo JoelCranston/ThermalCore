@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:dusts/signalum"
+            "items": "#c:dusts/signalum"
           }
         ]
       },
@@ -15,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:ingots/signalum"
+            "items": "#c:ingots/signalum"
           }
         ]
       },

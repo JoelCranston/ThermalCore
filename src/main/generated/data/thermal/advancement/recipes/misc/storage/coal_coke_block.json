@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:coal_coke"
-            ]
+            "items": "thermal:coal_coke"
           }
         ]
       },

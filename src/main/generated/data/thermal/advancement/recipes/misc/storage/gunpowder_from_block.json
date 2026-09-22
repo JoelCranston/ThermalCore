@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:gunpowder"
-            ]
+            "items": "minecraft:gunpowder"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:gunpowder_block"
-            ]
+            "items": "thermal:gunpowder_block"
           }
         ]
       },

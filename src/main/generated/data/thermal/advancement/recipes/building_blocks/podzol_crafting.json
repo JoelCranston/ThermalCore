@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:compost"
-            ]
+            "items": "thermal:compost"
           }
         ]
       },

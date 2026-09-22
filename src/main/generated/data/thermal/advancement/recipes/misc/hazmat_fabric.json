@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:cured_rubber"
-            ]
+            "items": "thermal:cured_rubber"
           }
         ]
       },

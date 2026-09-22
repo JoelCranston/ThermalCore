@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:enderium_dust"
-            ]
+            "items": "thermal:enderium_dust"
           }
         ]
       },

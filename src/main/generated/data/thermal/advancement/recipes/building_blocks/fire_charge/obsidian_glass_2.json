@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:obsidians"
+            "items": "#c:obsidians"
           }
         ]
       },

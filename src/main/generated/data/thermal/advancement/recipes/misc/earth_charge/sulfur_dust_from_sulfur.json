@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:gems/sulfur"
+            "items": "#c:gems/sulfur"
           }
         ]
       },

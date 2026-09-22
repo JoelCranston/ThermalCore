@@ -7,6 +7,7 @@
     "item": "thermal:slag_block"
   },
   "result": {
+    "count": 1,
     "id": "thermal:polished_slag"
   }
 }

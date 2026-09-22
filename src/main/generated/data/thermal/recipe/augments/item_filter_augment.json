@@ -21,6 +21,7 @@
     " t "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:item_filter_augment"
   }
 }

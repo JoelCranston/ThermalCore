@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:dusts/glowstone"
+            "items": "#c:dusts/glowstone"
           }
         ]
       },

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:rich_slag_block"
-            ]
+            "items": "thermal:rich_slag_block"
           }
         ]
       },

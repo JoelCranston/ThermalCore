@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:charcoal"
-            ]
+            "items": "minecraft:charcoal"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:charcoal_block"
-            ]
+            "items": "thermal:charcoal_block"
           }
         ]
       },

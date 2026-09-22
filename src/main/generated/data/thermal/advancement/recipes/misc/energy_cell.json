@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:energy_cell_frame"
-            ]
+            "items": "thermal:energy_cell_frame"
           }
         ]
       },

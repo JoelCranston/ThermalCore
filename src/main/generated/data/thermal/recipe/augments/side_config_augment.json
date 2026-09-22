@@ -15,6 +15,7 @@
     " i "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:side_config_augment"
   }
 }

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:apple_block"
-            ]
+            "items": "thermal:apple_block"
           }
         ]
       },
@@ -20,9 +18,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:apple"
-            ]
+            "items": "minecraft:apple"
           }
         ]
       },

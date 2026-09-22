@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:fluid_cell_frame"
-            ]
+            "items": "thermal:fluid_cell_frame"
           }
         ]
       },

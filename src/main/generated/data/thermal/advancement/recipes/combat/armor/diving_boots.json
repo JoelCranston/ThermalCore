@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:diving_fabric"
-            ]
+            "items": "thermal:diving_fabric"
           }
         ]
       },

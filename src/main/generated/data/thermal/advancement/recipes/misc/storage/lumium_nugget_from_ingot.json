@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:lumium_nugget"
-            ]
+            "items": "thermal:lumium_nugget"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:lumium_ingot"
-            ]
+            "items": "thermal:lumium_ingot"
           }
         ]
       },

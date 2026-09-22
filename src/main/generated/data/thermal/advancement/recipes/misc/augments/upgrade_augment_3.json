@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:ingots/enderium"
+            "items": "#c:ingots/enderium"
           }
         ]
       },

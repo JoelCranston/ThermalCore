@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:redstone_servo"
-            ]
+            "items": "thermal:redstone_servo"
           }
         ]
       },

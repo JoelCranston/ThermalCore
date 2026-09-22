@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:rosin"
-            ]
+            "items": "thermal:rosin"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:rosin_block"
-            ]
+            "items": "thermal:rosin_block"
           }
         ]
       },

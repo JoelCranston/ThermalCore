@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:sugar_cane"
-            ]
+            "items": "minecraft:sugar_cane"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:sugar_cane_block"
-            ]
+            "items": "thermal:sugar_cane_block"
           }
         ]
       },

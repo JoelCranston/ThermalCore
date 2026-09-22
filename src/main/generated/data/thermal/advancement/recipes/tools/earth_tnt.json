@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:basalz_powder"
-            ]
+            "items": "thermal:basalz_powder"
           }
         ]
       },

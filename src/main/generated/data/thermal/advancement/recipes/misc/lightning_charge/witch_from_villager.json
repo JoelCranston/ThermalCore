@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:villager_spawn_egg"
-            ]
+            "items": "minecraft:villager_spawn_egg"
           }
         ]
       },

@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:gems/lapis"
+            "items": "#c:gems/lapis"
           }
         ]
       },

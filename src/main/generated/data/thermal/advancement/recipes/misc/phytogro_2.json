@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:rich_slag"
-            ]
+            "items": "thermal:rich_slag"
           }
         ]
       },

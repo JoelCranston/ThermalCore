@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:crops/beetroot"
+            "items": "#c:crops/beetroot"
           }
         ]
       },

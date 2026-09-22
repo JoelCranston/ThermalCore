@@ -7,6 +7,7 @@
     "item": "minecraft:gravel"
   },
   "result": {
+    "count": 1,
     "id": "thermal:slag"
   }
 }

@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:charcoal"
-            ]
+            "items": "minecraft:charcoal"
           }
         ]
       },

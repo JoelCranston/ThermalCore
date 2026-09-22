@@ -8,9 +8,7 @@
             "count": {
               "min": 4
             },
-            "items": [
-              "thermal:rich_slag"
-            ]
+            "items": "thermal:rich_slag"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:rich_slag_block"
-            ]
+            "items": "thermal:rich_slag_block"
           }
         ]
       },

@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "thermal:glass/hardened"
+            "items": "#thermal:glass/hardened"
           }
         ]
       },

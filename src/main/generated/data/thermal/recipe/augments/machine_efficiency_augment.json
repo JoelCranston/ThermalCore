@@ -24,6 +24,7 @@
     " N "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:machine_efficiency_augment"
   }
 }

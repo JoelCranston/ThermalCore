@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:gems/cinnabar"
+            "items": "#c:gems/cinnabar"
           }
         ]
       },

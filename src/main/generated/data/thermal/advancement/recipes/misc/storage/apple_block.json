@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:apple"
-            ]
+            "items": "minecraft:apple"
           }
         ]
       },

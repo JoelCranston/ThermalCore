@@ -27,6 +27,7 @@
     "SGS"
   ],
   "result": {
+    "count": 1,
     "id": "thermal:machine_cycle_augment"
   }
 }

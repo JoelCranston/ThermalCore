@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:xp_crystal"
-            ]
+            "items": "thermal:xp_crystal"
           }
         ]
       },

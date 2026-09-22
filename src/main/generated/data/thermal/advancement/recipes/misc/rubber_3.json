@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:latex_bucket"
-            ]
+            "items": "thermal:latex_bucket"
           }
         ]
       },

@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:blizz_powder"
-            ]
+            "items": "thermal:blizz_powder"
           }
         ]
       },

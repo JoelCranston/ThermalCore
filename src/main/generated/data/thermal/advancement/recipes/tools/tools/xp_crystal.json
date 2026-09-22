@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:experience_bottle"
-            ]
+            "items": "minecraft:experience_bottle"
           }
         ]
       },

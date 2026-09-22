@@ -24,6 +24,7 @@
     " G "
   ],
   "result": {
+    "count": 1,
     "id": "thermal:rf_coil_storage_augment"
   }
 }

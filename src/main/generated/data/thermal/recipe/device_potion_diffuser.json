@@ -30,6 +30,7 @@
     "IPI"
   ],
   "result": {
+    "count": 1,
     "id": "thermal:device_potion_diffuser"
   }
 }

@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "minecraft:potato"
-            ]
+            "items": "minecraft:potato"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:potato_block"
-            ]
+            "items": "thermal:potato_block"
           }
         ]
       },

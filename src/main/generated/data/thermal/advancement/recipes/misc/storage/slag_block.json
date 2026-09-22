@@ -8,9 +8,7 @@
             "count": {
               "min": 4
             },
-            "items": [
-              "thermal:slag"
-            ]
+            "items": "thermal:slag"
           }
         ]
       },

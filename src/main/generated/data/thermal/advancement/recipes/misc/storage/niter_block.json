@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:niter"
-            ]
+            "items": "thermal:niter"
           }
         ]
       },

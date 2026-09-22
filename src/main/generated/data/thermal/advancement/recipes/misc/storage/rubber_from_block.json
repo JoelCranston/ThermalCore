@@ -8,9 +8,7 @@
             "count": {
               "min": 4
             },
-            "items": [
-              "thermal:rubber"
-            ]
+            "items": "thermal:rubber"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:rubber_block"
-            ]
+            "items": "thermal:rubber_block"
           }
         ]
       },

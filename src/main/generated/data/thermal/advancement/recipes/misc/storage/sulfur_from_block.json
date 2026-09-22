@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:sulfur"
-            ]
+            "items": "thermal:sulfur"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:sulfur_block"
-            ]
+            "items": "thermal:sulfur_block"
           }
         ]
       },

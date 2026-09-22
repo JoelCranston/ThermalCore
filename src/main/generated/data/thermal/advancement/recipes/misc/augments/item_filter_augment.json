@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:ingots/signalum"
+            "items": "#c:ingots/signalum"
           }
         ]
       },

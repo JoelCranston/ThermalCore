@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:pig_spawn_egg"
-            ]
+            "items": "minecraft:pig_spawn_egg"
           }
         ]
       },

@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:crops/wheat"
+            "items": "#c:crops/wheat"
           }
         ]
       },

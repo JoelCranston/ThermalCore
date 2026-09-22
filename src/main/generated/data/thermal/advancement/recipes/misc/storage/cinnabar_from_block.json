@@ -8,9 +8,7 @@
             "count": {
               "min": 9
             },
-            "items": [
-              "thermal:cinnabar"
-            ]
+            "items": "thermal:cinnabar"
           }
         ]
       },
@@ -20,9 +18,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:cinnabar_block"
-            ]
+            "items": "thermal:cinnabar_block"
           }
         ]
       },

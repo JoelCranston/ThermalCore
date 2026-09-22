@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "thermal:hazmat_fabric"
-            ]
+            "items": "thermal:hazmat_fabric"
           }
         ]
       },
