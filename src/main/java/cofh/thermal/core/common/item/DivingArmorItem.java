@@ -1,9 +1,14 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.core.Holder;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.common.item.ArmorItemCoFH;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
@@ -21,6 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 import static net.neoforged.neoforge.common.NeoForgeMod.SWIM_SPEED;
 
@@ -29,49 +35,45 @@ public class DivingArmorItem extends ArmorItemCoFH {
     protected static final double[] SWIM_SPEED_BONUS = new double[]{0.60D, 0.30D, 0.10D, 0.0D};
     protected static final int AIR_DURATION = 1800;
 
-    private Multimap<Attribute, AttributeModifier> armorAttributes;
+    private static final ResourceLocation SWIM_SPEED_MODIFIER = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "diving_swim_speed");
 
-    public DivingArmorItem(ArmorMaterial pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
+    public DivingArmorItem(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
 
         super(pMaterial, pType, pProperties);
-
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
-        armorAttributes = multimap.build();
-    }
-
-    public void setup() {
-
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
-        multimap.putAll(super.getDefaultAttributeModifiers(getType().getSlot()));
-        multimap.put(SWIM_SPEED.value(), new AttributeModifier(UUID_SWIM_SPEED[getType().getSlot().getIndex()], "Swim Speed", SWIM_SPEED_BONUS[getType().getSlot().getIndex()], AttributeModifier.Operation.ADDITION));
-        armorAttributes = multimap.build();
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 
         if (getType().getSlot() == EquipmentSlot.HEAD) {
             tooltip.add(getTextComponent("info.thermal.diving_helmet").withStyle(ChatFormatting.GOLD));
         }
     }
 
+    // 1.21: attribute modifiers are an ItemAttributeModifiers component keyed by a
+    // ResourceLocation, not a Multimap keyed by an attribute and a UUID.
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
 
-        return slot == getType().getSlot() ? armorAttributes : ImmutableMultimap.of();
+        double bonus = SWIM_SPEED_BONUS[getType().getSlot().getIndex()];
+        if (bonus <= 0.0D) {
+            return super.getDefaultAttributeModifiers(stack);
+        }
+        return super.getDefaultAttributeModifiers(stack).withModifierAdded(SWIM_SPEED,
+                new AttributeModifier(SWIM_SPEED_MODIFIER, bonus, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.bySlot(getType().getSlot()));
     }
 
+    // NeoForge's onArmorTick is gone; Inventory#tick reaches the armour compartment through
+    // inventoryTick, so the piece has to check it is actually being worn.
     @Override
-    public void onArmorTick(ItemStack stack, Level world, Player player) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 
-        if (getType().getSlot() == EquipmentSlot.HEAD) {
-            if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(5) > 0) {
-                player.setAirSupply(player.getAirSupply() + 1);
-            }
-            // TODO: Revisit
-            //            if (!player.areEyesInFluid(FluidTags.WATER)) {
-            //                Utils.addPotionEffectNoEvent(player, new EffectInstance(Effects.WATER_BREATHING, AIR_DURATION, 0, false, false, true));
-            //            }
+        if (getType().getSlot() != EquipmentSlot.HEAD || !(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
+            return;
+        }
+        if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(5) > 0) {
+            player.setAirSupply(player.getAirSupply() + 1);
         }
     }
 

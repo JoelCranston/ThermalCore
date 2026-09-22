@@ -1,5 +1,7 @@
 package cofh.thermal.core.init.registries;
 
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraft.world.item.ArmorMaterial;
 import cofh.core.common.item.EnergyContainerItem;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.common.item.SpawnEggItemCoFH;
@@ -22,6 +24,7 @@ import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.FlagManager.getFlag;
 import static cofh.lib.util.Utils.itemProperties;
 import static cofh.lib.util.constants.NBTTags.*;
+import static cofh.thermal.core.ThermalCore.ARMOR_MATERIALS;
 import static cofh.thermal.core.ThermalCore.BLOCKS;
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.core.init.registries.TCoreEntities.*;
@@ -67,10 +70,8 @@ public class TCoreItems {
         DetonatorItem.registerTNT(BLOCKS.get(ID_PHYTO_TNT), ((TntBlockCoFH) (BLOCKS.get(ID_PHYTO_TNT))).getFactory());
         DetonatorItem.registerTNT(BLOCKS.get(ID_NUKE_TNT), ((TntBlockCoFH) (BLOCKS.get(ID_NUKE_TNT))).getFactory());
 
-        ((DivingArmorItem) ITEMS.get(ID_DIVING_HELMET)).setup();
-        ((DivingArmorItem) ITEMS.get(ID_DIVING_CHESTPLATE)).setup();
-        ((DivingArmorItem) ITEMS.get(ID_DIVING_LEGGINGS)).setup();
-        ((DivingArmorItem) ITEMS.get(ID_DIVING_BOOTS)).setup();
+        // The diving suit's swim-speed modifier is part of its attribute component now and
+        // needs no deferred setup pass.
 
         flagUniqueAugment(ITEMS.get("rs_control_augment"));
         flagUniqueAugment(ITEMS.get("side_config_augment"));
@@ -199,20 +200,20 @@ public class TCoreItems {
 
     private static void registerArmor() {
 
-        toolsTab(50, registerItem(ID_BEEKEEPER_HELMET, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.HELMET, itemProperties())), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_CHESTPLATE, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.CHESTPLATE, itemProperties())), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_LEGGINGS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.LEGGINGS, itemProperties())), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_BOOTS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.BOOTS, itemProperties())), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_HELMET, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_CHESTPLATE, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_LEGGINGS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_BOOTS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
 
-        toolsTab(50, registerItem(ID_DIVING_HELMET, () -> new DivingArmorItem(DIVING, ArmorItem.Type.HELMET, itemProperties())), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_CHESTPLATE, () -> new DivingArmorItem(DIVING, ArmorItem.Type.CHESTPLATE, itemProperties())), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_LEGGINGS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.LEGGINGS, itemProperties())), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_BOOTS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.BOOTS, itemProperties())), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_HELMET, () -> new DivingArmorItem(DIVING, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_CHESTPLATE, () -> new DivingArmorItem(DIVING, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_LEGGINGS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_BOOTS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
 
-        toolsTab(50, registerItem(ID_HAZMAT_HELMET, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.HELMET, itemProperties())), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_CHESTPLATE, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.CHESTPLATE, itemProperties())), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_LEGGINGS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.LEGGINGS, itemProperties())), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_BOOTS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.BOOTS, itemProperties())), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_HELMET, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_CHESTPLATE, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_LEGGINGS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_BOOTS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
     }
 
     // region AUGMENTS
@@ -438,8 +439,14 @@ public class TCoreItems {
     }
     // endregion
 
-    public static final ArmorMaterialCoFH BEEKEEPER = new ArmorMaterialCoFH("thermal:beekeeper", 4, new int[]{1, 2, 3, 1}, 16, SoundEvents.ARMOR_EQUIP_ELYTRA, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("beekeeper_fabric")));
-    public static final ArmorMaterialCoFH DIVING = new ArmorMaterialCoFH("thermal:diving", 12, new int[]{1, 4, 5, 2}, 20, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("diving_fabric")));
-    public static final ArmorMaterialCoFH HAZMAT = new ArmorMaterialCoFH("thermal:hazmat", 6, new int[]{1, 4, 5, 2}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("hazmat_fabric")));
+    // 1.21: ArmorMaterial is a registry record and durability moved off it onto the item's own
+    // MAX_DAMAGE component, so the old durability multiplier is applied per armour piece below.
+    private static final int BEEKEEPER_DURABILITY = 4;
+    private static final int DIVING_DURABILITY = 12;
+    private static final int HAZMAT_DURABILITY = 6;
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BEEKEEPER = ARMOR_MATERIALS.register("beekeeper", () -> ArmorMaterialCoFH.create(new int[]{1, 2, 3, 1}, 16, SoundEvents.ARMOR_EQUIP_ELYTRA, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("beekeeper_fabric"))));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DIVING = ARMOR_MATERIALS.register("diving", () -> ArmorMaterialCoFH.create(new int[]{1, 4, 5, 2}, 20, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("diving_fabric"))));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HAZMAT = ARMOR_MATERIALS.register("hazmat", () -> ArmorMaterialCoFH.create(new int[]{1, 4, 5, 2}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("hazmat_fabric"))));
 
 }

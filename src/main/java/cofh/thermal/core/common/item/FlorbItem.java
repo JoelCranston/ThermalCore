@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.world.item.Item.TooltipContext;
 import cofh.core.common.item.FluidContainerItem;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
@@ -61,7 +62,7 @@ public class FlorbItem extends FluidContainerItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 
         List<Component> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);

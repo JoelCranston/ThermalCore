@@ -1,5 +1,6 @@
 package cofh.thermal.core;
 
+import net.minecraft.world.item.ArmorMaterial;
 import cofh.core.client.event.CoreClientEvents;
 import cofh.core.client.renderer.entity.TNTMinecartRendererCoFH;
 import cofh.core.common.config.ConfigManager;
@@ -84,6 +85,8 @@ public class ThermalCore {
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(BuiltInRegistries.FLUID, ID_THERMAL);
     public static final DeferredRegisterCoFH<CreativeModeTab> CREATIVE_TABS = DeferredRegisterCoFH.create(BuiltInRegistries.CREATIVE_MODE_TAB, ID_THERMAL);
     public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(BuiltInRegistries.MOB_EFFECT, ID_THERMAL);
+    // 1.21: ArmorMaterial is a registered record, not a class to implement - armour items take a Holder.
+    public static final DeferredRegisterCoFH<ArmorMaterial> ARMOR_MATERIALS = DeferredRegisterCoFH.create(BuiltInRegistries.ARMOR_MATERIAL, ID_THERMAL);
 
     public static final DeferredRegisterCoFH<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_THERMAL);
     public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(BuiltInRegistries.MENU, ID_THERMAL);
@@ -125,6 +128,7 @@ public class ThermalCore {
         FLUIDS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
         EFFECTS.register(modEventBus);
+        ARMOR_MATERIALS.register(modEventBus);
 
         BLOCK_ENTITIES.register(modEventBus);
         CONTAINERS.register(modEventBus);

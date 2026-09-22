@@ -1,5 +1,9 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.core.Holder;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.common.event.ArmorEvents;
 import cofh.core.common.item.ArmorItemCoFH;
@@ -22,7 +26,7 @@ import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 
 public class HazmatArmorItem extends ArmorItemCoFH {
 
-    public HazmatArmorItem(ArmorMaterial pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
+    public HazmatArmorItem(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
 
         super(pMaterial, pType, pProperties);
 
@@ -33,7 +37,7 @@ public class HazmatArmorItem extends ArmorItemCoFH {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 
         tooltip.add(getTextComponent("info.thermal.hazmat_armor").withStyle(ChatFormatting.GOLD));
 
@@ -45,17 +49,16 @@ public class HazmatArmorItem extends ArmorItemCoFH {
         }
     }
 
+    // NeoForge's onArmorTick is gone; Inventory#tick reaches the armour compartment through
+    // inventoryTick, so the piece has to check it is actually being worn.
     @Override
-    public void onArmorTick(ItemStack stack, Level world, Player player) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 
-        if (getType().getSlot() == EquipmentSlot.HEAD) {
-            if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(3) > 0) {
-                player.setAirSupply(player.getAirSupply() + 1);
-            }
-            // TODO: Revisit
-            //            if (!player.areEyesInFluid(FluidTags.WATER)) {
-            //                Utils.addPotionEffectNoEvent(player, new EffectInstance(Effects.WATER_BREATHING, AIR_DURATION, 0, false, false, true));
-            //            }
+        if (getType().getSlot() != EquipmentSlot.HEAD || !(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
+            return;
+        }
+        if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(3) > 0) {
+            player.setAirSupply(player.getAirSupply() + 1);
         }
     }
 

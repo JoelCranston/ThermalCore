@@ -1,5 +1,8 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.core.Holder;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.common.event.ArmorEvents;
 import cofh.core.common.item.ArmorItemCoFH;
@@ -21,7 +24,7 @@ import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 
 public class BeekeeperArmorItem extends ArmorItemCoFH {
 
-    public BeekeeperArmorItem(ArmorMaterial pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
+    public BeekeeperArmorItem(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
 
         super(pMaterial, pType, pProperties);
 
@@ -29,7 +32,7 @@ public class BeekeeperArmorItem extends ArmorItemCoFH {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 
         tooltip.add(getTextComponent("info.thermal.beekeeper_armor").withStyle(ChatFormatting.GOLD));
     }
