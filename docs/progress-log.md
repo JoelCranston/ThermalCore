@@ -41,3 +41,43 @@ and the matching entry in `../CoFHCore/docs/progress-log.md` for what re-verific
 Branch `1.21.1` created today. `../ThermalCoreForNeoForge` (SPLIGAN's 1.21.1 port of this repo) is the Phase A
 worklist; `../Pyronetics` is the 26.1.2 reference. The uncommitted 1.20.6 build bump is left
 uncommitted on purpose.
+
+---
+
+## Phase A complete — 1.21.1 (2026-09-22)
+
+575 errors on the first real compile → 0, in seventeen commits, one per root cause, each with
+its before/after count. Order: `c:` tag constants → event bus and spawn placements → recipe
+lookups → ItemStack NBT to components → `HolderLookup.Provider` threading → enchantment
+components → recipe serializers on MapCodec/StreamCodec → synched data and mobs → armour →
+vertex API → potions/enchantments/food → projectiles and dispensing → Patchouli → datagen
+registries → brewing and block hooks → recipe/loot JSON.
+
+Three places the translation was not mechanical:
+
+- **Armour.** `ArmorMaterial` is a registered record and `ArmorItem` takes a `Holder`, so the
+  three suits moved into a `DeferredRegisterCoFH`; durability left the material for the item's
+  `MAX_DAMAGE` component, and the diving suit's swim-speed modifier became part of its
+  attribute component (its deferred `setup()` pass is gone).
+- **Brewing.** `PotionBrewing.POTION_MIXES` is gone and a server's mixes are not enumerable, so
+  the Imbuer's default conversions are now *discovered* — mix each potion against each item the
+  running `PotionBrewing` accepts as an ingredient.
+- **Frost Walker.** A datapack enchantment effect with no class to call; the Blizz reproduces
+  the level-1 `replace_disk` disk inline.
+
+### Caught only by booting
+
+The first headless run logged **198 recipe parse failures**. Fixing the result key (`item` →
+`id`) left 30; the round trip was over ingredients — a first pass converted them to the
+bare-string form, which is **1.21.2, not 1.21.1**, and had to be reverted wholesale.
+`minecraft:looting_enchant` also became `minecraft:enchanted_count_increase`, naming the
+enchantment explicitly.
+
+Then every CoFH item threw when the Stirling dynamo enumerated furnace fuels: NeoForge throws on
+a negative burn time now, and CoFH's `-1` "no opinion" default has to fall through to the
+`neoforge:furnace_fuels` data map. Fixed in CoFHCore.
+
+### Owed
+
+The client pass, and `runData` (the committed generated output was hand-migrated). Shapes are in
+`../CoFHCore/docs/api-notes-1.21.1.md`.

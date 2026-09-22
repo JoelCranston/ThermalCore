@@ -38,17 +38,25 @@ before writing code against it.
 
 ## Current state
 
-Branch **`1.21.1`**. Phase 0.3/0.4 and A.0 are **done** (2026-09-22): ModDevGradle 2.0.147
-replaces NeoGradle userdev, `META-INF/neoforge.mods.toml` replaces `mods.toml`, and
-`gradle.properties` is on the Phase A values (java 21 / mc 1.21.1 / neo 21.1.251). Gradle
-configures and `createMinecraftArtifacts` succeeds; `compileJava` stops at
-`:CoFHCore:compileJava`, which is the expected blocked state. The resources sweep (A.1.15) is
-done too — singular data folders, `forge:` → `c:`, and the six `c:` tags NeoForge renamed in
-the plural.
+**Phase A done (2026-09-22): builds clean and boots headless on NeoForge 21.1.251.**
+575 errors on the first real compile → 0, in seventeen commits, one per root cause.
 
-The family-wide `ResourceLocation` sweep (Phase A.1 category 2) has already been applied and
-committed here, ahead of this repo's own Phase A — it was cheaper to run once for all four.
+Branch **`1.21.1`**, ModDevGradle 2.0.147, `META-INF/neoforge.mods.toml`.
+`verify_runserver.sh` reaches `Done (…)` with no registry, recipe or loot-table errors, and
+Patchouli 1.21.1-93 loads.
 
-**Blocked on CoFHCore**: this repo's own Phase A starts only once `../CoFHCore` builds clean
-on 1.21.1 and boots headless (its `docs/TODO.md` tracks that). Then: apply Phase 0.3/0.4
-here, bump to 1.21.1, and work through the SPLIGAN diff (port-plan.md §5 A.2/A.3).
+Three things here needed design rather than translation, and are worth knowing before touching
+them again:
+
+- **Armour materials are registered records.** The three Thermal suits live in a
+  `DeferredRegisterCoFH<ArmorMaterial>`; durability moved onto the item's `MAX_DAMAGE`
+  component, so the old multiplier is applied per piece.
+- **Brewing conversions are discovered, not enumerated.** `PotionBrewing.POTION_MIXES` is gone
+  and a server's mixes are not readable, so the Alchemical Imbuer's default recipes come from
+  mixing each potion against each item the instance accepts as an ingredient.
+- **The Blizz freezes its own disk.** Frost Walker is a datapack enchantment effect now; the mob
+  reproduces the level-1 `replace_disk` inline.
+
+**Next step**: nothing blocking. The remaining Phase A exit criterion is the client pass, which
+is Joel's — see `../CoFHCore/docs/TODO.md`. Every API shape this hop confirmed is written up in
+`../CoFHCore/docs/api-notes-1.21.1.md`; **read it before deriving anything again**.
