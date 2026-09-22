@@ -22,7 +22,7 @@ public class SmelterProcessor implements IComponentProcessor {
 
         if (!variables.has("recipe"))
             return;
-        ResourceLocation recipeId = new ResourceLocation(variables.get("recipe").asString());
+        ResourceLocation recipeId = ResourceLocation.parse(variables.get("recipe").asString());
         Optional<? extends RecipeHolder<?>> recipe = level.getRecipeManager().byKey(recipeId);
         if (recipe.isPresent() && recipe.get().value() instanceof SmelterRecipe) {
             this.recipe = (SmelterRecipe) recipe.get().value();

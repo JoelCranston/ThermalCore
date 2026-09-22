@@ -60,7 +60,7 @@ public class TCoreBiomeModifiers {
     // region HELPERS
     private static ResourceKey<BiomeModifier> createKey(String name) {
 
-        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(ID_THERMAL, name));
+        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(ID_THERMAL, name));
     }
 
     private static void registerMob(BootstapContext<BiomeModifier> context, ResourceKey<BiomeModifier> biomeMod, HolderSet<Biome> biomes, List<MobSpawnSettings.SpawnerData> spawners) {

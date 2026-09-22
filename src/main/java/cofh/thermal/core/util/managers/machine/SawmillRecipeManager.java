@@ -107,7 +107,7 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
 
     protected RecipeHolder<SawmillRecipe> convert(Ingredient log, ItemStack planks) {
 
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "sawmill_" + log.hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "sawmill_" + log.hashCode()),
                 new SawmillRecipe(getDefaultEnergy() / 2, 0.15F,
                         Collections.singletonList(log),
                         Collections.emptyList(), // no fluid input

@@ -48,7 +48,7 @@ public class TCoreDamageTypes {
 
     protected static ResourceKey<DamageType> createKey(String id) {
 
-        return ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ID_THERMAL, id));
+        return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(ID_THERMAL, id));
     }
 
 }

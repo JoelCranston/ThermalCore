@@ -62,7 +62,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
             BANNED_ITEMS.clear();
 
             for (String loc : itemLocs) {
-                Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(loc));
+                Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(loc));
                 if (item != null) {
                     BANNED_ITEMS.add(item);
                 }
@@ -76,7 +76,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
 
         super(builder, slots);
 
-        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("color"), (stack, world, entity, seed) -> (hasCustomColor(stack) ? 1F : 0));
+        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("color"), (stack, world, entity, seed) -> (hasCustomColor(stack) ? 1F : 0));
         ProxyUtils.registerColorable(this);
 
         numSlots = () -> ThermalCoreConfig.storageAugments;

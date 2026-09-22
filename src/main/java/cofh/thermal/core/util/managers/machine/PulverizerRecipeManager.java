@@ -204,7 +204,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
 
     protected RecipeHolder<PulverizerRecipe> convertIngot(Ingredient input, Ingredient dust) {
 
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "pulverizer_ingot_" + input.hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "pulverizer_ingot_" + input.hashCode()),
                 new PulverizerRecipe(getDefaultEnergy() / 2, 0.0F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
@@ -215,7 +215,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
 
     protected RecipeHolder<PulverizerRecipe> convertOre(Ingredient input, Ingredient dust) {
 
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "pulverizer_ore_" + input.hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "pulverizer_ore_" + input.hashCode()),
                 new PulverizerRecipe(getDefaultEnergy(), 0.2F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
@@ -226,7 +226,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
 
     protected RecipeHolder<PulverizerRecipe> convertRaw(Ingredient input, Ingredient dust) {
 
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "pulverizer_raw_" + input.hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "pulverizer_raw_" + input.hashCode()),
                 new PulverizerRecipe(getDefaultEnergy(), 0.1F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input

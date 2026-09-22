@@ -278,7 +278,7 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
 
     protected BottlerRecipeNBT convert(int energy, float experience, @Nonnull ItemStack inputItem, @Nonnull FluidStack inputFluid, @Nonnull ItemStack outputItem) {
 
-        convertedRecipes.add(new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "bottler_" + getName(outputItem)),
+        convertedRecipes.add(new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "bottler_" + getName(outputItem)),
                 new BottlerRecipe(energy, experience,
                         singletonList(Ingredient.of(inputItem)),
                         singletonList(FluidIngredient.of(inputFluid).setAmount(inputFluid.getAmount())),

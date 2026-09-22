@@ -90,8 +90,8 @@ public class RedstoneFluid extends FluidCoFH {
             consumer.accept(new IClientFluidTypeExtensions() {
 
                 private static final ResourceLocation
-                        STILL = new ResourceLocation("thermal:block/fluids/redstone_still"),
-                        FLOW = new ResourceLocation("thermal:block/fluids/redstone_flow");
+                        STILL = ResourceLocation.parse("thermal:block/fluids/redstone_still"),
+                        FLOW = ResourceLocation.parse("thermal:block/fluids/redstone_flow");
 
                 @Override
                 public ResourceLocation getStillTexture() {

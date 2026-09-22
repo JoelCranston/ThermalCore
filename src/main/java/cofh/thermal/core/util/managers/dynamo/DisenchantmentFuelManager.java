@@ -120,7 +120,7 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<DisenchantmentFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "disenchantment_" + getName(item)), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "disenchantment_" + getName(item)), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
     }
     // endregion
 }

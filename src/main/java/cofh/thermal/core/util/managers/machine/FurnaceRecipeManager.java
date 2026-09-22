@@ -114,7 +114,7 @@ public class FurnaceRecipeManager extends SingleItemRecipeManager {
         ItemStack recipeOutput = recipe.result;
         float experience = recipe.getExperience();
         int energy = defaultFoodRecipes && recipeOutput.getItem().isEdible() ? defaultEnergy / 2 : defaultEnergy;
-        return new RecipeHolder<>(new ResourceLocation(ID_THERMAL, "furnace_" + recipe.getIngredients().get(0).hashCode()),
+        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "furnace_" + recipe.getIngredients().get(0).hashCode()),
                 new FurnaceRecipe(energy, experience, recipe));
     }
     // endregion

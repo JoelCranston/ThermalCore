@@ -37,7 +37,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
 
         super(builder);
 
-        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("has_data"), ((stack, world, entity, seed) -> stack.hasTag() ? 1F : 0F));
+        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("has_data"), ((stack, world, entity, seed) -> stack.hasTag() ? 1F : 0F));
     }
 
     @Override

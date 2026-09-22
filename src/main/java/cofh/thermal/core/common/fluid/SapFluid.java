@@ -61,8 +61,8 @@ public class SapFluid extends FluidCoFH {
             consumer.accept(new IClientFluidTypeExtensions() {
 
                 private static final ResourceLocation
-                        STILL = new ResourceLocation("thermal:block/fluids/sap_still"),
-                        FLOW = new ResourceLocation("thermal:block/fluids/sap_flow");
+                        STILL = ResourceLocation.parse("thermal:block/fluids/sap_still"),
+                        FLOW = ResourceLocation.parse("thermal:block/fluids/sap_flow");
 
                 @Override
                 public ResourceLocation getStillTexture() {
