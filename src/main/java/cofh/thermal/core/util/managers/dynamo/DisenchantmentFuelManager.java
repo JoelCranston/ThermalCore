@@ -1,5 +1,10 @@
 package cofh.thermal.core.util.managers.dynamo;
 
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import cofh.core.util.ProxyUtils;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.dynamo.DisenchantmentFuel;
 import cofh.thermal.lib.util.managers.SingleItemFuelManager;
@@ -68,11 +73,12 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
         if (stack.isEmpty()) {
             return 0;
         }
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
+        // 1.21: enchantments on a stack are the ENCHANTMENTS component, keyed by Holder.
+        ItemEnchantments enchants = stack.getEnchantments();
         int energy = 0;
 
-        for (Enchantment enchant : enchants.keySet()) {
-            energy += enchant.getMinCost(enchants.get(enchant));
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchants.entrySet()) {
+            energy += entry.getKey().value().getMinCost(entry.getIntValue());
         }
         energy += (enchants.size() * (enchants.size() + 1)) / 2;
         energy *= (DEFAULT_ENERGY / 2);
@@ -103,10 +109,11 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     protected void createConvertedRecipes(RecipeManager recipeManager) {
 
+        // Enchantments are a datapack registry now, so they come from the running registries
+        // rather than BuiltInRegistries.
         List<ItemStack> books = new ArrayList<>();
-        for (Enchantment enchant : BuiltInRegistries.ENCHANTMENT) {
-            books.add(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchant, enchant.getMaxLevel())));
-        }
+        ProxyUtils.registryAccess().lookup(Registries.ENCHANTMENT).ifPresent(lookup -> lookup.listElements()
+                .forEach(holder -> books.add(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, holder.value().getMaxLevel())))));
         for (ItemStack book : books) {
             try {
                 if (getFuel(book) == null && validFuel(book)) {

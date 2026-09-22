@@ -1,5 +1,7 @@
 package cofh.thermal.core.common.block.entity.device;
 
+import java.util.ArrayList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.HolderLookup;
 import cofh.core.common.network.packet.client.TileStatePacket;
 import cofh.core.util.helpers.AugmentDataHelper;
@@ -26,7 +28,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -287,9 +289,13 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
                 cached = false;
             }
         } else if (!cached) {
-            effects = PotionUtils.getAllEffects(inputTank.getFluidStack().getTag());
+            // 1.21: potion data is the POTION_CONTENTS component on the stack (FluidStack is a
+            // component holder too), and an effect is a Holder<MobEffect>.
+            PotionContents contents = inputTank.getFluidStack().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+            effects = new ArrayList<>();
+            contents.getAllEffects().forEach(effects::add);
             for (MobEffectInstance effect : effects) {
-                instant |= effect.getEffect().isInstantenous();
+                instant |= effect.getEffect().value().isInstantenous();
             }
             cached = true;
         }
@@ -324,8 +330,8 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
         for (LivingEntity target : targets) {
             if (target.isAffectedByPotions()) {
                 for (MobEffectInstance effect : effects) {
-                    if (effect.getEffect().isInstantenous()) {
-                        effect.getEffect().applyInstantenousEffect(null, null, target, getEffectAmplifier(effect), 0.5D);
+                    if (effect.getEffect().value().isInstantenous()) {
+                        effect.getEffect().value().applyInstantenousEffect(null, null, target, getEffectAmplifier(effect), 0.5D);
                     } else {
                         MobEffectInstance potion = new MobEffectInstance(effect.getEffect(), getEffectDuration(effect), getEffectAmplifier(effect), effect.isAmbient(), effect.isVisible());
                         target.addEffect(potion);
