@@ -1,5 +1,9 @@
 package cofh.thermal.core.util.recipes.device;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.util.Utils;
@@ -103,8 +107,16 @@ public class TreeExtractorMapping extends SerializableRecipe {
     // region SERIALIZER
     public static class Serializer implements RecipeSerializer<TreeExtractorMapping> {
 
+        public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+
         @Override
-        public Codec<TreeExtractorMapping> codec() {
+        public StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> streamCodec() {
+
+            return STREAM_CODEC;
+        }
+
+        @Override
+        public MapCodec<TreeExtractorMapping> codec() {
 
             return JsonMapCodec.INSTANCE
                     .flatXmap(json -> {
@@ -114,7 +126,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
                             return DataResult.error(e::getMessage);
                         }
                     }, recipe -> DataResult.success(toJson(recipe)))
-                    .codec();
+                    ;
         }
 
         public TreeExtractorMapping fromJson(JsonObject json) {
@@ -168,9 +180,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
             return null;
         }
 
-        @Nullable
-        @Override
-        public TreeExtractorMapping fromNetwork(FriendlyByteBuf buffer) {
+        public static TreeExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
             BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
             BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
@@ -184,8 +194,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
             return new TreeExtractorMapping(logs, leaves, sapling, fluid, minHeight, maxHeight, minLeaves, maxLeaves);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, TreeExtractorMapping recipe) {
+        public static void toNetwork(RegistryFriendlyByteBuf buffer, TreeExtractorMapping recipe) {
 
             recipe.trunk.toNetwork(buffer);
             recipe.leaves.toNetwork(buffer);

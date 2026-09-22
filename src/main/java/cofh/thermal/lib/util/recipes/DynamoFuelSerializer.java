@@ -1,5 +1,9 @@
 package cofh.thermal.lib.util.recipes;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.recipes.JsonMapCodec;
@@ -34,8 +38,16 @@ public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerial
         this.maxEnergy = maxEnergy;
     }
 
+    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
+
     @Override
-    public Codec<T> codec() {
+    public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+
+        return streamCodec;
+    }
+
+    @Override
+    public MapCodec<T> codec() {
 
         return JsonMapCodec.INSTANCE
                 .flatXmap(json -> {
@@ -45,7 +57,7 @@ public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerial
                         return DataResult.error(e::getMessage);
                     }
                 }, recipe -> DataResult.success(toJson(recipe)))
-                .codec();
+                ;
     }
 
     protected T fromJson(JsonObject json) {
@@ -88,16 +100,14 @@ public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerial
         return null;
     }
 
-    @Nullable
-    @Override
-    public T fromNetwork(FriendlyByteBuf buffer) {
+    public T fromNetwork(RegistryFriendlyByteBuf buffer) {
 
         int energy = buffer.readVarInt();
 
         int numInputItems = buffer.readVarInt();
         ArrayList<Ingredient> inputItems = new ArrayList<>(numInputItems);
         for (int i = 0; i < numInputItems; ++i) {
-            inputItems.add(Ingredient.fromNetwork(buffer));
+            inputItems.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
         }
 
         int numInputFluids = buffer.readVarInt();
@@ -108,15 +118,14 @@ public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerial
         return factory.create(energy, inputItems, inputFluids);
     }
 
-    @Override
-    public void toNetwork(FriendlyByteBuf buffer, T recipe) {
+    public void toNetwork(RegistryFriendlyByteBuf buffer, T recipe) {
 
         buffer.writeVarInt(recipe.energy);
 
         int numInputItems = recipe.inputItems.size();
         buffer.writeVarInt(numInputItems);
         for (int i = 0; i < numInputItems; ++i) {
-            recipe.inputItems.get(i).toNetwork(buffer);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.inputItems.get(i));
         }
         int numInputFluids = recipe.inputFluids.size();
         buffer.writeVarInt(numInputFluids);

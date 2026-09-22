@@ -1,5 +1,8 @@
 package cofh.thermal.lib.util.recipes;
 
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.helpers.MathHelper;
@@ -32,8 +35,16 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         this.defaultEnergy = defaultEnergy;
     }
 
+    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
+
     @Override
-    public Codec<T> codec() {
+    public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+
+        return streamCodec;
+    }
+
+    @Override
+    public MapCodec<T> codec() {
 
         return JsonMapCodec.INSTANCE
                 .flatXmap(json -> {
@@ -43,7 +54,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
                         return DataResult.error(e::getMessage);
                     }
                 }, recipe -> DataResult.success(toJson(recipe)))
-                .codec();
+                ;
     }
 
     protected T fromJson(JsonObject json) {
@@ -105,9 +116,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         return null;
     }
 
-    @Nullable
-    @Override
-    public T fromNetwork(FriendlyByteBuf buffer) {
+    public T fromNetwork(RegistryFriendlyByteBuf buffer) {
 
         int energy = buffer.readVarInt();
         float experience = buffer.readFloat();
@@ -115,7 +124,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         int numInputItems = buffer.readVarInt();
         ArrayList<Ingredient> inputItems = new ArrayList<>(numInputItems);
         for (int i = 0; i < numInputItems; ++i) {
-            inputItems.add(Ingredient.fromNetwork(buffer));
+            inputItems.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
         }
 
         int numInputFluids = buffer.readVarInt();
@@ -128,7 +137,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         ArrayList<ItemStack> outputItems = new ArrayList<>(numOutputItems);
         ArrayList<Float> outputItemChances = new ArrayList<>(numOutputItems);
         for (int i = 0; i < numOutputItems; ++i) {
-            outputItems.add(buffer.readItem());
+            outputItems.add(ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer));
             outputItemChances.add(buffer.readFloat());
         }
 
@@ -143,8 +152,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         return factory.create(energy, experience, inputItems, inputFluids, outputItems, outputItemChances, outputFluids);
     }
 
-    @Override
-    public void toNetwork(FriendlyByteBuf buffer, T recipe) {
+    public void toNetwork(RegistryFriendlyByteBuf buffer, T recipe) {
 
         buffer.writeVarInt(recipe.energy);
         buffer.writeFloat(recipe.xp);
@@ -152,7 +160,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         int numInputItems = recipe.inputItems.size();
         buffer.writeVarInt(numInputItems);
         for (int i = 0; i < numInputItems; ++i) {
-            recipe.inputItems.get(i).toNetwork(buffer);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.inputItems.get(i));
         }
         int numInputFluids = recipe.inputFluids.size();
         buffer.writeVarInt(numInputFluids);
@@ -162,7 +170,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         int numOutputItems = recipe.outputItems.size();
         buffer.writeVarInt(numOutputItems);
         for (int i = 0; i < numOutputItems; ++i) {
-            buffer.writeItem(recipe.outputItems.get(i));
+            ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.outputItems.get(i));
             buffer.writeFloat(recipe.outputItemChances.get(i));
         }
         int numOutputFluids = recipe.outputFluids.size();

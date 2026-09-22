@@ -1,5 +1,7 @@
 package cofh.thermal.core.util.managers.device;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.resources.ResourceKey;
 import cofh.lib.util.crafting.ComparableItemStack;
 import cofh.thermal.core.util.recipes.device.FisherBoost;
 import cofh.thermal.lib.util.managers.AbstractManager;
@@ -18,7 +20,7 @@ public class FisherManager extends AbstractManager {
 
     private static final FisherManager INSTANCE = new FisherManager();
 
-    protected Map<ComparableItemStack, Triple<ResourceLocation, Float, Float>> boostMap = new Object2ObjectOpenHashMap<>();
+    protected Map<ComparableItemStack, Triple<ResourceKey<LootTable>, Float, Float>> boostMap = new Object2ObjectOpenHashMap<>();
 
     public static FisherManager instance() {
 
@@ -43,7 +45,7 @@ public class FisherManager extends AbstractManager {
         }
     }
 
-    public ResourceLocation getBoostLootTable(ItemStack item) {
+    public ResourceKey<LootTable> getBoostLootTable(ItemStack item) {
 
         return validBoost(item) ? boostMap.get(makeNBTComparable(item)).getLeft() : BuiltInLootTables.FISHING_FISH;
     }

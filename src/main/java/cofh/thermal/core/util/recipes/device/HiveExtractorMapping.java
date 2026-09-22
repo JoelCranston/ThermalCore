@@ -1,5 +1,8 @@
 package cofh.thermal.core.util.recipes.device;
 
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.mojang.serialization.Codec;
@@ -64,17 +67,25 @@ public class HiveExtractorMapping extends SerializableRecipe {
     // region SERIALIZER
     public static class Serializer implements RecipeSerializer<HiveExtractorMapping> {
 
-        public static final Codec<HiveExtractorMapping> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+        public static final MapCodec<HiveExtractorMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
                         Block.CODEC.fieldOf(HIVE).forGetter(recipe -> recipe.hive),
-                        ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
+                        ItemStack.CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
                         FluidStack.CODEC.fieldOf(FLUID).forGetter(recipe -> recipe.fluid)
                 ).apply(builder, HiveExtractorMapping::new)
         );
 
+        public static final StreamCodec<RegistryFriendlyByteBuf, HiveExtractorMapping> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+
         @Override
-        public Codec<HiveExtractorMapping> codec() {
+        public MapCodec<HiveExtractorMapping> codec() {
 
             return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, HiveExtractorMapping> streamCodec() {
+
+            return STREAM_CODEC;
         }
 
         //        @Override
@@ -96,22 +107,19 @@ public class HiveExtractorMapping extends SerializableRecipe {
         //            return new HiveExtractorMapping(recipeId, hive, item, fluid);
         //        }
 
-        @Nullable
-        @Override
-        public HiveExtractorMapping fromNetwork(FriendlyByteBuf buffer) {
+        public static HiveExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
             Block hive = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
-            ItemStack item = buffer.readItem();
+            ItemStack item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
             FluidStack fluid = FluidHelper.readFluidStack(buffer);
 
             return new HiveExtractorMapping(hive, item, fluid);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, HiveExtractorMapping recipe) {
+        public static void toNetwork(RegistryFriendlyByteBuf buffer, HiveExtractorMapping recipe) {
 
             buffer.writeResourceLocation(getRegistryName(recipe.hive));
-            buffer.writeItem(recipe.item);
+            ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.item);
             FluidHelper.writeFluidStack(buffer, recipe.fluid);
         }
 

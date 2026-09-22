@@ -1,5 +1,9 @@
 package cofh.thermal.core.util.recipes.device;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
 import cofh.lib.util.recipes.SerializableRecipe;
 import cofh.thermal.core.util.managers.device.PotionDiffuserManager;
 import com.mojang.serialization.Codec;
@@ -68,7 +72,7 @@ public class PotionDiffuserBoost extends SerializableRecipe {
     // region SERIALIZER
     public static class Serializer implements RecipeSerializer<PotionDiffuserBoost> {
 
-        public static final Codec<PotionDiffuserBoost> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+        public static final MapCodec<PotionDiffuserBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
                         Ingredient.CODEC_NONEMPTY.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                         Codec.INT.optionalFieldOf(AMPLIFIER, 0).forGetter(recipe -> recipe.amplifier),
                         Codec.FLOAT.optionalFieldOf(DURATION_MOD, 0.0F).forGetter(recipe -> recipe.durationMod),
@@ -76,10 +80,18 @@ public class PotionDiffuserBoost extends SerializableRecipe {
                 ).apply(builder, PotionDiffuserBoost::new)
         );
 
+        public static final StreamCodec<RegistryFriendlyByteBuf, PotionDiffuserBoost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+
         @Override
-        public Codec<PotionDiffuserBoost> codec() {
+        public MapCodec<PotionDiffuserBoost> codec() {
 
             return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, PotionDiffuserBoost> streamCodec() {
+
+            return STREAM_CODEC;
         }
 
         //        @Override
@@ -105,11 +117,9 @@ public class PotionDiffuserBoost extends SerializableRecipe {
         //            return new PotionDiffuserBoost(recipeId, ingredient, amplifier, durationMod, cycles);
         //        }
 
-        @Nullable
-        @Override
-        public PotionDiffuserBoost fromNetwork(FriendlyByteBuf buffer) {
+        public static PotionDiffuserBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
+            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 
             int amplifier = buffer.readInt();
             float durationMod = buffer.readFloat();
@@ -118,10 +128,9 @@ public class PotionDiffuserBoost extends SerializableRecipe {
             return new PotionDiffuserBoost(ingredient, amplifier, durationMod, cycles);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, PotionDiffuserBoost recipe) {
+        public static void toNetwork(RegistryFriendlyByteBuf buffer, PotionDiffuserBoost recipe) {
 
-            recipe.ingredient.toNetwork(buffer);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 
             buffer.writeInt(recipe.amplifier);
             buffer.writeFloat(recipe.durationMod);

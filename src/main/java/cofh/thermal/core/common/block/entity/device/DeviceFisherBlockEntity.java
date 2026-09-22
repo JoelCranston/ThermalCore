@@ -163,7 +163,7 @@ public class DeviceFisherBlockEntity extends DeviceBlockEntity implements ITicka
             return;
         }
         if (valid) {
-            LootTable table = level.getServer().getLootData().getLootTable(FisherManager.instance().getBoostLootTable(inputSlot.getItemStack()));
+            LootTable table = level.getServer().reloadableRegistries().getLootTable(FisherManager.instance().getBoostLootTable(inputSlot.getItemStack()));
             LootParams lootparams = (new LootParams.Builder((ServerLevel) level))
                     .withParameter(LootContextParams.ORIGIN, Vec3.atLowerCornerOf(getBlockPos()))
                     .create(LootContextParamSets.EMPTY);
