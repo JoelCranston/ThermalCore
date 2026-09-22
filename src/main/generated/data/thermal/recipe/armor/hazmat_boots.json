@@ -9,7 +9,7 @@
   "category": "equipment",
   "key": {
     "L": {
-      "tag": "c:leather"
+      "tag": "c:leathers"
     },
     "R": {
       "item": "thermal:cured_rubber"

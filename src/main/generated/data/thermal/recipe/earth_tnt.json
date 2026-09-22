@@ -9,7 +9,7 @@
   "category": "equipment",
   "key": {
     "G": {
-      "tag": "c:gunpowder"
+      "tag": "c:gunpowders"
     },
     "P": {
       "item": "thermal:basalz_powder"

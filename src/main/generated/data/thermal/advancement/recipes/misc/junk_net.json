@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:string"
+            "tag": "c:strings"
           }
         ]
       },

@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "tag": "c:obsidian"
+      "tag": "c:obsidians"
     },
     [
       {
@@ -14,7 +14,7 @@
       }
     ],
     {
-      "tag": "c:sand"
+      "tag": "c:sands"
     },
     {
       "item": "minecraft:fire_charge"

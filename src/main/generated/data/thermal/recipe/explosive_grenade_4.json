@@ -3,13 +3,13 @@
   "category": "equipment",
   "key": {
     "G": {
-      "tag": "c:gunpowder"
+      "tag": "c:gunpowders"
     },
     "I": {
       "tag": "c:ingots/iron"
     },
     "P": {
-      "tag": "c:sand"
+      "tag": "c:sands"
     }
   },
   "pattern": [

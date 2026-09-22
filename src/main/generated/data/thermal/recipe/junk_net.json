@@ -9,7 +9,7 @@
   "category": "misc",
   "key": {
     "#": {
-      "tag": "c:string"
+      "tag": "c:strings"
     },
     "S": {
       "item": "minecraft:stick"

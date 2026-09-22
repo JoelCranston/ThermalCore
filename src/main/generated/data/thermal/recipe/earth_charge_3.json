@@ -3,7 +3,7 @@
   "category": "equipment",
   "ingredients": [
     {
-      "tag": "c:gunpowder"
+      "tag": "c:gunpowders"
     },
     {
       "item": "thermal:basalz_powder"
