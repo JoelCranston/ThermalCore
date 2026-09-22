@@ -38,10 +38,13 @@ before writing code against it.
 
 ## Current state
 
-Branch **`1.21.1`**. The build files are back at their committed 1.20.4 values (the stray
-uncommitted 1.20.6 bump was discarded on 2026-09-22 — it was never a target); Phase 0.3/0.4
-(ModDevGradle 2.0.147, `neoforge.mods.toml`) and A.0 (1.21.1 values) replace them wholesale,
-per `../CoFHCore/docs/port-plan.md` §4.3–§4.4 and §5 A.0.
+Branch **`1.21.1`**. Phase 0.3/0.4 and A.0 are **done** (2026-09-22): ModDevGradle 2.0.147
+replaces NeoGradle userdev, `META-INF/neoforge.mods.toml` replaces `mods.toml`, and
+`gradle.properties` is on the Phase A values (java 21 / mc 1.21.1 / neo 21.1.251). Gradle
+configures and `createMinecraftArtifacts` succeeds; `compileJava` stops at
+`:CoFHCore:compileJava`, which is the expected blocked state. The resources sweep (A.1.15) is
+done too — singular data folders, `forge:` → `c:`, and the six `c:` tags NeoForge renamed in
+the plural.
 
 The family-wide `ResourceLocation` sweep (Phase A.1 category 2) has already been applied and
 committed here, ahead of this repo's own Phase A — it was cheaper to run once for all four.
