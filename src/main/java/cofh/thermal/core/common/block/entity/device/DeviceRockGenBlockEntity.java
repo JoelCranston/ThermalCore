@@ -1,6 +1,5 @@
 package cofh.thermal.core.common.block.entity.device;
 
-import net.minecraft.core.HolderLookup;
 import cofh.core.common.network.packet.client.TileStatePacket;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.lib.api.block.entity.ITickableTile;
@@ -10,6 +9,7 @@ import cofh.thermal.core.common.inventory.device.DeviceRockGenMenu;
 import cofh.thermal.core.util.managers.device.RockGenManager;
 import cofh.thermal.lib.common.block.entity.DeviceBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

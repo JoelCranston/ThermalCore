@@ -27,8 +27,6 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;
@@ -91,7 +89,7 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     //        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellTile.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
     //        if (isCreative(container, FLUID)) {
     //            if (action.execute()) {
-    //                tank.setFluidStack(resource.copyWithAmount(tank.getCapacity()));
+    //                tank.setFluidStack(new FluidStack(resource, tank.getCapacity()));
     //                tank.write(containerTag);
     //            }
     //            return resource.getAmount();
@@ -107,7 +105,7 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     //        CompoundTag containerTag = getOrCreateTankTag(container);
     //        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellTile.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
     //        if (isCreative(container, FLUID)) {
-    //            return tank.getFluidStack().copyWithAmount(maxDrain);
+    //            return new FluidStack(tank.getFluidStack(), maxDrain);
     //        }
     //        FluidStack ret = tank.drain(maxDrain, action);
     //        tank.write(containerTag);
@@ -119,7 +117,7 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     //    @Override
     //    public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
     //
-    //        ItemHelper.setCustomSubTag(container, TAG_PROPERTIES, new CompoundTag());
+    //        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
     //        for (ItemStack augment : augments) {
     //            CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
     //            if (augmentData == null) {

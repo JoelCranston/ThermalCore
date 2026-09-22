@@ -1,7 +1,5 @@
 package cofh.thermal.core.common.event;
 
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.neoforged.neoforge.common.util.TriState;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.filter.IFilterOptions;
 import cofh.thermal.core.common.inventory.storage.SatchelMenu;
@@ -9,13 +7,14 @@ import cofh.thermal.core.common.item.DivingArmorItem;
 import cofh.thermal.core.common.item.SatchelItem;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
@@ -55,8 +54,6 @@ public class TCoreCommonEvents {
     @SubscribeEvent
     public static void handleEntityItemPickup(final ItemEntityPickupEvent.Pre event) {
 
-        // ItemEntityPickupEvent.Pre is not cancellable - the pickup is denied by setting the
-        // TriState instead.
         if (event.canPickup() == TriState.FALSE) {
             return;
         }

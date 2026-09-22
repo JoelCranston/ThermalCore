@@ -1,22 +1,20 @@
 package cofh.thermal.lib.common.block.entity;
 
-import net.minecraft.core.HolderLookup;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.util.control.IRedstoneControllableTile;
 import cofh.core.util.control.ISecurableTile;
 import cofh.core.util.control.RedstoneControlModule;
 import cofh.core.util.control.SecurityControlModule;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.thermal.core.common.config.ThermalCoreConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import static cofh.lib.util.constants.NBTTags.TAG_BLOCK_ENTITY;
 
 public class LogisticsBlockEntity extends BlockEntityCoFH implements ISecurableTile, IRedstoneControllableTile {
 

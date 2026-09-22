@@ -13,7 +13,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 public class ConfigPlacementFilter extends PlacementFilter {
 
-    // PlacementModifierType#codec() returns a MapCodec now.
     public static final MapCodec<ConfigPlacementFilter> CODEC = RecordCodecBuilder.mapCodec((builder) -> builder.group(Codec.STRING.fieldOf("config").forGetter(f -> f.name)).apply(builder, ConfigPlacementFilter::new));
 
     protected String name;

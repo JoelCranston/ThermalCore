@@ -1,16 +1,12 @@
 package cofh.thermal.lib.util.recipes;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-
-import javax.annotation.Nullable;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 
@@ -18,6 +14,7 @@ public class MachineCatalystSerializer<T extends ThermalCatalyst> implements Rec
 
     protected final IFactory<T> factory;
     protected final MapCodec<T> codec;
+    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 
     public MachineCatalystSerializer(IFactory<T> factory) {
 
@@ -32,8 +29,6 @@ public class MachineCatalystSerializer<T extends ThermalCatalyst> implements Rec
                 ).apply(builder, factory::create)
         );
     }
-
-    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 
     @Override
     public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {

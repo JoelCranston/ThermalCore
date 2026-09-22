@@ -1,7 +1,7 @@
 package cofh.thermal.core.common.item;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.AugmentDataHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.common.energy.EnergyStorageCoFH;
 import cofh.thermal.core.common.block.entity.storage.EnergyCellBlockEntity;
@@ -48,8 +48,6 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;
@@ -69,8 +67,6 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
     //    }
 
     // region IEnergyContainerItem
-    // 1.21: the cell's energy lives in the BLOCK_ENTITY_DATA component, which hands back a
-    // copy - a write only sticks if it goes through setBlockEntityData.
     @Override
     public CompoundTag getEnergyTag(ItemStack container) {
 

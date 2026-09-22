@@ -1,7 +1,5 @@
 package cofh.thermal.core.common.item;
 
-import net.minecraft.core.component.DataComponents;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.IMultiModeItem;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.filter.EmptyFilter;
@@ -10,6 +8,7 @@ import cofh.core.util.filter.IFilter;
 import cofh.core.util.filter.IFilterableItem;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.InventoryHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.item.IColorableItem;
 import cofh.lib.api.item.ISecurableItem;
 import cofh.lib.common.inventory.ItemStorageCoFH;
@@ -22,6 +21,7 @@ import cofh.thermal.core.common.inventory.storage.SatchelMenu;
 import cofh.thermal.lib.common.item.InventoryContainerItemAugmentable;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -199,8 +199,6 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
     @Override
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;

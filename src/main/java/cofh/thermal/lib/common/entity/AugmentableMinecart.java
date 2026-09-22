@@ -1,15 +1,15 @@
 package cofh.thermal.lib.common.entity;
 
-import cofh.core.util.helpers.ItemHelper;
-import cofh.core.util.ProxyUtils;
 import cofh.core.common.entity.AbstractMinecartCoFH;
 import cofh.core.common.item.IAugmentableItem;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.filter.EmptyFilter;
 import cofh.core.util.filter.IFilter;
 import cofh.core.util.filter.IFilterable;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.IStorageCallback;
 import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.lib.common.inventory.SimpleItemInv;
@@ -25,7 +25,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -34,7 +33,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -102,7 +100,6 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
             }
             filter.write(ProxyUtils.registryAccess(), nbt);
         }
-        // The blob is a component copy now, so it has to be stored back explicitly.
         ItemHelper.setCustomData(stack, nbt);
         return super.createItemStackTag(stack);
     }

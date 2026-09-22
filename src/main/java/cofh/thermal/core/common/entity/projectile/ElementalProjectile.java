@@ -1,7 +1,7 @@
 package cofh.thermal.core.common.entity.projectile;
 
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -22,8 +22,6 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
         super(type, world);
     }
 
-    // 1.21: the three acceleration components became a direction Vec3 plus the projectile's
-    // own accelerationPower, which is applied along the normalised movement each tick.
     public ElementalProjectile(EntityType<? extends AbstractHurtingProjectile> type, LivingEntity shooter, double accelX, double accelY, double accelZ, Level world) {
 
         super(type, shooter, new Vec3(accelX, accelY, accelZ), world);

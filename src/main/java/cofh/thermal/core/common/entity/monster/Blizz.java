@@ -1,10 +1,5 @@
 package cofh.thermal.core.common.entity.monster;
 
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.util.Mth;
-import net.minecraft.server.level.ServerLevel;
 import cofh.thermal.core.common.config.ThermalClientConfig;
 import cofh.thermal.core.common.entity.projectile.BlizzProjectile;
 import net.minecraft.core.BlockPos;
@@ -12,8 +7,10 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,9 +29,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.EnumSet;
 
@@ -133,10 +133,8 @@ public class Blizz extends Monster {
         super.aiStep();
     }
 
+    // Frost Walker I's replace_disk effect; Soul Speed is handled by super.
     @Override
-    // 1.21: Frost Walker is a datapack enchantment effect (minecraft:replace_disk) and there
-    // is no FrostWalkerEnchantment to call; this is that same disk at the level-1 radius. Soul
-    // speed is handled by super, which runs the location-changed enchantment effects.
     protected void onChangedBlock(ServerLevel level, BlockPos pos) {
 
         super.onChangedBlock(level, pos);

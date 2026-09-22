@@ -1,9 +1,9 @@
 package cofh.thermal.lib.common.item;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.FluidContainerItem;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.helpers.AugmentDataHelper;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +20,8 @@ import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.Constants.MAX_POTION_AMPLIFIER;
 import static cofh.lib.util.Constants.MAX_POTION_DURATION;
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class FluidContainerItemAugmentable extends FluidContainerItem implements IAugmentableItem {
 
@@ -63,8 +63,6 @@ public class FluidContainerItemAugmentable extends FluidContainerItem implements
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;

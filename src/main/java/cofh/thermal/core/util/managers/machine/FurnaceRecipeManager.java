@@ -1,9 +1,9 @@
 package cofh.thermal.core.util.managers.machine;
 
-import net.minecraft.core.component.DataComponents;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.machine.FurnaceRecipe;
 import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;

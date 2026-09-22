@@ -151,7 +151,6 @@ public class EnderFluid extends FluidCoFH {
 
         public FluidBlock(Supplier<? extends FlowingFluid> fluidSup, Properties properties) {
 
-            // LiquidBlock takes the fluid itself now, not a supplier.
             super(fluidSup.get(), properties);
         }
 

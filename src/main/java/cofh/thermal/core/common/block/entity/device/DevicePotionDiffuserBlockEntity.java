@@ -1,9 +1,5 @@
 package cofh.thermal.core.common.block.entity.device;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import java.util.ArrayList;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.HolderLookup;
 import cofh.core.common.network.packet.client.TileStatePacket;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FluidHelper;
@@ -18,6 +14,8 @@ import cofh.thermal.core.common.inventory.device.DevicePotionDiffuserMenu;
 import cofh.thermal.core.util.managers.device.PotionDiffuserManager;
 import cofh.thermal.lib.common.block.entity.DeviceBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,7 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
@@ -38,9 +36,9 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -290,8 +288,6 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
                 cached = false;
             }
         } else if (!cached) {
-            // 1.21: potion data is the POTION_CONTENTS component on the stack (FluidStack is a
-            // component holder too), and an effect is a Holder<MobEffect>.
             PotionContents contents = inputTank.getFluidStack().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             effects = new ArrayList<>();
             contents.getAllEffects().forEach(effects::add);

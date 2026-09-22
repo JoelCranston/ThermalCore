@@ -1,17 +1,11 @@
 package cofh.thermal.lib.common.block.entity;
 
-import cofh.core.util.helpers.FluidHelper;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.core.component.DataComponents;
-import cofh.core.util.ProxyUtils;
-import net.minecraft.core.HolderLookup;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.common.network.packet.client.TileControlPacket;
 import cofh.core.common.network.packet.client.TileRedstonePacket;
 import cofh.core.common.network.packet.client.TileStatePacket;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.control.*;
 import cofh.core.util.filter.EmptyFilter;
 import cofh.core.util.filter.FilterRegistry;
@@ -19,6 +13,8 @@ import cofh.core.util.filter.IFilter;
 import cofh.core.util.filter.IFilterable;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FilterHelper;
+import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.common.energy.EmptyEnergyStorage;
 import cofh.lib.common.energy.EnergyStorageCoFH;
 import cofh.lib.common.fluid.FluidStorageCoFH;
@@ -36,8 +32,10 @@ import cofh.thermal.core.common.config.ThermalClientConfig;
 import cofh.thermal.core.common.config.ThermalCoreConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,8 +46,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -65,7 +62,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -512,7 +508,6 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         isActive = nbt.getBoolean(TAG_ACTIVE);
 
-        // 1.21: enchantments on a stack are a component; persisted here through its codec.
         enchantments = ItemEnchantments.CODEC
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get(TAG_ENCHANTMENTS))
                 .result().orElse(ItemEnchantments.EMPTY);

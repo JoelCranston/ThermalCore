@@ -1,9 +1,9 @@
 package cofh.thermal.core.common.item;
 
 import cofh.core.util.ProxyUtils;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.common.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.StringHelper;
@@ -22,7 +22,6 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
 import java.util.function.Consumer;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
@@ -63,8 +62,6 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;
@@ -83,8 +80,6 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     //    }
 
     // region IFluidContainerItem
-    // 1.21: the cell's fluid lives in the BLOCK_ENTITY_DATA component, which hands back a
-    // copy - a write only sticks if it goes through setBlockEntityData.
     @Override
     public CompoundTag getTankTag(ItemStack container) {
 

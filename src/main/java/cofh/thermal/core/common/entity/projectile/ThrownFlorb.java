@@ -1,8 +1,8 @@
 package cofh.thermal.core.common.entity.projectile;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

@@ -1,15 +1,14 @@
 package cofh.thermal.core.util.managers.device;
 
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.resources.ResourceKey;
 import cofh.lib.util.crafting.ComparableItemStack;
 import cofh.thermal.core.util.recipes.device.FisherBoost;
 import cofh.thermal.lib.util.managers.AbstractManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Map;

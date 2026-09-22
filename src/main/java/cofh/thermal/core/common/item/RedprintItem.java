@@ -1,14 +1,14 @@
 package cofh.thermal.core.common.item;
 
-import net.minecraft.core.component.DataComponents;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.util.ProxyUtils;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.IConveyableData;
 import cofh.lib.api.control.ISecurable;
 import cofh.lib.api.item.IPlacementItem;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -79,7 +79,6 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             if (ItemHelper.hasCustomData(stack)) {
                 player.level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5F, 0.3F);
                 ItemHelper.setCustomData(stack, null);
-            stack.remove(DataComponents.RARITY);
                 stack.remove(DataComponents.RARITY);
             }
             return true;
@@ -92,7 +91,6 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
         }
         if (tile instanceof IConveyableData conveyableTile) {
             if (!ItemHelper.hasCustomData(stack) && context.getHand() == InteractionHand.MAIN_HAND) {
-                // The blob is a component copy now, so it is built up and then stored back.
                 CompoundTag conveyableData = new CompoundTag();
                 conveyableTile.writeConveyableData(player, conveyableData);
                 tile.setChanged();
@@ -142,7 +140,6 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             }
             ItemHelper.setCustomData(stack, null);
             stack.remove(DataComponents.RARITY);
-                stack.remove(DataComponents.RARITY);
         }
         player.swing(hand);
         return InteractionResultHolder.success(stack);

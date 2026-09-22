@@ -1,7 +1,7 @@
 package cofh.thermal.core.client.renderer.model;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.client.renderer.model.ModelUtils;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.client.renderer.block.model.RetexturedBakedQuad;
 import cofh.lib.util.crafting.ComparableItemStack;
@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import static cofh.lib.api.ContainerType.ENERGY;
-import static cofh.lib.util.constants.NBTTags.TAG_BLOCK_ENTITY;
 import static cofh.lib.util.constants.NBTTags.TAG_SIDES;
 import static cofh.thermal.core.client.ThermalTextures.*;
 import static cofh.thermal.lib.util.Constants.DEFAULT_CELL_SIDES_RAW;

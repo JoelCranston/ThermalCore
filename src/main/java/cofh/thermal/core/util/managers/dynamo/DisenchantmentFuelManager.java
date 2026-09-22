@@ -1,15 +1,13 @@
 package cofh.thermal.core.util.managers.dynamo;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.core.Holder;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import cofh.core.util.ProxyUtils;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.dynamo.DisenchantmentFuel;
 import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
-import net.minecraft.core.registries.BuiltInRegistries;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
@@ -17,13 +15,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static cofh.lib.util.Utils.getName;
 import static cofh.lib.util.Utils.getRegistryName;
@@ -73,7 +70,6 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
         if (stack.isEmpty()) {
             return 0;
         }
-        // 1.21: enchantments on a stack are the ENCHANTMENTS component, keyed by Holder.
         ItemEnchantments enchants = stack.getEnchantments();
         int energy = 0;
 
@@ -109,8 +105,6 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     protected void createConvertedRecipes(RecipeManager recipeManager) {
 
-        // Enchantments are a datapack registry now, so they come from the running registries
-        // rather than BuiltInRegistries.
         List<ItemStack> books = new ArrayList<>();
         ProxyUtils.registryAccess().lookup(Registries.ENCHANTMENT).ifPresent(lookup -> lookup.listElements()
                 .forEach(holder -> books.add(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, holder.value().getMaxLevel())))));

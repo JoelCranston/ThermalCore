@@ -1,8 +1,8 @@
 package cofh.thermal.core.common.inventory.storage;
 
-import cofh.core.util.ProxyUtils;
 import cofh.core.common.inventory.ContainerMenuCoFH;
 import cofh.core.common.network.packet.server.SecurityPacket;
+import cofh.core.util.ProxyUtils;
 import cofh.lib.api.control.ISecurable;
 import cofh.lib.api.item.IInventoryContainerItem;
 import cofh.lib.common.inventory.SimpleItemInv;

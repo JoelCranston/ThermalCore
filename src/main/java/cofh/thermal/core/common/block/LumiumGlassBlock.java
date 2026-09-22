@@ -1,9 +1,9 @@
 package cofh.thermal.core.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

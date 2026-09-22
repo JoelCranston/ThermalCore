@@ -1,6 +1,5 @@
 package cofh.thermal.core.common.block.entity.device;
 
-import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.common.inventory.ItemStorageCoFH;
@@ -12,6 +11,7 @@ import cofh.thermal.core.common.inventory.device.DeviceComposterMenu;
 import cofh.thermal.lib.common.block.entity.DeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

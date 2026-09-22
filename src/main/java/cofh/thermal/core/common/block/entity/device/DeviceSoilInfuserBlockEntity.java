@@ -1,7 +1,5 @@
 package cofh.thermal.core.common.block.entity.device;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.lib.api.block.entity.IAreaEffectTile;
@@ -13,20 +11,20 @@ import cofh.thermal.core.common.config.ThermalCoreConfig;
 import cofh.thermal.core.common.inventory.device.DeviceSoilInfuserMenu;
 import cofh.thermal.lib.common.block.entity.AugmentableBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 

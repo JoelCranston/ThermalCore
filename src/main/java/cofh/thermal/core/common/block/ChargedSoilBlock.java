@@ -1,8 +1,8 @@
 package cofh.thermal.core.common.block;
 
-import net.minecraft.core.Direction;
 import cofh.core.common.block.SoilBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -34,7 +34,6 @@ public class ChargedSoilBlock extends SoilBlock {
         BlockPos abovePos = pos.above();
         BlockState aboveState = worldIn.getBlockState(abovePos);
 
-        // IPlantable is gone - whether the block above is a plant is the soil's own answer now.
         if (state.canSustainPlant(worldIn, pos, Direction.UP, aboveState).isTrue() && aboveState.isRandomlyTicking()) {
             int charge = state.getValue(CHARGED);
             int boost = 1 + charge;

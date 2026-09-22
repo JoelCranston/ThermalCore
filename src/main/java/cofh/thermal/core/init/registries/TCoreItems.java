@@ -1,7 +1,5 @@
 package cofh.thermal.core.init.registries;
 
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.minecraft.world.item.ArmorMaterial;
 import cofh.core.common.item.EnergyContainerItem;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.common.item.SpawnEggItemCoFH;
@@ -15,10 +13,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.FlagManager.getFlag;
@@ -69,9 +69,6 @@ public class TCoreItems {
 
         DetonatorItem.registerTNT(BLOCKS.get(ID_PHYTO_TNT), ((TntBlockCoFH) (BLOCKS.get(ID_PHYTO_TNT))).getFactory());
         DetonatorItem.registerTNT(BLOCKS.get(ID_NUKE_TNT), ((TntBlockCoFH) (BLOCKS.get(ID_NUKE_TNT))).getFactory());
-
-        // The diving suit's swim-speed modifier is part of its attribute component now and
-        // needs no deferred setup pass.
 
         flagUniqueAugment(ITEMS.get("rs_control_augment"));
         flagUniqueAugment(ITEMS.get("side_config_augment"));
@@ -439,8 +436,6 @@ public class TCoreItems {
     }
     // endregion
 
-    // 1.21: ArmorMaterial is a registry record and durability moved off it onto the item's own
-    // MAX_DAMAGE component, so the old durability multiplier is applied per armour piece below.
     private static final int BEEKEEPER_DURABILITY = 4;
     private static final int DIVING_DURABILITY = 12;
     private static final int HAZMAT_DURABILITY = 6;

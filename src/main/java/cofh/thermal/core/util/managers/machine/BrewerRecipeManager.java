@@ -1,14 +1,5 @@
 package cofh.thermal.core.util.managers.machine;
 
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Item;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.Holder;
-import java.util.Optional;
 import cofh.core.common.fluid.PotionFluid;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.fluid.IFluidStackHolder;
@@ -25,17 +16,26 @@ import cofh.thermal.lib.util.recipes.internal.IMachineRecipe;
 import cofh.thermal.lib.util.recipes.internal.SimpleMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.*;
+import java.util.Optional;
 
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
@@ -184,9 +184,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
         return convertedRecipes;
     }
 
-    // 1.21: PotionBrewing.POTION_MIXES is gone - brewing is a per-server PotionBrewing instance
-    // whose mixes are not enumerable, so the conversions are discovered by asking it to mix each
-    // potion with each item it accepts as an ingredient.
+    // Brewing mixes are not enumerable, so each potion is tried against each ingredient.
     protected void createConvertedRecipes() {
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();

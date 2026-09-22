@@ -1,9 +1,5 @@
 package cofh.thermal.core.util.recipes.device;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import com.mojang.serialization.MapCodec;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.util.Utils;
@@ -11,17 +7,16 @@ import cofh.lib.util.recipes.JsonMapCodec;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 import static cofh.thermal.core.init.registries.TCoreRecipeSerializers.TREE_EXTRACTOR_SERIALIZER;
@@ -125,8 +120,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
                         } catch (JsonParseException e) {
                             return DataResult.error(e::getMessage);
                         }
-                    }, recipe -> DataResult.success(toJson(recipe)))
-                    ;
+                    }, recipe -> DataResult.success(toJson(recipe)));
         }
 
         public TreeExtractorMapping fromJson(JsonObject json) {

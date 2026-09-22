@@ -6,7 +6,6 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id 'com.modrinth.minotaur' version "2.+"
 
-    // ModDevGradle (replaced NeoGradle userdev 7.1.38 on 2026-09-22 - see ../CoFHCore/docs/port-plan.md §1.4/§4.3)
     id 'net.neoforged.moddev' version '2.0.147'
 }
 
@@ -20,8 +19,6 @@ java {
 
 sourceSets.main.resources.srcDirs += "src/main/generated"
 
-// javac's default -Xmaxerrs 100 silently caps error output, which makes a version hop's error
-// count look like it has stalled at 100. Raised so `compileJava` always shows the true total.
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xmaxerrs" << "100000"
     options.encoding = 'UTF-8'
@@ -40,9 +37,6 @@ println "Using NeoForge: ${neo_version}, for Minecraft: ${mc_version}"
 neoForge {
     version = project.neo_version
 
-    // Fail the build on access transformer lines whose targets no longer exist - exactly what a
-    // version hop needs to surface. The file at the default path
-    // (src/main/resources/META-INF/accesstransformer.cfg) is picked up automatically.
     validateAccessTransformers = true
 
     runs {
@@ -60,7 +54,6 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         data {
-            // 1.21.1 has the plain data run type; 26.1 (1.21.4+) replaces it with clientData().
             data()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output',
                     file('src/main/generated/').getAbsolutePath(), '--existing',
@@ -79,7 +72,7 @@ neoForge {
     }
 }
 
-// Runtime-only optional mods (the full JEI jar) go here so they are never published as a dependency.
+// Runtime-only mods, never published as dependencies.
 configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
@@ -155,7 +148,6 @@ repositories {
 }
 
 dependencies {
-    // Resolved to the ../CoFHCore included build by the dependencySubstitution in settings.gradle.
     implementation "com.teamcofh:cofh_core:${mc_version}-${cofh_core_version}+"
 
     compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -182,8 +174,6 @@ def commonManifest = {
     ])
 }
 
-// Was defined but never applied before 2026-09-22 (same latent bug CoFHCore had) - the jar shipped
-// without any of these attributes.
 tasks.named('jar', Jar) {
     manifest commonManifest
 }

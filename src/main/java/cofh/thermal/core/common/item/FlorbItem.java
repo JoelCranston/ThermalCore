@@ -1,15 +1,13 @@
 package cofh.thermal.core.common.item;
 
-import net.minecraft.world.item.Item.TooltipContext;
 import cofh.core.common.item.FluidContainerItem;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cofh.thermal.core.common.entity.projectile.ThrownFlorb;
-import net.minecraft.core.Position;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ProjectileItem;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,7 +16,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -45,8 +45,6 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
 
         ProxyUtils.registerColorable(this);
 
-        // Per-item dispense-behaviour subclasses are gone; ProjectileItem plus this call is the
-        // modern equivalent.
         DispenserBlock.registerProjectileBehavior(this);
     }
 
@@ -144,18 +142,19 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
     @Override
     public Projectile asProjectile(Level worldIn, Position position, ItemStack stackIn, Direction direction) {
 
-            ThrownFlorb florb = new ThrownFlorb(worldIn, position.x(), position.y(), position.z());
-            ItemStack throwStack = cloneStack(stackIn, 1);
-            throwStack.setDamageValue(1);
-            florb.setItem(throwStack);
+        ThrownFlorb florb = new ThrownFlorb(worldIn, position.x(), position.y(), position.z());
+        ItemStack throwStack = cloneStack(stackIn, 1);
+        throwStack.setDamageValue(1);
+        florb.setItem(throwStack);
         return florb;
     }
 
     @Override
-    public ProjectileItem.DispenseConfig createDispenseConfig() {
+    public DispenseConfig createDispenseConfig() {
 
-        ProjectileItem.DispenseConfig defaults = ProjectileItem.super.createDispenseConfig();
-        return new ProjectileItem.DispenseConfig(defaults.positionFunction(), 3.0F, defaults.power(), defaults.overrideDispenseEvent());
+        DispenseConfig defaults = ProjectileItem.super.createDispenseConfig();
+
+        return new DispenseConfig(defaults.positionFunction(), 3.0F, defaults.power(), defaults.overrideDispenseEvent());
     }
     // endregion
 }

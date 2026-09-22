@@ -1,9 +1,9 @@
 package cofh.thermal.core.common.item;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.IMultiModeItem;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.util.ProxyUtils;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.api.ITNTFactory;
 import cofh.lib.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.Optional;
 
 import static cofh.lib.util.constants.NBTTags.TAG_PRIMED;

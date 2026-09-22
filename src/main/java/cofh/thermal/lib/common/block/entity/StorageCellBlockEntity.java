@@ -1,24 +1,21 @@
 package cofh.thermal.lib.common.block.entity;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.core.HolderLookup;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.control.*;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Map;
 
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_HORIZONTAL;
 import static cofh.lib.util.constants.NBTTags.*;

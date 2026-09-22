@@ -1,7 +1,5 @@
 package cofh.thermal.core.common.block.entity.device;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.InventoryHelper;
 import cofh.lib.api.block.entity.IAreaEffectTile;
@@ -17,6 +15,7 @@ import cofh.thermal.core.util.managers.device.FisherManager;
 import cofh.thermal.lib.common.block.entity.DeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +24,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -39,7 +38,6 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 

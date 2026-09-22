@@ -1063,7 +1063,7 @@ public class TCoreRecipeProvider extends RecipeProviderCoFH {
                 .save(recipeOutput.withConditions(new FlagSetCondition(ID_FLUID_CELL_FRAME)));
 
         //        ShapedRecipeBuilder.shaped(reg.get(ID_ITEM_CELL_FRAME))
-        //                .define('G', Tags.Items.GLASS_BLOCKS)
+        //                .define('G', Tags.Items.GLASS)
         //                .define('I', ItemTagsCoFH.INGOTS_TIN)
         //                .define('E', ItemTagsCoFH.GEARS_IRON)
         //                .pattern("IGI")

@@ -1,7 +1,5 @@
 package cofh.thermal.lib.common.block.entity;
 
-import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.core.HolderLookup;
 import cofh.core.util.control.IReconfigurableTile;
 import cofh.core.util.control.ITransferControllableTile;
 import cofh.core.util.control.ReconfigControlModule;
@@ -13,12 +11,13 @@ import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.thermal.lib.util.recipes.IThermalInventory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,7 +29,6 @@ import net.neoforged.neoforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 import static cofh.core.client.renderer.model.ModelUtils.FLUID;
 import static cofh.core.client.renderer.model.ModelUtils.SIDES;

@@ -1,16 +1,14 @@
 package cofh.thermal.core.util.managers.dynamo;
 
-import net.minecraft.core.component.DataComponents;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.dynamo.GourmandFuel;
 import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
-import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,9 +71,6 @@ public class GourmandFuelManager extends SingleItemFuelManager {
         if (stack.getItem().hasCraftingRemainingItem(stack)) {
             return 0;
         }
-        // 1.21: FoodProperties is a record hanging off DataComponents.FOOD. Its saturation is
-        // absolute now (it used to be a modifier: saturation = nutrition * modifier * 2), and
-        // "fast food" is just a shorter eat duration than the 32-tick default.
         FoodProperties food = stack.get(DataComponents.FOOD);
         if (food == null) {
             return 0;
@@ -90,6 +85,7 @@ public class GourmandFuelManager extends SingleItemFuelManager {
             }
             energy *= 2;
         }
+        // Saturation is absolute (nutrition * modifier * 2), so this is a modifier above 1.
         if (food.nutrition() > 0 && food.saturation() > food.nutrition() * 2.0F) {
             energy *= 4;
         }

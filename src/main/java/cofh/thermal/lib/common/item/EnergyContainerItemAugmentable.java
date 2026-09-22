@@ -1,9 +1,9 @@
 package cofh.thermal.lib.common.item;
 
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.EnergyContainerItem;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.helpers.AugmentDataHelper;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -56,8 +56,6 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
-        // attribute writes only stick if they happen inside the component update.
         ItemHelper.mutateCustomData(container, tag -> {
             if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
                 return;

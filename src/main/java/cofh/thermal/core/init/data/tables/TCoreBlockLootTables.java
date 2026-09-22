@@ -1,7 +1,7 @@
 package cofh.thermal.core.init.data.tables;
 
-import net.minecraft.core.HolderLookup;
 import cofh.lib.init.data.loot.BlockLootSubProviderCoFH;
+import net.minecraft.core.HolderLookup;
 
 import static cofh.thermal.core.ThermalCore.BLOCKS;
 import static cofh.thermal.core.ThermalCore.ITEMS;
@@ -9,7 +9,6 @@ import static cofh.thermal.lib.util.ThermalIDs.*;
 
 public class TCoreBlockLootTables extends BlockLootSubProviderCoFH {
 
-    // Loot can reference registry objects, so a sub-provider is handed the registries.
     public TCoreBlockLootTables(HolderLookup.Provider registries) {
 
         super(registries);

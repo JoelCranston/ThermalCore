@@ -1,8 +1,5 @@
 package cofh.thermal.lib.util.recipes;
 
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import com.mojang.serialization.MapCodec;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.helpers.MathHelper;
@@ -10,15 +7,15 @@ import cofh.lib.util.recipes.JsonMapCodec;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,14 +25,13 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
 
     protected final int defaultEnergy;
     protected final IFactory<T> factory;
+    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 
     public MachineRecipeSerializer(IFactory<T> factory, int defaultEnergy) {
 
         this.factory = factory;
         this.defaultEnergy = defaultEnergy;
     }
-
-    private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 
     @Override
     public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
@@ -53,8 +49,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
                     } catch (JsonParseException e) {
                         return DataResult.error(e::getMessage);
                     }
-                }, recipe -> DataResult.success(toJson(recipe)))
-                ;
+                }, recipe -> DataResult.success(toJson(recipe)));
     }
 
     protected T fromJson(JsonObject json) {

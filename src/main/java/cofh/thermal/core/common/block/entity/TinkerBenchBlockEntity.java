@@ -1,6 +1,5 @@
 package cofh.thermal.core.common.block.entity;
 
-import net.minecraft.core.HolderLookup;
 import cofh.core.common.fluid.PotionFluid;
 import cofh.core.util.filter.EmptyFilter;
 import cofh.core.util.filter.IFilter;
@@ -15,6 +14,7 @@ import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.thermal.core.common.inventory.TinkerBenchMenu;
 import cofh.thermal.lib.common.block.entity.AugmentableBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

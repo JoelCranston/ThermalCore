@@ -1,9 +1,9 @@
 package cofh.thermal.core.client.renderer.model;
 
-import cofh.core.util.ProxyUtils;
-import cofh.core.util.helpers.ItemHelper;
 import cofh.core.client.renderer.model.ModelUtils;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.client.renderer.block.model.RetexturedBakedQuad;

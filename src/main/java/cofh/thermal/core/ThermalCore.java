@@ -1,6 +1,5 @@
 package cofh.thermal.core;
 
-import net.minecraft.world.item.ArmorMaterial;
 import cofh.core.client.event.CoreClientEvents;
 import cofh.core.client.renderer.entity.TNTMinecartRendererCoFH;
 import cofh.core.common.config.ConfigManager;
@@ -24,7 +23,6 @@ import cofh.thermal.core.common.fluid.RedstoneFluid;
 import cofh.thermal.core.init.registries.*;
 import cofh.thermal.lib.util.ThermalProxy;
 import cofh.thermal.lib.util.ThermalProxyClient;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -35,8 +33,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -85,7 +83,6 @@ public class ThermalCore {
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(BuiltInRegistries.FLUID, ID_THERMAL);
     public static final DeferredRegisterCoFH<CreativeModeTab> CREATIVE_TABS = DeferredRegisterCoFH.create(BuiltInRegistries.CREATIVE_MODE_TAB, ID_THERMAL);
     public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(BuiltInRegistries.MOB_EFFECT, ID_THERMAL);
-    // 1.21: ArmorMaterial is a registered record, not a class to implement - armour items take a Holder.
     public static final DeferredRegisterCoFH<ArmorMaterial> ARMOR_MATERIALS = DeferredRegisterCoFH.create(BuiltInRegistries.ARMOR_MATERIAL, ID_THERMAL);
 
     public static final DeferredRegisterCoFH<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_THERMAL);

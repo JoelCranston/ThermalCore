@@ -1,23 +1,19 @@
 package cofh.thermal.core.util.recipes.device;
 
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import com.mojang.serialization.MapCodec;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 import static cofh.thermal.core.init.registries.TCoreRecipeSerializers.FISHER_BOOST_SERIALIZER;
