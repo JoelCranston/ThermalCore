@@ -24,6 +24,6 @@
     "IGI"
   ],
   "result": {
-    "item": "thermal:machine_frame"
+    "id": "thermal:machine_frame"
   }
 }

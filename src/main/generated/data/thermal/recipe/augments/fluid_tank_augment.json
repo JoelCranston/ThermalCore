@@ -24,6 +24,6 @@
     "RIR"
   ],
   "result": {
-    "item": "thermal:fluid_tank_augment"
+    "id": "thermal:fluid_tank_augment"
   }
 }

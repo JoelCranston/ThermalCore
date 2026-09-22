@@ -15,6 +15,6 @@
     "###"
   ],
   "result": {
-    "item": "thermal:lumium_block"
+    "id": "thermal:lumium_block"
   }
 }

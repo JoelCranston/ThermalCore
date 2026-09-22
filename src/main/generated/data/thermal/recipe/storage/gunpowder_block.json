@@ -12,6 +12,6 @@
     "###"
   ],
   "result": {
-    "item": "thermal:gunpowder_block"
+    "id": "thermal:gunpowder_block"
   }
 }

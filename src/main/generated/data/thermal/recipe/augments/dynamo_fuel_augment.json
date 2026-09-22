@@ -24,6 +24,6 @@
     " G "
   ],
   "result": {
-    "item": "thermal:dynamo_fuel_augment"
+    "id": "thermal:dynamo_fuel_augment"
   }
 }

@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:enderium_dust"
   },
-  "result": "thermal:enderium_ingot"
+  "result": {
+    "id": "thermal:enderium_ingot"
+  }
 }

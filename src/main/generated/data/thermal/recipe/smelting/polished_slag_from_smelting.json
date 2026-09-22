@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:slag_block"
   },
-  "result": "thermal:polished_slag"
+  "result": {
+    "id": "thermal:polished_slag"
+  }
 }

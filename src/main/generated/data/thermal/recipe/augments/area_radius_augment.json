@@ -24,6 +24,6 @@
     " G "
   ],
   "result": {
-    "item": "thermal:area_radius_augment"
+    "id": "thermal:area_radius_augment"
   }
 }

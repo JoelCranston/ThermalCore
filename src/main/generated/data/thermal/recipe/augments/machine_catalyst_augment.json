@@ -24,6 +24,6 @@
     " C "
   ],
   "result": {
-    "item": "thermal:machine_catalyst_augment"
+    "id": "thermal:machine_catalyst_augment"
   }
 }

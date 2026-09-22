@@ -24,6 +24,6 @@
     "IGI"
   ],
   "result": {
-    "item": "thermal:fluid_cell_frame"
+    "id": "thermal:fluid_cell_frame"
   }
 }

@@ -15,6 +15,6 @@
     " i "
   ],
   "result": {
-    "item": "thermal:side_config_augment"
+    "id": "thermal:side_config_augment"
   }
 }

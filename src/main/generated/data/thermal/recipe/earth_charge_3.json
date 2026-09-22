@@ -19,6 +19,6 @@
   ],
   "result": {
     "count": 3,
-    "item": "thermal:earth_charge"
+    "id": "thermal:earth_charge"
   }
 }

@@ -24,6 +24,6 @@
     " L "
   ],
   "result": {
-    "item": "thermal:machine_speed_augment"
+    "id": "thermal:machine_speed_augment"
   }
 }

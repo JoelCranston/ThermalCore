@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_composter"
+    "id": "thermal:device_composter"
   }
 }

@@ -24,6 +24,6 @@
     " B "
   ],
   "result": {
-    "item": "thermal:machine_output_augment"
+    "id": "thermal:machine_output_augment"
   }
 }

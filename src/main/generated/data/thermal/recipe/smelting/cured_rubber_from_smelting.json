@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:rubber"
   },
-  "result": "thermal:cured_rubber"
+  "result": {
+    "id": "thermal:cured_rubber"
+  }
 }

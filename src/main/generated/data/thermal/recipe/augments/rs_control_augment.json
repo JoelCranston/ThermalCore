@@ -15,6 +15,6 @@
     " i "
   ],
   "result": {
-    "item": "thermal:rs_control_augment"
+    "id": "thermal:rs_control_augment"
   }
 }

@@ -2,6 +2,6 @@
   "type": "thermal:rock_gen",
   "adjacent": "minecraft:water",
   "result": {
-    "item": "minecraft:cobblestone"
+    "id": "minecraft:cobblestone"
   }
 }

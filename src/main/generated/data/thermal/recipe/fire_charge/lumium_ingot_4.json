@@ -46,6 +46,6 @@
   ],
   "result": {
     "count": 4,
-    "item": "thermal:lumium_ingot"
+    "id": "thermal:lumium_ingot"
   }
 }

@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_potion_diffuser"
+    "id": "thermal:device_potion_diffuser"
   }
 }

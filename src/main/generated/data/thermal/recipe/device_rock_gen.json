@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_rock_gen"
+    "id": "thermal:device_rock_gen"
   }
 }

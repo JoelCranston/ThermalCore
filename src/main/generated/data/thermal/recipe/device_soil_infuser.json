@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_soil_infuser"
+    "id": "thermal:device_soil_infuser"
   }
 }

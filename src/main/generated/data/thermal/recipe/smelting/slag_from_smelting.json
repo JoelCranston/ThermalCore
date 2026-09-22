@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "minecraft:gravel"
   },
-  "result": "thermal:slag"
+  "result": {
+    "id": "thermal:slag"
+  }
 }

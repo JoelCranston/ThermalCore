@@ -51,6 +51,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "thermal:enderium_ingot"
+    "id": "thermal:enderium_ingot"
   }
 }

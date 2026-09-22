@@ -15,6 +15,6 @@
     "###"
   ],
   "result": {
-    "item": "thermal:tar_block"
+    "id": "thermal:tar_block"
   }
 }

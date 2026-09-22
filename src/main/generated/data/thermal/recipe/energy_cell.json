@@ -30,6 +30,6 @@
     "RPR"
   ],
   "result": {
-    "item": "thermal:energy_cell"
+    "id": "thermal:energy_cell"
   }
 }

@@ -15,6 +15,6 @@
     "iii"
   ],
   "result": {
-    "item": "thermal:lock"
+    "id": "thermal:lock"
   }
 }

@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_hive_extractor"
+    "id": "thermal:device_hive_extractor"
   }
 }

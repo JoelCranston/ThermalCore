@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:signalum_dust"
   },
-  "result": "thermal:signalum_ingot"
+  "result": {
+    "id": "thermal:signalum_ingot"
+  }
 }

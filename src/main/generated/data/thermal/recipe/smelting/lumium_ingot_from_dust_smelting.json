@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:lumium_dust"
   },
-  "result": "thermal:lumium_ingot"
+  "result": {
+    "id": "thermal:lumium_ingot"
+  }
 }

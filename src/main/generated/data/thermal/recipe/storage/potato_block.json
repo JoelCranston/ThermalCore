@@ -12,6 +12,6 @@
     "###"
   ],
   "result": {
-    "item": "thermal:potato_block"
+    "id": "thermal:potato_block"
   }
 }

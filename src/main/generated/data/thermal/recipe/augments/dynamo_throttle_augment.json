@@ -21,6 +21,6 @@
     " l "
   ],
   "result": {
-    "item": "thermal:dynamo_throttle_augment"
+    "id": "thermal:dynamo_throttle_augment"
   }
 }

@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "thermal:slag_bricks"
   },
-  "result": "thermal:cracked_slag_bricks"
+  "result": {
+    "id": "thermal:cracked_slag_bricks"
+  }
 }

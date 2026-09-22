@@ -24,6 +24,6 @@
     " G "
   ],
   "result": {
-    "item": "thermal:dynamo_output_augment"
+    "id": "thermal:dynamo_output_augment"
   }
 }

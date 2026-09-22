@@ -24,6 +24,6 @@
     " G "
   ],
   "result": {
-    "item": "thermal:rf_coil_storage_augment"
+    "id": "thermal:rf_coil_storage_augment"
   }
 }

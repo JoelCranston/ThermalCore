@@ -25,6 +25,6 @@
   ],
   "result": {
     "count": 4,
-    "item": "thermal:redstone_grenade"
+    "id": "thermal:redstone_grenade"
   }
 }

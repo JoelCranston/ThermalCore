@@ -30,6 +30,6 @@
     "IPI"
   ],
   "result": {
-    "item": "thermal:device_fisher"
+    "id": "thermal:device_fisher"
   }
 }

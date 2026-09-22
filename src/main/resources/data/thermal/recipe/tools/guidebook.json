@@ -9,8 +9,8 @@
     }
   ],
   "result": {
-    "item": "patchouli:guide_book",
-    "nbt": "{\"patchouli:book\":\"thermal:guidebook\"}"
+    "nbt": "{\"patchouli:book\":\"thermal:guidebook\"}",
+    "id": "patchouli:guide_book"
   },
   "neoforge:conditions": [
     {

@@ -52,6 +52,6 @@
   ],
   "result": {
     "count": 4,
-    "item": "thermal:signalum_ingot"
+    "id": "thermal:signalum_ingot"
   }
 }

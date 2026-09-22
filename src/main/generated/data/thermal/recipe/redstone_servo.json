@@ -15,6 +15,6 @@
     " R "
   ],
   "result": {
-    "item": "thermal:redstone_servo"
+    "id": "thermal:redstone_servo"
   }
 }

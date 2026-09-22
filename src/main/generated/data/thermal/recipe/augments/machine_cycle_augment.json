@@ -27,6 +27,6 @@
     "SGS"
   ],
   "result": {
-    "item": "thermal:machine_cycle_augment"
+    "id": "thermal:machine_cycle_augment"
   }
 }

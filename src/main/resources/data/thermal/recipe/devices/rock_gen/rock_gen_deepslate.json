@@ -3,6 +3,6 @@
   "adjacent": "minecraft:packed_ice",
   "below": "minecraft:magma_block",
   "result": {
-    "item": "minecraft:deepslate"
+    "id": "minecraft:deepslate"
   }
 }

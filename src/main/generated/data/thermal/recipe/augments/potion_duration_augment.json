@@ -24,6 +24,6 @@
     " G "
   ],
   "result": {
-    "item": "thermal:potion_duration_augment"
+    "id": "thermal:potion_duration_augment"
   }
 }

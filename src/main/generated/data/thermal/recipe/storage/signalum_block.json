@@ -15,6 +15,6 @@
     "###"
   ],
   "result": {
-    "item": "thermal:signalum_block"
+    "id": "thermal:signalum_block"
   }
 }

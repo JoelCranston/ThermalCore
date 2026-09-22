@@ -2,6 +2,6 @@
   "type": "thermal:rock_gen",
   "adjacent": "minecraft:blue_ice",
   "result": {
-    "item": "minecraft:blackstone"
+    "id": "minecraft:blackstone"
   }
 }
