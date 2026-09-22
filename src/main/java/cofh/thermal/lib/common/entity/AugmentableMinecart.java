@@ -1,5 +1,7 @@
 package cofh.thermal.lib.common.entity;
 
+import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.ProxyUtils;
 import cofh.core.common.entity.AbstractMinecartCoFH;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.filter.EmptyFilter;
@@ -78,11 +80,9 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
 
         super.onPlaced(stack);
 
-        CompoundTag nbt = stack.getTag();
-        if (nbt != null) {
-            if (nbt.contains(TAG_AUGMENTS)) {
-                inventory.readSlotsUnordered(nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
-            }
+        CompoundTag nbt = ItemHelper.getCustomData(stack);
+        if (nbt.contains(TAG_AUGMENTS)) {
+            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
         }
         updateAugmentState();
 
@@ -92,16 +92,18 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        CompoundTag nbt = stack.getOrCreateTag();
+        CompoundTag nbt = ItemHelper.getCustomData(stack);
 
         if (ThermalCoreConfig.keepAugments.get() && augSize() > 0) {
-            getItemInv().writeSlotsToNBTUnordered(nbt, TAG_AUGMENTS, invSize() - augSize());
+            getItemInv().writeSlotsToNBTUnordered(ProxyUtils.registryAccess(), nbt, TAG_AUGMENTS, invSize() - augSize());
             if (stack.getItem() instanceof IAugmentableItem augmentableItem) {
                 List<ItemStack> items = getAugmentsAsList();
                 augmentableItem.updateAugmentState(stack, items);
             }
-            filter.write(nbt);
+            filter.write(ProxyUtils.registryAccess(), nbt);
         }
+        // The blob is a component copy now, so it has to be stored back explicitly.
+        ItemHelper.setCustomData(stack, nbt);
         return super.createItemStackTag(stack);
     }
 

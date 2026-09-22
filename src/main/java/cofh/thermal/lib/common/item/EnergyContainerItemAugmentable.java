@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.item;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.EnergyContainerItem;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.helpers.AugmentDataHelper;
@@ -14,6 +15,7 @@ import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
 import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.*;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem implements IAugmentableItem {
 
@@ -54,14 +56,18 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
-            return;
-        }
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_CREATIVE);
+        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
+        // attribute writes only stick if they happen inside the component update.
+        ItemHelper.mutateCustomData(container, tag -> {
+            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+                return;
+            }
+            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_CREATIVE);
+        });
     }
 
     // region IEnergyContainerItem
@@ -106,7 +112,7 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        ItemHelper.setCustomSubTag(container, TAG_PROPERTIES, new CompoundTag());
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

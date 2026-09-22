@@ -27,8 +27,10 @@ public class BottlerRecipeNBT extends BaseMachineRecipe {
 
         FluidStack fluid = inventory.inputTanks().get(0).getFluidStack();
         ItemStack item = outputItems.get(0).copy();
-        if (fluid.hasTag()) {
-            item.setTag(fluid.getTag().copy());
+        // 1.21: a FluidStack carries data components, not a tag - the bottled item inherits
+        // them (this is what puts the potion contents on the bottle).
+        if (!fluid.isComponentsPatchEmpty()) {
+            item.applyComponents(fluid.getComponentsPatch());
         }
         return Collections.singletonList(item);
     }

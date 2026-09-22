@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.common.network.packet.client.TileControlPacket;
@@ -202,7 +203,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        CompoundTag nbt = stack.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        CompoundTag nbt = ItemHelper.getBlockEntityData(stack);
         if (keepEnergy()) {
             getEnergyStorage().writeWithParams(nbt);
         }
@@ -235,7 +236,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
             securityControl().write(nbt);
         }
         if (!nbt.isEmpty()) {
-            stack.addTagElement(TAG_BLOCK_ENTITY, nbt);
+            ItemHelper.setBlockEntityData(stack, nbt);
         }
         if (!enchantments.isEmpty()) {
             stack.getOrCreateTag().put(TAG_ENCHANTMENTS, enchantments);

@@ -1,5 +1,6 @@
 package cofh.thermal.core.client.renderer.model;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.client.renderer.model.ModelUtils;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.RenderHelper;
@@ -129,7 +130,7 @@ public class FluidCellBakedModel extends UnderlayBakedModel implements IDynamicB
         @Override
         public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int seed) {
 
-            CompoundTag tag = stack.getTagElement(TAG_BLOCK_ENTITY);
+            CompoundTag tag = ItemHelper.getBlockEntityData(stack);
             byte[] sideConfigRaw = getSideConfigRaw(tag);
             int itemHash = new ComparableItemStack(stack).hashCode();
             int level = getLevel(stack);

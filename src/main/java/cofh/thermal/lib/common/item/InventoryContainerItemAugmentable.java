@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.item;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.common.item.InventoryContainerItem;
 import cofh.core.util.helpers.AugmentDataHelper;
@@ -13,6 +14,7 @@ import java.util.function.IntSupplier;
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
 import static cofh.lib.util.constants.NBTTags.*;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class InventoryContainerItemAugmentable extends InventoryContainerItem implements IAugmentableItem {
 
@@ -49,13 +51,17 @@ public class InventoryContainerItemAugmentable extends InventoryContainerItem im
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
-            return;
-        }
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_STORAGE);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_CREATIVE);
+        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
+        // attribute writes only stick if they happen inside the component update.
+        ItemHelper.mutateCustomData(container, tag -> {
+            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+                return;
+            }
+            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_STORAGE);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_CREATIVE);
+        });
     }
 
     // region IInventoryContainerItem
@@ -84,7 +90,7 @@ public class InventoryContainerItemAugmentable extends InventoryContainerItem im
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        ItemHelper.setCustomSubTag(container, TAG_PROPERTIES, new CompoundTag());
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

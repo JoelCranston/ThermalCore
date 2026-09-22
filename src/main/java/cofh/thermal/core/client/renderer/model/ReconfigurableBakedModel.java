@@ -1,5 +1,6 @@
 package cofh.thermal.core.client.renderer.model;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.client.renderer.model.ModelUtils;
 import cofh.lib.client.renderer.block.model.RetexturedBakedQuad;
 import cofh.lib.util.crafting.ComparableItemStack;
@@ -98,7 +99,7 @@ public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDyn
         @Override
         public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int seed) {
 
-            CompoundTag tag = stack.getTagElement(TAG_BLOCK_ENTITY);
+            CompoundTag tag = ItemHelper.getBlockEntityData(stack);
             byte[] sideConfigRaw = getSideConfigRaw(tag);
             int itemHash = new ComparableItemStack(stack).hashCode();
             int configHash = Arrays.hashCode(sideConfigRaw);

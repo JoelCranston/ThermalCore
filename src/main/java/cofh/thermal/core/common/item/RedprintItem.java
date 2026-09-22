@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.IConveyableData;
@@ -37,13 +38,13 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
 
         super(builder);
 
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("has_data"), ((stack, world, entity, seed) -> stack.hasTag() ? 1F : 0F));
+        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("has_data"), ((stack, world, entity, seed) -> ItemHelper.hasCustomData(stack) ? 1F : 0F));
     }
 
     @Override
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        CompoundTag conveyableData = stack.getTag();
+        CompoundTag conveyableData = ItemHelper.hasCustomData(stack) ? ItemHelper.getCustomData(stack) : null;
 
         if (conveyableData == null) {
             tooltip.add(getTextComponent("info.thermal.redprint.use").withStyle(GRAY));
@@ -68,7 +69,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
     @Override
     public Rarity getRarity(ItemStack stack) {
 
-        return stack.hasTag() ? Rarity.UNCOMMON : Rarity.COMMON;
+        return ItemHelper.hasCustomData(stack) ? Rarity.UNCOMMON : Rarity.COMMON;
     }
 
     protected boolean useDelegate(ItemStack stack, UseOnContext context) {
@@ -80,9 +81,9 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             return false;
         }
         if (player.isSecondaryUseActive() && context.getHand() == InteractionHand.MAIN_HAND) {
-            if (stack.getTag() != null) {
+            if (ItemHelper.hasCustomData(stack)) {
                 player.level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5F, 0.3F);
-                stack.setTag(null);
+                ItemHelper.setCustomData(stack, null);
             }
             return true;
         }
@@ -93,17 +94,19 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             return false;
         }
         if (tile instanceof IConveyableData conveyableTile) {
-            if (stack.getTag() == null && context.getHand() == InteractionHand.MAIN_HAND) {
-                conveyableTile.writeConveyableData(player, stack.getOrCreateTag());
+            if (!ItemHelper.hasCustomData(stack) && context.getHand() == InteractionHand.MAIN_HAND) {
+                // The blob is a component copy now, so it is built up and then stored back.
+                CompoundTag conveyableData = new CompoundTag();
+                conveyableTile.writeConveyableData(player, conveyableData);
                 tile.setChanged();
-                if (stack.getTag().isEmpty()) {
-                    stack.setTag(null);
+                if (conveyableData.isEmpty()) {
                     return false;
                 } else {
+                    ItemHelper.setCustomData(stack, conveyableData);
                     player.level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5F, 0.7F);
                 }
-            } else if (stack.hasTag()) {
-                conveyableTile.readConveyableData(player, stack.getTag());
+            } else if (ItemHelper.hasCustomData(stack)) {
+                conveyableTile.readConveyableData(player, ItemHelper.getCustomData(stack));
                 player.level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5F, 0.8F);
                 return true;
             }
@@ -136,10 +139,10 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
 
         ItemStack stack = player.getItemInHand(hand);
         if (player.isSecondaryUseActive()) {
-            if (stack.getTag() != null) {
+            if (ItemHelper.hasCustomData(stack)) {
                 player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 0.3F);
             }
-            stack.setTag(null);
+            ItemHelper.setCustomData(stack, null);
         }
         player.swing(hand);
         return InteractionResultHolder.success(stack);

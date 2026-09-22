@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.IMultiModeItem;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.filter.EmptyFilter;
@@ -198,11 +199,15 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
     @Override
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
-            return;
-        }
-        setAttributeFromAugmentString(subTag, augmentData, TAG_FILTER_TYPE);
+        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
+        // attribute writes only stick if they happen inside the component update.
+        ItemHelper.mutateCustomData(container, tag -> {
+            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+                return;
+            }
+            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            setAttributeFromAugmentString(subTag, augmentData, TAG_FILTER_TYPE);
+        });
 
         super.setAttributesFromAugment(container, augmentData);
     }
@@ -238,7 +243,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
         if (FILTERS.size() > MAP_CAPACITY) {
             FILTERS.clear();
         }
-        FILTERS.put(stack, FilterRegistry.getFilter(filterType, stack.getTag()));
+        FILTERS.put(stack, FilterRegistry.getFilter(filterType, ItemHelper.getCustomData(stack)));
         return FILTERS.get(stack);
     }
 

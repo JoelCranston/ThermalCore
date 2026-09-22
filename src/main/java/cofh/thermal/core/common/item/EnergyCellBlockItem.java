@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.common.energy.EnergyStorageCoFH;
@@ -15,12 +16,14 @@ import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
 import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.*;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergyContainerItem {
 
@@ -45,14 +48,18 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
-            return;
-        }
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_CREATIVE);
+        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
+        // attribute writes only stick if they happen inside the component update.
+        ItemHelper.mutateCustomData(container, tag -> {
+            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+                return;
+            }
+            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_CREATIVE);
+        });
     }
 
     //    @Override
@@ -62,34 +69,44 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
     //    }
 
     // region IEnergyContainerItem
+    // 1.21: the cell's energy lives in the BLOCK_ENTITY_DATA component, which hands back a
+    // copy - a write only sticks if it goes through setBlockEntityData.
     @Override
-    public CompoundTag getOrCreateEnergyTag(ItemStack container) {
+    public CompoundTag getEnergyTag(ItemStack container) {
 
-        CompoundTag blockTag = container.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        CompoundTag blockTag = ItemHelper.getBlockEntityData(container);
         if (!blockTag.contains(TAG_ENERGY_MAX)) {
             new EnergyStorageCoFH(EnergyCellBlockEntity.BASE_CAPACITY, EnergyCellBlockEntity.BASE_RECV, EnergyCellBlockEntity.BASE_SEND).writeWithParams(blockTag);
         }
-        return container.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        return blockTag;
+    }
+
+    @Override
+    public void mutateEnergyTag(ItemStack container, Consumer<CompoundTag> mutator) {
+
+        CompoundTag blockTag = getEnergyTag(container);
+        mutator.accept(blockTag);
+        ItemHelper.setBlockEntityData(container, blockTag);
     }
 
     @Override
     public int getExtract(ItemStack container) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getEnergyTag(container);
         return Math.round(tag.getInt(TAG_ENERGY_SEND));
     }
 
     @Override
     public int getReceive(ItemStack container) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getEnergyTag(container);
         return Math.round(tag.getInt(TAG_ENERGY_RECV));
     }
 
     @Override
     public int getMaxEnergyStored(ItemStack container) {
 
-        CompoundTag tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getEnergyTag(container);
         float base = getPropertyWithDefault(container, TAG_AUGMENT_BASE_MOD, 1.0F);
         float mod = getPropertyWithDefault(container, TAG_AUGMENT_RF_STORAGE, 1.0F);
         return getMaxStored(container, Math.round(tag.getInt(TAG_ENERGY_MAX) * mod * base));
@@ -100,7 +117,7 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        ItemHelper.setCustomSubTag(container, TAG_PROPERTIES, new CompoundTag());
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

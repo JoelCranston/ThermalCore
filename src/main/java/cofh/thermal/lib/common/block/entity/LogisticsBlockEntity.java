@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.util.control.IRedstoneControllableTile;
 import cofh.core.util.control.ISecurableTile;
@@ -29,7 +30,7 @@ public class LogisticsBlockEntity extends BlockEntityCoFH implements ISecurableT
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        CompoundTag nbt = stack.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        CompoundTag nbt = ItemHelper.getBlockEntityData(stack);
         if (hasSecurity()) {
             securityControl().write(nbt);
         }
@@ -37,7 +38,7 @@ public class LogisticsBlockEntity extends BlockEntityCoFH implements ISecurableT
             redstoneControl().writeSettings(nbt);
         }
         if (!nbt.isEmpty()) {
-            stack.addTagElement(TAG_BLOCK_ENTITY, nbt);
+            ItemHelper.setBlockEntityData(stack, nbt);
         }
         return super.createItemStackTag(stack);
     }

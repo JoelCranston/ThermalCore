@@ -1,5 +1,6 @@
 package cofh.thermal.lib.common.block.entity;
 
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.control.*;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
@@ -65,7 +66,7 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        CompoundTag nbt = stack.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        CompoundTag nbt = ItemHelper.getBlockEntityData(stack);
 
         nbt.putInt(TAG_AMOUNT_IN, amountInput);
         nbt.putInt(TAG_AMOUNT_OUT, amountOutput);

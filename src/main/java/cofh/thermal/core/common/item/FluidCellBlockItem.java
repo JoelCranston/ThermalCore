@@ -1,5 +1,7 @@
 package cofh.thermal.core.common.item;
 
+import cofh.core.util.ProxyUtils;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.item.IFluidContainerItem;
@@ -20,6 +22,8 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import java.util.function.Consumer;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
@@ -59,13 +63,17 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
-            return;
-        }
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_STORAGE);
-        setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_CREATIVE);
+        // 1.21: the properties blob is a copy read out of CUSTOM_DATA, so the
+        // attribute writes only stick if they happen inside the component update.
+        ItemHelper.mutateCustomData(container, tag -> {
+            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+                return;
+            }
+            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_STORAGE);
+            setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_CREATIVE);
+        });
     }
 
     //    @Override
@@ -75,15 +83,29 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     //    }
 
     // region IFluidContainerItem
+    // 1.21: the cell's fluid lives in the BLOCK_ENTITY_DATA component, which hands back a
+    // copy - a write only sticks if it goes through setBlockEntityData.
     @Override
-    public CompoundTag getOrCreateTankTag(ItemStack container) {
+    public CompoundTag getTankTag(ItemStack container) {
 
-        CompoundTag blockTag = container.getOrCreateTagElement(TAG_BLOCK_ENTITY);
+        return tankTag(ItemHelper.getBlockEntityData(container));
+    }
+
+    @Override
+    public void mutateTankTag(ItemStack container, Consumer<CompoundTag> mutator) {
+
+        CompoundTag blockTag = ItemHelper.getBlockEntityData(container);
+        mutator.accept(tankTag(blockTag));
+        ItemHelper.setBlockEntityData(container, blockTag);
+    }
+
+    private static CompoundTag tankTag(CompoundTag blockTag) {
+
         ListTag tanks = blockTag.getList(TAG_TANK_INV, TAG_COMPOUND);
         if (tanks.isEmpty()) {
             CompoundTag tag = new CompoundTag();
             tag.putByte(TAG_TANK, (byte) 0);
-            new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).write(tag);
+            new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).write(ProxyUtils.registryAccess(), tag);
             tanks.add(tag);
             blockTag.put(TAG_TANK_INV, tanks);
         }
@@ -93,14 +115,14 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     @Override
     public FluidStack getFluid(ItemStack container) {
 
-        CompoundTag tag = getOrCreateTankTag(container);
+        CompoundTag tag = getTankTag(container);
         return FluidStack.loadFluidStackFromNBT(tag);
     }
 
     @Override
     public int getCapacity(ItemStack container) {
 
-        CompoundTag tag = getOrCreateTankTag(container);
+        CompoundTag tag = getTankTag(container);
         if (tag == null) {
             return 0;
         }
@@ -112,7 +134,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     @Override
     public int fill(ItemStack container, FluidStack resource, FluidAction action) {
 
-        CompoundTag containerTag = getOrCreateTankTag(container);
+        CompoundTag containerTag = getTankTag(container);
         if (resource.isEmpty() || !isFluidValid(container, resource)) {
             return 0;
         }
@@ -132,7 +154,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     @Override
     public FluidStack drain(ItemStack container, int maxDrain, FluidAction action) {
 
-        CompoundTag containerTag = getOrCreateTankTag(container);
+        CompoundTag containerTag = getTankTag(container);
         FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
         if (isCreative(container, FLUID)) {
             return new FluidStack(tank.getFluidStack(), maxDrain);
@@ -147,7 +169,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        ItemHelper.setCustomSubTag(container, TAG_PROPERTIES, new CompoundTag());
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

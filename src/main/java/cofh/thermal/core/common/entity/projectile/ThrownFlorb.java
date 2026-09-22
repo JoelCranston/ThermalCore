@@ -1,5 +1,7 @@
 package cofh.thermal.core.common.entity.projectile;
 
+import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -115,11 +117,11 @@ public class ThrownFlorb extends ThrowableItemProjectile {
     // region HELPERS
     public static FluidStack getFluid(ItemStack container) {
 
-        CompoundTag tag = container.getOrCreateTag();
+        CompoundTag tag = ItemHelper.getCustomData(container);
         if (!tag.contains(TAG_FLUID)) {
             return FluidStack.EMPTY;
         }
-        return FluidStack.loadFluidStackFromNBT(tag.getCompound(TAG_FLUID));
+        return FluidStack.parseOptional(ProxyUtils.registryAccess(), tag.getCompound(TAG_FLUID));
     }
     // endregion
 }
