@@ -532,7 +532,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         securityControl.read(nbt);
         redstoneControl.read(nbt);
 
-        renderFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound(TAG_RENDER_FLUID));
+        renderFluid = FluidStack.parseOptional(registries, nbt.getCompound(TAG_RENDER_FLUID));
     }
 
     @Override

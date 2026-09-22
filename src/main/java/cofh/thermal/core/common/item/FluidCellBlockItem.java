@@ -116,7 +116,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     public FluidStack getFluid(ItemStack container) {
 
         CompoundTag tag = getTankTag(container);
-        return FluidStack.loadFluidStackFromNBT(tag);
+        return FluidStack.parseOptional(ProxyUtils.registryAccess(), tag);
     }
 
     @Override
@@ -138,16 +138,16 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
         if (resource.isEmpty() || !isFluidValid(container, resource)) {
             return 0;
         }
-        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
+        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).setCapacity(getCapacity(container)).read(ProxyUtils.registryAccess(), containerTag);
         if (isCreative(container, FLUID)) {
             if (action.execute()) {
-                tank.setFluidStack(new FluidStack(resource, tank.getCapacity()));
-                tank.write(containerTag);
+                tank.setFluidStack(resource.copyWithAmount(tank.getCapacity()));
+                tank.write(ProxyUtils.registryAccess(), containerTag);
             }
             return resource.getAmount();
         }
         int ret = tank.fill(resource, action);
-        tank.write(containerTag);
+        tank.write(ProxyUtils.registryAccess(), containerTag);
         return ret;
     }
 
@@ -155,12 +155,12 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     public FluidStack drain(ItemStack container, int maxDrain, FluidAction action) {
 
         CompoundTag containerTag = getTankTag(container);
-        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
+        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellBlockEntity.BASE_CAPACITY).setCapacity(getCapacity(container)).read(ProxyUtils.registryAccess(), containerTag);
         if (isCreative(container, FLUID)) {
-            return new FluidStack(tank.getFluidStack(), maxDrain);
+            return tank.getFluidStack().copyWithAmount(maxDrain);
         }
         FluidStack ret = tank.drain(maxDrain, action);
-        tank.write(containerTag);
+        tank.write(ProxyUtils.registryAccess(), containerTag);
         return ret;
     }
     // endregion

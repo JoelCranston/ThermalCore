@@ -41,7 +41,7 @@ public class TCoreFluids {
 
     public static void setup() {
 
-        BOTTLE_DRAIN_MAP.put(ITEMS.get("syrup_bottle"), (stack -> new FluidStack(SYRUP_FLUID.get(), BOTTLE_VOLUME)));
+        BOTTLE_DRAIN_MAP.put(ITEMS.get("syrup_bottle"), (stack -> SYRUP_FLUID.get().copyWithAmount(BOTTLE_VOLUME)));
 
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().equals(SYRUP_FLUID.get()), fluid -> new ItemStack(ITEMS.get("syrup_bottle")));
 

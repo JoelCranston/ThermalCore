@@ -84,7 +84,7 @@ public class ThrownFlorb extends ThrowableItemProjectile {
                 } else if (result instanceof EntityHitResult entityHitResult) {
                     hitPos = entityHitResult.getEntity().getOnPos();
                 }
-                FluidActionResult actionResult = FluidUtil.tryPlaceFluid(getOwner() instanceof Player player ? player : null, this.level, MAIN_HAND, hitPos.relative(hitDir), getItem(), new FluidStack(getFluid(getItem()), BUCKET_VOLUME));
+                FluidActionResult actionResult = FluidUtil.tryPlaceFluid(getOwner() instanceof Player player ? player : null, this.level, MAIN_HAND, hitPos.relative(hitDir), getItem(), getFluid(getItem()).copyWithAmount(BUCKET_VOLUME));
             }
             this.level.broadcastEntityEvent(this, (byte) 3);
             this.discard();

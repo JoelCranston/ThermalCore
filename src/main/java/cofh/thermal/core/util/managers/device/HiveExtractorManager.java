@@ -49,7 +49,7 @@ public class HiveExtractorManager extends AbstractManager {
 
     public FluidStack getFluid(BlockState hive) {
 
-        return specificHive(hive) ? hiveMap.get(hive.getBlock()).getRight() : new FluidStack(HONEY_FLUID.get(), HONEY_AMOUNT);
+        return specificHive(hive) ? hiveMap.get(hive.getBlock()).getRight() : HONEY_FLUID.get().copyWithAmount(HONEY_AMOUNT);
     }
 
     public void addMapping(HiveExtractorMapping mapping) {

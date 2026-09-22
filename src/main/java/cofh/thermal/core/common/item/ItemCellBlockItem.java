@@ -91,7 +91,7 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     //        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellTile.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
     //        if (isCreative(container, FLUID)) {
     //            if (action.execute()) {
-    //                tank.setFluidStack(new FluidStack(resource, tank.getCapacity()));
+    //                tank.setFluidStack(resource.copyWithAmount(tank.getCapacity()));
     //                tank.write(containerTag);
     //            }
     //            return resource.getAmount();
@@ -107,7 +107,7 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     //        CompoundTag containerTag = getOrCreateTankTag(container);
     //        FluidStorageCoFH tank = new FluidStorageCoFH(FluidCellTile.BASE_CAPACITY).setCapacity(getCapacity(container)).read(containerTag);
     //        if (isCreative(container, FLUID)) {
-    //            return new FluidStack(tank.getFluidStack(), maxDrain);
+    //            return tank.getFluidStack().copyWithAmount(maxDrain);
     //        }
     //        FluidStack ret = tank.drain(maxDrain, action);
     //        tank.write(containerTag);

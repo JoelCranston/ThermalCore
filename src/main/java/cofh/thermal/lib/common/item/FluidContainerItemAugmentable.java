@@ -137,7 +137,7 @@ public class FluidContainerItemAugmentable extends FluidContainerItem implements
         FluidStack fluid = getFluid(container);
         if (isCreative(container, FLUID)) {
             if (!fluid.isEmpty()) {
-                fill(container, new FluidStack(fluid, getSpace(container)), EXECUTE);
+                fill(container, fluid.copyWithAmount(getSpace(container)), EXECUTE);
             }
         } else {
             int fluidExcess = getFluidAmount(container) - getCapacity(container);

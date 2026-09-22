@@ -164,7 +164,7 @@ public class DeviceTreeExtractorBlockEntity extends DeviceBlockEntity implements
                 boostMult = 1.0F;
             }
             float sizeMult = MathHelper.sqrt((float) Math.min(logs.length, recipe.getMaxHeight()) * Math.min(leaves.length, recipe.getMaxLeaves()) / (recipe.getMinHeight() * recipe.getMinLeaves()));
-            outputTank.fill(new FluidStack(renderFluid, (int) (renderFluid.getAmount() * baseMod * boostMult * sizeMult)), EXECUTE);
+            outputTank.fill(renderFluid.copyWithAmount((int) (renderFluid.getAmount() * baseMod * boostMult * sizeMult)), EXECUTE);
         }
         if (curFluid != renderFluid.getFluid()) {
             TileStatePacket.sendToClient(this);

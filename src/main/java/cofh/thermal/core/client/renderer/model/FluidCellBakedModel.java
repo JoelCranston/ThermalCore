@@ -1,5 +1,6 @@
 package cofh.thermal.core.client.renderer.model;
 
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.client.renderer.model.ModelUtils;
 import cofh.core.util.helpers.FluidHelper;
@@ -230,7 +231,7 @@ public class FluidCellBakedModel extends UnderlayBakedModel implements IDynamicB
         if (tanks.isEmpty()) {
             return FluidStack.EMPTY;
         }
-        return FluidStack.loadFluidStackFromNBT(tanks.getCompound(0));
+        return FluidStack.parseOptional(ProxyUtils.registryAccess(), tanks.getCompound(0));
     }
 
     private byte[] getSideConfigRaw(CompoundTag tag) {

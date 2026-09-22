@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.core.component.DataComponents;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.IMultiModeItem;
 import cofh.core.util.ProxyUtils;
@@ -36,12 +37,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 import static cofh.thermal.lib.util.ThermalAugmentRules.createAllowValidator;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-public class SatchelItem extends InventoryContainerItemAugmentable implements IColorableItem, DyeableLeatherItem, IFilterableItem, IMultiModeItem, ISecurableItem, MenuProvider {
+public class SatchelItem extends InventoryContainerItemAugmentable implements IColorableItem, IFilterableItem, IMultiModeItem, ISecurableItem, MenuProvider {
 
     protected static final Set<Item> BANNED_ITEMS = new ObjectOpenHashSet<>();
 
@@ -77,7 +77,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
 
         super(builder, slots);
 
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("color"), (stack, world, entity, seed) -> (hasCustomColor(stack) ? 1F : 0));
+        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("color"), (stack, world, entity, seed) -> (stack.has(DataComponents.DYED_COLOR) ? 1F : 0));
         ProxyUtils.registerColorable(this);
 
         numSlots = () -> ThermalCoreConfig.storageAugments;
@@ -105,17 +105,17 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
     }
 
     // region HELPERS
-    public static boolean onItemPickup(EntityItemPickupEvent event, ItemStack container) {
+    public static boolean onItemPickup(ItemEntityPickupEvent.Pre event, ItemStack container) {
 
         SatchelItem satchelItem = (SatchelItem) container.getItem();
-        if (satchelItem.getMode(container) <= 0 || !satchelItem.canPlayerAccess(container, event.getEntity())) {
+        if (satchelItem.getMode(container) <= 0 || !satchelItem.canPlayerAccess(container, event.getPlayer())) {
             return false;
         }
-        ItemEntity eventItem = event.getItem();
+        ItemEntity eventItem = event.getItemEntity();
         int count = eventItem.getItem().getCount();
 
         if (satchelItem.getFilter(container).valid(eventItem.getItem())) {
-            Player player = event.getEntity();
+            Player player = event.getPlayer();
             dropExtraItems(container, player);
 
             SimpleItemInv containerInv = satchelItem.getContainerInventory(container);

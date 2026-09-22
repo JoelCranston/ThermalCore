@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.event;
 
+import net.neoforged.neoforge.common.util.TriState;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.filter.IFilterOptions;
 import cofh.thermal.core.common.inventory.storage.SatchelMenu;
@@ -14,7 +15,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import static cofh.core.util.references.EnsorcIDs.ID_AIR_AFFINITY;
@@ -51,12 +52,14 @@ public class TCoreCommonEvents {
     }
 
     @SubscribeEvent
-    public static void handleEntityItemPickup(final EntityItemPickupEvent event) {
+    public static void handleEntityItemPickup(final ItemEntityPickupEvent.Pre event) {
 
-        if (event.isCanceled()) {
+        // ItemEntityPickupEvent.Pre is not cancellable - the pickup is denied by setting the
+        // TriState instead.
+        if (event.canPickup() == TriState.FALSE) {
             return;
         }
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         if (player.containerMenu instanceof SatchelMenu || player.containerMenu instanceof IFilterOptions) {
             return;
         }
@@ -78,7 +81,9 @@ public class TCoreCommonEvents {
                 }
             }
         });
-        event.setCanceled(cancel[0]);
+        if (cancel[0]) {
+            event.setCanPickup(TriState.FALSE);
+        }
     }
 
 }

@@ -151,7 +151,7 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
             } else {
                 var handler = tankSlot.getItemStack().getCapability(Capabilities.FluidHandler.ITEM);
                 if (handler != null) {
-                    int toFill = tank.fill(new FluidStack(handler.getFluidInTank(0), BUCKET_VOLUME), SIMULATE);
+                    int toFill = tank.fill(handler.getFluidInTank(0).copyWithAmount(BUCKET_VOLUME), SIMULATE);
                     if (toFill > 0) {
                         tank.fill(handler.drain(toFill, EXECUTE), EXECUTE);
                         tankSlot.setItemStack(handler.getContainer());
@@ -162,7 +162,7 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
         if (!tinkerSlot.isEmpty() && mode == REPLENISH && !pause) {
             var handler = tinkerSlot.getItemStack().getCapability(Capabilities.FluidHandler.ITEM);
             if (handler != null) {
-                tank.drain(handler.fill(new FluidStack(tank.getFluidStack(), Math.min(tank.getAmount(), BUCKET_VOLUME)), EXECUTE), EXECUTE);
+                tank.drain(handler.fill(tank.getFluidStack().copyWithAmount(Math.min(tank.getAmount(), BUCKET_VOLUME)), EXECUTE), EXECUTE);
                 tinkerSlot.setItemStack(handler.getContainer());
             }
         }
