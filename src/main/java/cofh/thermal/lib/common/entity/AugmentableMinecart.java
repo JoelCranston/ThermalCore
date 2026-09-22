@@ -26,7 +26,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -126,8 +126,6 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
 
         super.addAdditionalSaveData(compound);
 
-        compound.put(TAG_ENCHANTMENTS, enchantments);
-
         inventory.write(ProxyUtils.registryAccess(), compound);
         filter.write(ProxyUtils.registryAccess(), compound);
     }
@@ -196,7 +194,7 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
             }
             setAttributesFromAugment(augmentData);
         }
-        finalizeAttributes(EnchantmentHelper.deserializeEnchantments(enchantments));
+        finalizeAttributes(enchantments);
         augmentNBT = null;
     }
 
@@ -234,7 +232,7 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
         // creativeSlots |= getAttributeMod(augmentData, TAG_AUGMENT_ITEM_CREATIVE) > 0;
     }
 
-    protected abstract void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap);
+    protected abstract void finalizeAttributes(ItemEnchantments enchantments);
     // endregion
 
     // region IStorageCallback

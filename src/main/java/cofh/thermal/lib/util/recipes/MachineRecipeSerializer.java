@@ -1,5 +1,6 @@
 package cofh.thermal.lib.util.recipes;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.recipes.JsonMapCodec;
@@ -134,7 +135,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         int numOutputFluids = buffer.readVarInt();
         ArrayList<FluidStack> outputFluids = new ArrayList<>(numOutputFluids);
         for (int i = 0; i < numOutputFluids; ++i) {
-            outputFluids.add(buffer.readFluidStack());
+            outputFluids.add(FluidHelper.readFluidStack(buffer));
         }
         if (inputItems.isEmpty() && inputFluids.isEmpty() || outputItems.isEmpty() && outputFluids.isEmpty()) {
             throw new JsonSyntaxException("Invalid Thermal Series recipe! Please check your datapacks!");
@@ -167,7 +168,7 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         int numOutputFluids = recipe.outputFluids.size();
         buffer.writeVarInt(numOutputFluids);
         for (int i = 0; i < numOutputFluids; ++i) {
-            buffer.writeFluidStack(recipe.outputFluids.get(i));
+            FluidHelper.writeFluidStack(buffer, recipe.outputFluids.get(i));
         }
     }
 

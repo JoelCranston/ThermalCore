@@ -1,5 +1,9 @@
 package cofh.thermal.lib.common.block.entity;
 
+import cofh.core.util.helpers.FluidHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.core.component.DataComponents;
 import cofh.core.util.ProxyUtils;
 import net.minecraft.core.HolderLookup;
 import cofh.core.util.helpers.ItemHelper;
@@ -93,7 +97,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
     protected RedstoneControlModule redstoneControl = new RedstoneControlModule(this);
 
     protected List<ItemStorageCoFH> augments = Collections.emptyList();
-    protected ListTag enchantments = new ListTag();
+    protected ItemEnchantments enchantments = ItemEnchantments.EMPTY;
 
     public boolean isActive;
     protected FluidStack renderFluid = FluidStack.EMPTY;
@@ -174,7 +178,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         super.onPlacedBy(worldIn, pos, state, placer, stack);
 
-        enchantments = stack.getEnchantmentTags();
+        enchantments = stack.getEnchantments();
 
         updateAugmentState();
 
@@ -241,7 +245,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
             ItemHelper.setBlockEntityData(stack, nbt);
         }
         if (!enchantments.isEmpty()) {
-            stack.getOrCreateTag().put(TAG_ENCHANTMENTS, enchantments);
+            stack.set(DataComponents.ENCHANTMENTS, enchantments);
         }
         return super.createItemStackTag(stack);
     }
@@ -403,7 +407,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         securityControl.writeToBuffer(buffer);
         redstoneControl.writeToBuffer(buffer);
 
-        buffer.writeFluidStack(renderFluid);
+        FluidHelper.writeFluidStack(buffer, renderFluid);
 
         return buffer;
     }
@@ -416,7 +420,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         securityControl.readFromBuffer(buffer);
         redstoneControl.readFromBuffer(buffer);
 
-        renderFluid = buffer.readFluidStack();
+        renderFluid = FluidHelper.readFluidStack(buffer);
     }
 
     // GUI
@@ -426,13 +430,13 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         super.getGuiPacket(buffer);
 
         buffer.writeBoolean(isActive);
-        buffer.writeFluidStack(renderFluid);
+        FluidHelper.writeFluidStack(buffer, renderFluid);
 
         energyStorage.writeToBuffer(buffer);
         xpStorage.writeToBuffer(buffer);
 
         for (int i = 0; i < tankInv.getTanks(); ++i) {
-            buffer.writeFluidStack(tankInv.get(i));
+            FluidHelper.writeFluidStack(buffer, tankInv.get(i));
         }
         return buffer;
     }
@@ -443,13 +447,13 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         super.handleGuiPacket(buffer);
 
         isActive = buffer.readBoolean();
-        renderFluid = buffer.readFluidStack();
+        renderFluid = FluidHelper.readFluidStack(buffer);
 
         energyStorage.readFromBuffer(buffer);
         xpStorage.readFromBuffer(buffer);
 
         for (int i = 0; i < tankInv.getTanks(); ++i) {
-            tankInv.set(i, buffer.readFluidStack());
+            tankInv.set(i, FluidHelper.readFluidStack(buffer));
         }
     }
 
@@ -479,7 +483,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         super.getStatePacket(buffer);
 
         buffer.writeBoolean(isActive);
-        buffer.writeFluidStack(renderFluid);
+        FluidHelper.writeFluidStack(buffer, renderFluid);
 
         return buffer;
     }
@@ -492,7 +496,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         boolean prevActive = isActive;
 
         isActive = buffer.readBoolean();
-        renderFluid = buffer.readFluidStack();
+        renderFluid = FluidHelper.readFluidStack(buffer);
 
         if (ThermalClientConfig.blockAmbientSounds.get() && isActive && !prevActive) {
             SoundHelper.playSound(getSound());
@@ -508,7 +512,10 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         isActive = nbt.getBoolean(TAG_ACTIVE);
 
-        enchantments = nbt.getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
+        // 1.21: enchantments on a stack are a component; persisted here through its codec.
+        enchantments = ItemEnchantments.CODEC
+                .parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get(TAG_ENCHANTMENTS))
+                .result().orElse(ItemEnchantments.EMPTY);
 
         inventory.read(registries, nbt);
 
@@ -535,7 +542,11 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         nbt.putBoolean(TAG_ACTIVE, isActive);
 
-        nbt.put(TAG_ENCHANTMENTS, enchantments);
+        if (!enchantments.isEmpty()) {
+            ItemEnchantments.CODEC
+                    .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), enchantments)
+                    .result().ifPresent(tag -> nbt.put(TAG_ENCHANTMENTS, tag));
+        }
 
         inventory.write(registries, nbt);
         tankInv.write(registries, nbt);
@@ -603,7 +614,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
             }
             setAttributesFromAugment(augmentData);
         }
-        finalizeAttributes(EnchantmentHelper.deserializeEnchantments(enchantments));
+        finalizeAttributes(enchantments);
         augmentNBT = null;
     }
 
@@ -647,9 +658,9 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         // creativeSlots |= getAttributeMod(augmentData, TAG_AUGMENT_ITEM_CREATIVE) > 0;
     }
 
-    protected void finalizeAttributes(Map<Enchantment, Integer> enchantmentMap) {
+    protected void finalizeAttributes(ItemEnchantments enchantments) {
 
-        float holdingMod = getHoldingMod(enchantmentMap);
+        float holdingMod = getHoldingMod(enchantments);
         float baseMod = getAttributeModWithDefault(augmentNBT, TAG_AUGMENT_BASE_MOD, 1.0F);
 
         float energyStorageMod = holdingMod * baseMod * getAttributeModWithDefault(augmentNBT, TAG_AUGMENT_RF_STORAGE, 1.0F);
@@ -676,7 +687,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         }
 
         CompoundTag filterNBT = filter.write(ProxyUtils.registryAccess(), new CompoundTag());
-        filter = FilterRegistry.getFilter(getAttributeModString(augmentNBT, TAG_FILTER_TYPE), filterNBT, this);
+        filter = FilterRegistry.getFilter(ProxyUtils.registryAccess(), getAttributeModString(augmentNBT, TAG_FILTER_TYPE), filterNBT, this);
     }
 
     protected boolean defaultReconfigState() {
@@ -694,9 +705,9 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         return ThermalCoreConfig.defaultXPStorage.get();
     }
 
-    protected float getHoldingMod(Map<Enchantment, Integer> enchantmentMap) {
+    protected float getHoldingMod(ItemEnchantments enchantments) {
 
-        int holding = enchantmentMap.getOrDefault(HOLDING.get(), 0);
+        int holding = Utils.getLevel(enchantments, HOLDING);
         return 1 + holding / 2F;
     }
     // endregion

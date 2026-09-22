@@ -1,5 +1,6 @@
 package cofh.thermal.core.util.recipes.device;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -101,7 +102,7 @@ public class HiveExtractorMapping extends SerializableRecipe {
 
             Block hive = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
             ItemStack item = buffer.readItem();
-            FluidStack fluid = buffer.readFluidStack();
+            FluidStack fluid = FluidHelper.readFluidStack(buffer);
 
             return new HiveExtractorMapping(hive, item, fluid);
         }
@@ -111,7 +112,7 @@ public class HiveExtractorMapping extends SerializableRecipe {
 
             buffer.writeResourceLocation(getRegistryName(recipe.hive));
             buffer.writeItem(recipe.item);
-            buffer.writeFluidStack(recipe.fluid);
+            FluidHelper.writeFluidStack(buffer, recipe.fluid);
         }
 
     }

@@ -1,5 +1,6 @@
 package cofh.thermal.core.util.recipes.device;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.util.Utils;
 import cofh.lib.util.recipes.JsonMapCodec;
@@ -174,7 +175,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
             BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
             BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
             Block sapling = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
-            FluidStack fluid = buffer.readFluidStack();
+            FluidStack fluid = FluidHelper.readFluidStack(buffer);
             int minHeight = buffer.readInt();
             int maxHeight = buffer.readInt();
             int minLeaves = buffer.readInt();
@@ -189,7 +190,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
             recipe.trunk.toNetwork(buffer);
             recipe.leaves.toNetwork(buffer);
             buffer.writeResourceLocation(Utils.getRegistryName(recipe.sapling));
-            buffer.writeFluidStack(recipe.fluid);
+            FluidHelper.writeFluidStack(buffer, recipe.fluid);
             buffer.writeInt(recipe.minHeight);
             buffer.writeInt(recipe.maxHeight);
             buffer.writeInt(recipe.minLeaves);
