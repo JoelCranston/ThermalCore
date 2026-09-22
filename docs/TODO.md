@@ -8,22 +8,18 @@ already done and why.
 The plan for all four repos is `../CoFHCore/docs/port-plan.md`; this repo's steps are §4 (Phase 0,
 per repo), §5 A.2/A.3 (1.21.1) and §6 B.10 (26.1.2).
 
-1. **Blocked on CoFHCore's Phase A** (`../CoFHCore/docs/TODO.md`). Nothing here compiles
-   independently of it.
-2. ~~Phase 0.3 (ModDevGradle 2.0.147), 0.4 (`neoforge.mods.toml`), A.0 (1.21.1 values)~~ —
-   **done 2026-09-22**. Gradle configures; `createMinecraftArtifacts` succeeds; the build stops
-   at `:CoFHCore:compileJava`, which is the expected blocked state. This repo's own
-   `accesstransformer.cfg` was replaced with CoFHCore's (A.1 item 14) — MDG's
-   `validateAccessTransformers` was rejecting 13 stale 1.20.x targets and failing
-   `:createMinecraftArtifacts` outright.
-3. ~~Resources sweep (§5 A.1.15)~~ — **done 2026-09-22**, plus a follow-up commit correcting the
-   six `c:` tags NeoForge renamed in the plural (`c:glass` → `c:glass_blocks`, `sand` → `sands`,
-   `string` → `strings`, `leather` → `leathers`, `gunpowder` → `gunpowders`,
-   `obsidian` → `obsidians`). See the Inbox for what it turned up.
-4. When unblocked: `diff -ru src ../ThermalCoreForNeoForge/src` and apply the 1.21.1 hunks;
-   compile for a baseline count; fix what remains by category, reusing CoFHCore's confirmed
-   shapes (`../CoFHCore/docs/api-notes-1.21.1.md`) rather than re-deriving them.
-5. `../Pyronetics/scripts/verify_runserver.sh` passes; Joel's `runClient` check; commit.
+Phase A (1.21.1) is **code-complete** on branch `1.21.1`: `./gradlew build` is clean,
+`verify_runserver.sh` reaches `Done`, and `runData` runs and matches the committed output
+(2026-09-22). This repo builds against whatever branch `../CoFHCore` has checked out, so
+**put CoFHCore on `1.21.1` to build or run it**. CoFHCore's working branch is `26.1.2` now.
+
+1. **Joel's `runClient` pass** (port plan §A.4). It is the one Phase A exit criterion left, and
+   everything client-side is unverified. See `../CoFHCore/docs/TODO.md` for the checklist and
+   for `MouseHandlerMixin`, a specific suspect.
+2. **Phase B (B.10) waits for CoFHCore's 26.1.2 port** (B.0-B.2 done there, ~1537 errors left).
+   Nothing to do here until CoFHCore compiles on 26.1.2. When it does, branch `26.1.2` from
+   `1.21.1`, switch the data run back to `clientData()`, and **regenerate `src/main/generated`
+   rather than hand-migrating it** (see the progress log's runData entry for why).
 
 ## Inbox
 

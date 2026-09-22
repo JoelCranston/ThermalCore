@@ -81,3 +81,26 @@ a negative burn time now, and CoFH's `-1` "no opinion" default has to fall throu
 
 The client pass, and `runData` (the committed generated output was hand-migrated). Shapes are in
 `../CoFHCore/docs/api-notes-1.21.1.md`.
+
+---
+
+## runData on 1.21.1 (2026-09-22)
+
+`./gradlew runData` had never worked on this branch. `build.gradle` declared `clientData()`,
+which ModDevGradle only offers from 1.21.4, so `prepareDataRun` failed. 1.21.1's run type is
+`data()`.
+
+Regenerating corrected three things that loaded without error but behaved wrongly, because 1.21
+codecs ignore unknown fields:
+
+- 77 recipe-unlock advancements used the 1.20 `{"tag": "c:..."}` item predicate, so each
+  trigger matched any item. They now use `{"items": "#c:..."}`.
+- The four hardened-glass loot tables used the 1.20 top-level `enchantments` `match_tool` form,
+  so the glass dropped itself without silk touch.
+- Two stonecutting recipes kept `count` at the top level instead of in `result`.
+
+The rest of the 488-file diff is cosmetic. Commit `5a6ea0a`.
+
+The same pass found a client crash in CoFHCore (`LevelRendererMixin`, stale `renderLevel`
+signature), since the data run is a client-dist launch. See `../CoFHCore/docs/progress-log.md`,
+"Phase A follow-up — runData".
