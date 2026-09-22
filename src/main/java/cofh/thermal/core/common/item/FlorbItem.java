@@ -8,7 +8,8 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cofh.thermal.core.common.entity.projectile.ThrownFlorb;
 import net.minecraft.core.Position;
-import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +34,7 @@ import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
 import static cofh.core.util.helpers.ItemHelper.cloneStack;
 import static cofh.lib.util.helpers.StringHelper.*;
 
-public class FlorbItem extends FluidContainerItem {
+public class FlorbItem extends FluidContainerItem implements ProjectileItem {
 
     protected static int cooldown = 0;
 
@@ -44,7 +45,9 @@ public class FlorbItem extends FluidContainerItem {
 
         ProxyUtils.registerColorable(this);
 
-        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
+        // Per-item dispense-behaviour subclasses are gone; ProjectileItem plus this call is the
+        // modern equivalent.
+        DispenserBlock.registerProjectileBehavior(this);
     }
 
     @Override
@@ -138,23 +141,21 @@ public class FlorbItem extends FluidContainerItem {
     // endregion
 
     // region DISPENSER BEHAVIOR
-    private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
-
-        @Override
-        public Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+    @Override
+    public Projectile asProjectile(Level worldIn, Position position, ItemStack stackIn, Direction direction) {
 
             ThrownFlorb florb = new ThrownFlorb(worldIn, position.x(), position.y(), position.z());
             ItemStack throwStack = cloneStack(stackIn, 1);
             throwStack.setDamageValue(1);
             florb.setItem(throwStack);
-            return florb;
-        }
+        return florb;
+    }
 
-        @Override
-        protected float getUncertainty() {
+    @Override
+    public ProjectileItem.DispenseConfig createDispenseConfig() {
 
-            return 3.0F;
-        }
-    };
+        ProjectileItem.DispenseConfig defaults = ProjectileItem.super.createDispenseConfig();
+        return new ProjectileItem.DispenseConfig(defaults.positionFunction(), 3.0F, defaults.power(), defaults.overrideDispenseEvent());
+    }
     // endregion
 }
