@@ -1,5 +1,8 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import cofh.core.common.item.IMultiModeItem;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.util.ProxyUtils;
@@ -38,16 +41,15 @@ import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 
 public class WrenchItem extends ItemCoFH implements IMultiModeItem {
 
-    private final Multimap<Attribute, AttributeModifier> toolAttributes;
+    // 1.21: attribute modifiers are an ItemAttributeModifiers component keyed by a
+    // ResourceLocation; the vanilla base-attack-damage id is a plain identifier now.
+    private static final ItemAttributeModifiers TOOL_ATTRIBUTES = ItemAttributeModifiers.builder()
+            .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 0.0D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+            .build();
 
     public WrenchItem(Properties builder) {
 
         super(builder);
-
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
-        multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 0.0D, AttributeModifier.Operation.ADD_VALUE));
-
-        this.toolAttributes = multimap.build();
     }
 
     @Override
@@ -91,9 +93,7 @@ public class WrenchItem extends ItemCoFH implements IMultiModeItem {
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 
         target.addEffect(new MobEffectInstance(WRENCHED, 60, 0, false, false));
-        stack.hurtAndBreak(1, attacker, (entity) -> {
-            entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-        });
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
         return true;
     }
 
@@ -118,9 +118,9 @@ public class WrenchItem extends ItemCoFH implements IMultiModeItem {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
 
-        return slot == EquipmentSlot.MAINHAND ? this.toolAttributes : ImmutableMultimap.of();
+        return TOOL_ATTRIBUTES;
     }
 
     @Override

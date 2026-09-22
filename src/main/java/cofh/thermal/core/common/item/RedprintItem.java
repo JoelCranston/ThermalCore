@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import net.minecraft.core.component.DataComponents;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.common.item.ItemCoFH;
 import cofh.core.util.ProxyUtils;
@@ -66,12 +67,6 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
         }
     }
 
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-
-        return ItemHelper.hasCustomData(stack) ? Rarity.UNCOMMON : Rarity.COMMON;
-    }
-
     protected boolean useDelegate(ItemStack stack, UseOnContext context) {
 
         Level world = context.getLevel();
@@ -84,6 +79,8 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             if (ItemHelper.hasCustomData(stack)) {
                 player.level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5F, 0.3F);
                 ItemHelper.setCustomData(stack, null);
+            stack.remove(DataComponents.RARITY);
+                stack.remove(DataComponents.RARITY);
             }
             return true;
         }
@@ -103,6 +100,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
                     return false;
                 } else {
                     ItemHelper.setCustomData(stack, conveyableData);
+                    stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
                     player.level.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5F, 0.7F);
                 }
             } else if (ItemHelper.hasCustomData(stack)) {
@@ -143,6 +141,8 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
                 player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 0.3F);
             }
             ItemHelper.setCustomData(stack, null);
+            stack.remove(DataComponents.RARITY);
+                stack.remove(DataComponents.RARITY);
         }
         player.swing(hand);
         return InteractionResultHolder.success(stack);

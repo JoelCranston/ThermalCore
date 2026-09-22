@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.event;
 
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.neoforge.common.util.TriState;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.filter.IFilterOptions;
@@ -36,7 +37,7 @@ public class TCoreCommonEvents {
         Player player = event.getEntity();
         if (player.isEyeInFluid(FluidTags.WATER)) {
             boolean diveChest = player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DivingArmorItem;
-            if (!EnchantmentHelper.hasAquaAffinity(player) && diveChest) {
+            if (player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) < 1.0D && diveChest) {
                 event.setNewSpeed(Math.max(event.getNewSpeed(), event.getOriginalSpeed() * 5.0F));
             }
             boolean diveLegs = player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DivingArmorItem;

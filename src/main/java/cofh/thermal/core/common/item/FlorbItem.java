@@ -68,7 +68,7 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
 
         List<Component> additionalTooltips = new ArrayList<>();
-        tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
+        tooltipDelegate(stack, context.level(), additionalTooltips, flagIn);
         tooltip.addAll(additionalTooltips);
 
         //        if (SecurityHelper.isItemClaimable(stack)) {

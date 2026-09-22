@@ -34,7 +34,7 @@ public class SyrupFluid extends FluidCoFH {
 
         super(FLUIDS, ID_FLUID_SYRUP);
 
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_SYRUP), () -> new BucketItem(stillFluid, itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_SYRUP), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

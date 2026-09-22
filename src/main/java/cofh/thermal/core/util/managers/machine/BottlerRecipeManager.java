@@ -263,7 +263,7 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
 
         if (defaultPotionRecipes) {
             ThermalCore.LOG.debug("Adding default Potion recipes to the Fluid Encapsulator...");
-            addRecipe(convert(energy, 0.0F, new ItemStack(Items.GLASS_BOTTLE), POTION_FLUID.get().copyWithAmount(BOTTLE_VOLUME), new ItemStack(Items.POTION)));
+            addRecipe(convert(energy, 0.0F, new ItemStack(Items.GLASS_BOTTLE), new FluidStack(POTION_FLUID.get(), BOTTLE_VOLUME), new ItemStack(Items.POTION)));
         }
     }
     // endregion

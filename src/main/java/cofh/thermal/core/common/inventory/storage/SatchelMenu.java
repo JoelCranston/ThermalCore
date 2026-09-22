@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.inventory.storage;
 
+import cofh.core.util.ProxyUtils;
 import cofh.core.common.inventory.ContainerMenuCoFH;
 import cofh.core.common.network.packet.server.SecurityPacket;
 import cofh.lib.api.control.ISecurable;
@@ -128,7 +129,7 @@ public class SatchelMenu extends ContainerMenuCoFH implements ISecurable {
     @Override
     public void removed(Player playerIn) {
 
-        itemInventory.write(containerItem.getOrCreateInvTag(containerStack));
+        itemInventory.write(ProxyUtils.registryAccess(), containerItem.getOrCreateInvTag(containerStack));
         containerItem.onContainerInventoryChanged(containerStack);
         super.removed(playerIn);
     }

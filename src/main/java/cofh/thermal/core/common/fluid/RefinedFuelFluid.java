@@ -34,7 +34,7 @@ public class RefinedFuelFluid extends FluidCoFH {
 
         super(FLUIDS, ID_FLUID_REFINED_FUEL);
 
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_REFINED_FUEL), () -> new BucketItem(stillFluid, itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_REFINED_FUEL), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

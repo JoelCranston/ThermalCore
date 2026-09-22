@@ -109,7 +109,7 @@ public class ThrownFlorb extends ThrowableItemProjectile {
     }
 
     @Override
-    protected float getGravity() {
+    protected double getDefaultGravity() {
 
         return gravity;
     }

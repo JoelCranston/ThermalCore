@@ -124,7 +124,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
             if (eventItem.getItem().getCount() != count) {
                 container.setPopTime(5);
                 player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((MathHelper.RANDOM.nextFloat() - MathHelper.RANDOM.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                containerInv.write(satchelItem.getOrCreateInvTag(container));
+                containerInv.write(ProxyUtils.registryAccess(), satchelItem.getOrCreateInvTag(container));
                 satchelItem.onContainerInventoryChanged(container);
             }
         }
@@ -142,7 +142,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
                 CompoundTag slotTag = list.getCompound(i);
                 int slot = slotTag.getByte(TAG_SLOT);
                 if (slot >= numSlots) {
-                    Utils.dropItemStackIntoWorldWithRandomness(ItemStorageCoFH.loadItemStack(slotTag), player.level(), player.position());
+                    Utils.dropItemStackIntoWorldWithRandomness(ItemStorageCoFH.loadItemStack(ProxyUtils.registryAccess(), slotTag), player.level(), player.position());
                 } else {
                     return; // This optimization breaks out of the loop early, since slots are always tagged in ascending order.
                 }

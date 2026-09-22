@@ -34,7 +34,7 @@ public class LatexFluid extends FluidCoFH {
 
         super(FLUIDS, ID_FLUID_LATEX);
 
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_LATEX), () -> new BucketItem(stillFluid, itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_LATEX), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

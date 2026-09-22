@@ -1,5 +1,6 @@
 package cofh.thermal.core.common.item;
 
+import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import cofh.core.common.item.ItemCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -66,9 +67,10 @@ public class FertilizerItem extends ItemCoFH {
         BlockState state = world.getBlockState(pos);
         Player player = context.getPlayer();
         if (player != null) {
-            int hook = EventHooks.onApplyBonemeal(player, world, pos, state, stack);
-            if (hook != 0) {
-                return hook > 0;
+            // The int-coded hook became a cancellable event carrying its own result.
+            BonemealEvent event = EventHooks.fireBonemealEvent(player, world, pos, state, stack);
+            if (event.isCanceled()) {
+                return event.isSuccessful();
             }
         }
         boolean used;

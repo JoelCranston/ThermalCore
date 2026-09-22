@@ -34,8 +34,8 @@ public class TCoreDataGen {
         gen.addProvider(event.includeServer(), new TCoreTagsProvider.DamageType(output, lookup, exFileHelper));
 
         // gen.addProvider(event.includeServer(), new TCoreAdvancementProvider(gen));
-        gen.addProvider(event.includeServer(), new TCoreLootTableProvider(output));
-        gen.addProvider(event.includeServer(), new TCoreRecipeProvider(output));
+        gen.addProvider(event.includeServer(), new TCoreLootTableProvider(output, lookup));
+        gen.addProvider(event.includeServer(), new TCoreRecipeProvider(output, lookup));
 
         gen.addProvider(event.includeClient(), new TCoreBlockStateProvider(output, exFileHelper));
         gen.addProvider(event.includeClient(), new TCoreItemModelProvider(output, exFileHelper));
