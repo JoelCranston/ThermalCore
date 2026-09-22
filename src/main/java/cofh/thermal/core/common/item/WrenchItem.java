@@ -45,7 +45,7 @@ public class WrenchItem extends ItemCoFH implements IMultiModeItem {
         super(builder);
 
         ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
-        multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 0.0D, AttributeModifier.Operation.ADDITION));
+        multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 0.0D, AttributeModifier.Operation.ADD_VALUE));
 
         this.toolAttributes = multimap.build();
     }

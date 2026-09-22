@@ -23,7 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
@@ -166,7 +165,8 @@ public class FertilizerItem extends ItemCoFH {
 
     protected static void makeAreaOfEffectCloud(Level world, BlockPos pos, int radius) {
 
-        boolean isPlant = world.getBlockState(pos).getBlock() instanceof IPlantable;
+        // IPlantable is gone - ask the block below whether it sustains what is at pos.
+        boolean isPlant = world.getBlockState(pos.below()).canSustainPlant(world, pos.below(), Direction.UP, world.getBlockState(pos)).isTrue();
         AreaEffectCloud cloud = new AreaEffectCloud(world, pos.getX() + 0.5D, pos.getY() + (isPlant ? 0.0D : 1.0D), pos.getZ() + 0.5D);
         cloud.setRadius(1);
         cloud.setParticle(ParticleTypes.HAPPY_VILLAGER);
