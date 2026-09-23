@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:prismarine_bricks"
-    },
-    {
-      "item": "thermal:earth_charge"
-    }
+    "minecraft:prismarine_bricks",
+    "thermal:earth_charge"
   ],
   "result": {
     "count": 9,

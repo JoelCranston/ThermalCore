@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "P": {
-      "item": "thermal:blitz_powder"
-    }
+    "G": "#c:gunpowders",
+    "I": "#c:ingots/iron",
+    "P": "thermal:blitz_powder"
   },
   "pattern": [
     "GPG",

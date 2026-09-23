@@ -2,28 +2,22 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
+    "#c:sands",
+    "minecraft:bone_meal",
     {
-      "tag": "c:sands"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:gems/apatite",
+        "#c:dusts/apatite"
+      ]
     },
     {
-      "item": "minecraft:bone_meal"
-    },
-    [
-      {
-        "tag": "c:gems/apatite"
-      },
-      {
-        "tag": "c:dusts/apatite"
-      }
-    ],
-    [
-      {
-        "tag": "c:gems/niter"
-      },
-      {
-        "tag": "c:dusts/niter"
-      }
-    ]
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:gems/niter",
+        "#c:dusts/niter"
+      ]
+    }
   ],
   "result": {
     "count": 4,

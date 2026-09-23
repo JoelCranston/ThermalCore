@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static cofh.core.util.helpers.ItemHelper.cloneStack;
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.SAWMILL_RECIPE;
@@ -112,7 +112,7 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
                 new SawmillRecipe(getDefaultEnergy() / 2, 0.15F,
                         Collections.singletonList(log),
                         Collections.emptyList(), // no fluid input
-                        Arrays.asList(cloneStack(planks, (int) (planks.getCount() * 1.5F)), new ItemStack(ITEMS.get("sawdust"))),
+                        Arrays.asList(ItemStackTemplate.fromNonEmptyStack(planks).withCount((int) (planks.getCount() * 1.5F)), new ItemStackTemplate(ITEMS.get("sawdust"))),
                         Arrays.asList(-1.0F, 1.25F), // output chances
                         Collections.emptyList())); // no fluid output
     }

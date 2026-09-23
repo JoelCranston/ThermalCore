@@ -2,30 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dusts/copper"
-    },
-    {
-      "tag": "c:dusts/copper"
-    },
-    {
-      "tag": "c:dusts/copper"
-    },
-    {
-      "tag": "c:dusts/silver"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    },
-    {
-      "tag": "c:dusts/redstone"
-    }
+    "#c:dusts/copper",
+    "#c:dusts/copper",
+    "#c:dusts/copper",
+    "#c:dusts/silver",
+    "#c:dusts/redstone",
+    "#c:dusts/redstone",
+    "#c:dusts/redstone",
+    "#c:dusts/redstone"
   ],
   "result": {
     "count": 4,

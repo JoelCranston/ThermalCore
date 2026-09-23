@@ -1,13 +1,10 @@
 {
   "type": "minecraft:smelting",
-  "category": "blocks",
+  "category": "misc",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "thermal:rich_slag_block"
-  },
+  "ingredient": "thermal:rich_slag_block",
   "result": {
-    "count": 1,
     "id": "thermal:polished_rich_slag"
   }
 }

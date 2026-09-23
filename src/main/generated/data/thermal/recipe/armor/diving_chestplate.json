@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "tag": "c:ingots/gold"
-    },
-    "X": {
-      "item": "thermal:diving_fabric"
-    }
+    "I": "#c:ingots/gold",
+    "X": "thermal:diving_fabric"
   },
   "pattern": [
     "X X",
@@ -21,7 +17,6 @@
     "XXX"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:diving_chestplate"
   }
 }

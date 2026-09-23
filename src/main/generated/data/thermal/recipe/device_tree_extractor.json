@@ -8,21 +8,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "minecraft:bucket"
-    },
-    "G": {
-      "tag": "c:glass_blocks"
-    },
-    "I": {
-      "tag": "minecraft:planks"
-    },
-    "P": {
-      "item": "thermal:redstone_servo"
-    },
-    "X": {
-      "tag": "c:gears/iron"
-    }
+    "C": "minecraft:bucket",
+    "G": "#c:glass_blocks",
+    "I": "#minecraft:planks",
+    "P": "thermal:redstone_servo",
+    "X": "#c:gears/iron"
   },
   "pattern": [
     "IXI",
@@ -30,7 +20,6 @@
     "IPI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:device_tree_extractor"
   }
 }

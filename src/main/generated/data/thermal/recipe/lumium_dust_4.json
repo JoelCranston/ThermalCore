@@ -2,24 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dusts/tin"
-    },
-    {
-      "tag": "c:dusts/tin"
-    },
-    {
-      "tag": "c:dusts/tin"
-    },
-    {
-      "tag": "c:dusts/silver"
-    },
-    {
-      "tag": "c:dusts/glowstone"
-    },
-    {
-      "tag": "c:dusts/glowstone"
-    }
+    "#c:dusts/tin",
+    "#c:dusts/tin",
+    "#c:dusts/tin",
+    "#c:dusts/silver",
+    "#c:dusts/glowstone",
+    "#c:dusts/glowstone"
   ],
   "result": {
     "count": 4,

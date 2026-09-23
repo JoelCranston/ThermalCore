@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/lumium"
-    },
-    "I": {
-      "tag": "c:ingots/copper"
-    },
-    "X": {
-      "tag": "thermal:glass/hardened"
-    }
+    "G": "#c:gears/lumium",
+    "I": "#c:ingots/copper",
+    "X": "#thermal:glass/hardened"
   },
   "pattern": [
     " G ",
@@ -24,7 +18,6 @@
     " G "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:potion_duration_augment"
   }
 }

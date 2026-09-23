@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": {
-      "tag": "c:gears/electrum"
-    },
-    "G": {
-      "tag": "c:glass_blocks"
-    },
-    "I": {
-      "tag": "c:ingots/lead"
-    }
+    "E": "#c:gears/electrum",
+    "G": "#c:glass_blocks",
+    "I": "#c:ingots/lead"
   },
   "pattern": [
     "IGI",
@@ -24,7 +18,6 @@
     "IGI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:energy_cell_frame"
   }
 }

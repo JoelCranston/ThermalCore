@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:basalz_rod"
-    }
+    "thermal:basalz_rod"
   ],
   "result": {
     "count": 2,

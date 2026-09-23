@@ -8,9 +8,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": {
-      "item": "thermal:beekeeper_fabric"
-    }
+    "X": "thermal:beekeeper_fabric"
   },
   "pattern": [
     "XXX",
@@ -18,7 +16,6 @@
     "X X"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:beekeeper_leggings"
   }
 }

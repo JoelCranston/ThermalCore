@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/netherite"
-    },
-    "i": {
-      "tag": "c:nuggets/iron"
-    }
+    "#": "#c:ingots/netherite",
+    "i": "#c:nuggets/iron"
   },
   "pattern": [
     " # ",
@@ -15,7 +11,6 @@
     " # "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:netherite_gear"
   }
 }

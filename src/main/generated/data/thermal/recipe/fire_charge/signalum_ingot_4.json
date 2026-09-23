@@ -2,53 +2,39 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    [
-      {
-        "tag": "c:dusts/copper"
-      },
-      {
-        "tag": "c:ingots/copper"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/copper"
-      },
-      {
-        "tag": "c:ingots/copper"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/copper"
-      },
-      {
-        "tag": "c:ingots/copper"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/silver"
-      },
-      {
-        "tag": "c:ingots/silver"
-      }
-    ],
     {
-      "tag": "c:dusts/redstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/copper",
+        "#c:ingots/copper"
+      ]
     },
     {
-      "tag": "c:dusts/redstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/copper",
+        "#c:ingots/copper"
+      ]
     },
     {
-      "tag": "c:dusts/redstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/copper",
+        "#c:ingots/copper"
+      ]
     },
     {
-      "tag": "c:dusts/redstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/silver",
+        "#c:ingots/silver"
+      ]
     },
-    {
-      "item": "minecraft:fire_charge"
-    }
+    "#c:dusts/redstone",
+    "#c:dusts/redstone",
+    "#c:dusts/redstone",
+    "#c:dusts/redstone",
+    "minecraft:fire_charge"
   ],
   "result": {
     "count": 4,

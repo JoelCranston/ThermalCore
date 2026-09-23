@@ -29,12 +29,12 @@ import org.joml.Vector4f;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Utils.itemProperties;
 import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static cofh.thermal.core.ThermalCore.*;
 import static cofh.thermal.core.init.registries.ThermalCreativeTabs.toolsTab;
+import static cofh.thermal.core.util.RegistrationHelper.blockProperties;
+import static cofh.thermal.core.util.RegistrationHelper.itemProperties;
 import static cofh.thermal.lib.util.ThermalIDs.ID_FLUID_REDSTONE;
-import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;
 
 public class RedstoneFluid extends FluidCoFH {
 
@@ -54,8 +54,8 @@ public class RedstoneFluid extends FluidCoFH {
 
         particleColor = new Vector3f(0.4F, 0.0F, 0.0F);
 
-        block = BLOCKS.register(fluid(ID_FLUID_REDSTONE), () -> new FluidBlock(stillFluid, of().mapColor(MapColor.COLOR_RED).lightLevel(lightValue(7)).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_REDSTONE), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        block = BLOCKS.register(fluid(ID_FLUID_REDSTONE), id -> new FluidBlock(stillFluid, blockProperties(id).mapColor(MapColor.COLOR_RED).lightLevel(lightValue(7)).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_REDSTONE), id -> new BucketItem(stillFluid.get(), itemProperties(id).craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "tag": "c:ingots/tin"
-    },
-    "L": {
-      "tag": "c:leathers"
-    },
-    "W": {
-      "tag": "thermal:rockwool"
-    }
+    "I": "#c:ingots/tin",
+    "L": "#c:leathers",
+    "W": "#thermal:rockwool"
   },
   "pattern": [
     "LWL",
@@ -18,7 +12,6 @@
     "LWL"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:satchel"
   }
 }

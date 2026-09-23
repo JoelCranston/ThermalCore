@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "tag": "c:slimeballs"
-    }
+    "G": "#c:gunpowders",
+    "P": "#c:slime_balls"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:slime_tnt"
   }
 }

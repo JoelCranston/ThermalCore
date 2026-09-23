@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/lumium"
-    },
-    "I": {
-      "item": "thermal:lumium_ingot"
-    }
+    "#": "#c:ingots/lumium",
+    "I": "thermal:lumium_ingot"
   },
   "pattern": [
     "###",
@@ -15,7 +11,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:lumium_block"
   }
 }

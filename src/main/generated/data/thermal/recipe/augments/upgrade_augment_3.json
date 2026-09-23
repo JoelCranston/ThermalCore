@@ -8,18 +8,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "thermal:glass/hardened"
-    },
-    "I": {
-      "tag": "c:ingots/enderium"
-    },
-    "R": {
-      "tag": "c:gears/lumium"
-    },
-    "X": {
-      "item": "thermal:upgrade_augment_2"
-    }
+    "G": "#thermal:glass/hardened",
+    "I": "#c:ingots/enderium",
+    "R": "#c:gears/lumium",
+    "X": "thermal:upgrade_augment_2"
   },
   "pattern": [
     "IGI",
@@ -27,7 +19,6 @@
     "IGI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:upgrade_augment_3"
   }
 }

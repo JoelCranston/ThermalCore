@@ -4,8 +4,10 @@ import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.recipes.SerializableRecipe;
 import cofh.thermal.core.ThermalCore;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +19,19 @@ public abstract class ThermalRecipe extends SerializableRecipe {
     protected final List<Ingredient> inputItems = new ArrayList<>();
     protected final List<FluidIngredient> inputFluids = new ArrayList<>();
 
-    protected final List<ItemStack> outputItems = new ArrayList<>();
-    protected final List<FluidStack> outputFluids = new ArrayList<>();
+    protected final List<ItemStackTemplate> outputItems = new ArrayList<>();
+    protected final List<FluidStackTemplate> outputFluids = new ArrayList<>();
     protected final List<Float> outputItemChances = new ArrayList<>();
+
+    private List<ItemStack> outputItemStacks;
+    private List<FluidStack> outputFluidStacks;
 
     protected int energy;
     protected float xp;
 
     protected boolean catalyzable;
 
-    protected ThermalRecipe(int energy, float xp, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
+    protected ThermalRecipe(int energy, float xp, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStackTemplate> outputItems, List<Float> outputItemChances, List<FluidStackTemplate> outputFluids) {
 
         if ((inputItems == null || inputItems.isEmpty()) && (inputFluids == null || inputFluids.isEmpty()) || (outputItems == null || outputItems.isEmpty()) && (outputFluids == null || outputFluids.isEmpty())) {
             ThermalCore.LOG.warn("Invalid Thermal Series recipe! Please check your datapacks!");
@@ -66,8 +71,8 @@ public abstract class ThermalRecipe extends SerializableRecipe {
         ((ArrayList<Ingredient>) this.inputItems).trimToSize();
         ((ArrayList<FluidIngredient>) this.inputFluids).trimToSize();
 
-        ((ArrayList<ItemStack>) this.outputItems).trimToSize();
-        ((ArrayList<FluidStack>) this.outputFluids).trimToSize();
+        ((ArrayList<ItemStackTemplate>) this.outputItems).trimToSize();
+        ((ArrayList<FluidStackTemplate>) this.outputFluids).trimToSize();
         ((ArrayList<Float>) this.outputItemChances).trimToSize();
     }
 
@@ -82,14 +87,39 @@ public abstract class ThermalRecipe extends SerializableRecipe {
         return inputFluids;
     }
 
-    public List<ItemStack> getOutputItems() {
+    public List<ItemStackTemplate> getOutputItemTemplates() {
 
         return outputItems;
     }
 
-    public List<FluidStack> getOutputFluids() {
+    public List<FluidStackTemplate> getOutputFluidTemplates() {
 
         return outputFluids;
+    }
+
+    // Stacks are only created on demand; default components are not bound while recipes load.
+    public List<ItemStack> getOutputItems() {
+
+        if (outputItemStacks == null) {
+            List<ItemStack> stacks = new ArrayList<>(outputItems.size());
+            for (ItemStackTemplate template : outputItems) {
+                stacks.add(template.create());
+            }
+            outputItemStacks = stacks;
+        }
+        return outputItemStacks;
+    }
+
+    public List<FluidStack> getOutputFluids() {
+
+        if (outputFluidStacks == null) {
+            List<FluidStack> stacks = new ArrayList<>(outputFluids.size());
+            for (FluidStackTemplate template : outputFluids) {
+                stacks.add(template.create());
+            }
+            outputFluidStacks = stacks;
+        }
+        return outputFluidStacks;
     }
 
     public List<Float> getOutputItemChances() {

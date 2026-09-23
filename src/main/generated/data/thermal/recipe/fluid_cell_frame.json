@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": {
-      "tag": "c:gears/bronze"
-    },
-    "G": {
-      "tag": "c:glass_blocks"
-    },
-    "I": {
-      "tag": "c:ingots/copper"
-    }
+    "E": "#c:gears/bronze",
+    "G": "#c:glass_blocks",
+    "I": "#c:ingots/copper"
   },
   "pattern": [
     "IGI",
@@ -24,7 +18,6 @@
     "IGI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:fluid_cell_frame"
   }
 }

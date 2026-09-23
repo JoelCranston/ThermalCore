@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thermal:item/machine_efficiency_augment"
+  }
+}

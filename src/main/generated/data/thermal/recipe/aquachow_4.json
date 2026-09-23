@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:wheat"
-    },
-    {
-      "item": "minecraft:wheat"
-    },
-    {
-      "item": "minecraft:slime_ball"
-    }
+    "minecraft:wheat",
+    "minecraft:wheat",
+    "minecraft:slime_ball"
   ],
   "result": {
     "count": 4,

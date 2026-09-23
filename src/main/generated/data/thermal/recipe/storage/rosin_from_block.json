@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:rosin_block"
-    }
+    "thermal:rosin_block"
   ],
   "result": {
     "count": 9,

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "S": {
-      "tag": "c:ingots/signalum"
-    },
-    "i": {
-      "tag": "c:nuggets/iron"
-    }
+    "S": "#c:ingots/signalum",
+    "i": "#c:nuggets/iron"
   },
   "pattern": [
     " i ",
@@ -15,7 +11,6 @@
     "iii"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:lock"
   }
 }

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:quartz_block"
-    },
-    {
-      "item": "thermal:earth_charge"
-    }
+    "minecraft:quartz_block",
+    "thermal:earth_charge"
   ],
   "result": {
     "count": 4,

@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "S": {
-      "tag": "c:ingots/signalum"
-    },
-    "c": {
-      "tag": "c:nuggets/copper"
-    }
+    "S": "#c:ingots/signalum",
+    "c": "#c:nuggets/copper"
   },
   "pattern": [
     " c ",
@@ -21,7 +17,6 @@
     " c "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:fluid_filter_augment"
   }
 }

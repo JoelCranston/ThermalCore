@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thermal:item/dynamo_output_augment"
+  }
+}

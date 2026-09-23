@@ -1,0 +1,41 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:count",
+    "normalize": true,
+    "entries": [
+      {
+        "threshold": 0.03125,
+        "model": {
+          "type": "minecraft:model",
+          "model": "thermal:item/emerald_coin_1"
+        }
+      },
+      {
+        "threshold": 0.25,
+        "model": {
+          "type": "minecraft:model",
+          "model": "thermal:item/emerald_coin_2"
+        }
+      },
+      {
+        "threshold": 0.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "thermal:item/emerald_coin_3"
+        }
+      },
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "thermal:item/emerald_coin_4"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "thermal:item/emerald_coin"
+    }
+  }
+}

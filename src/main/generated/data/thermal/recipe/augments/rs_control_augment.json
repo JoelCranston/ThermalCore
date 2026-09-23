@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "i": {
-      "tag": "c:nuggets/iron"
-    },
-    "r": {
-      "tag": "c:dusts/redstone"
-    }
+    "i": "#c:nuggets/iron",
+    "r": "#c:dusts/redstone"
   },
   "pattern": [
     " i ",
@@ -15,7 +11,6 @@
     " i "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:rs_control_augment"
   }
 }

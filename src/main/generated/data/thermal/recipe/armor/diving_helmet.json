@@ -8,22 +8,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:glass_panes"
-    },
-    "I": {
-      "tag": "c:ingots/gold"
-    },
-    "X": {
-      "item": "thermal:diving_fabric"
-    }
+    "G": "#c:glass_panes",
+    "I": "#c:ingots/gold",
+    "X": "thermal:diving_fabric"
   },
   "pattern": [
     "XIX",
     "IGI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:diving_helmet"
   }
 }

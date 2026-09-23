@@ -5,9 +5,7 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.recipes.JsonMapCodec;
 import cofh.thermal.core.ThermalCore;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -47,14 +45,7 @@ public class DynamoFuelSerializer<T extends ThermalFuel> {
 
     public MapCodec<T> codec() {
 
-        return JsonMapCodec.INSTANCE
-                .flatXmap(json -> {
-                    try {
-                        return DataResult.success(fromJson(json));
-                    } catch (JsonParseException e) {
-                        return DataResult.error(e::getMessage);
-                    }
-                }, recipe -> DataResult.success(toJson(recipe)));
+        return JsonMapCodec.of(this::fromJson, this::toJson);
     }
 
     protected T fromJson(JsonObject json) {

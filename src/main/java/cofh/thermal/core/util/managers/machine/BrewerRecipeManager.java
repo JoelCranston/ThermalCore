@@ -34,6 +34,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.*;
@@ -233,7 +234,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
                         Collections.singletonList(reagent),
                         Collections.singletonList(FluidIngredient.of(PotionFluid.getPotionAsFluid(defaultPotion, inputPotion))),
                         Collections.emptyList(), Collections.emptyList(),
-                        Collections.singletonList(PotionFluid.getPotionAsFluid(defaultPotion, outputPotion))));
+                        Collections.singletonList(FluidStackTemplate.fromNonEmptyStack(PotionFluid.getPotionAsFluid(defaultPotion, outputPotion)))));
     }
     // endregion
 }

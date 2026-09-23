@@ -3,11 +3,11 @@ package cofh.thermal.core.util.recipes.machine;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.managers.machine.PulverizerRecipeManager;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -17,7 +17,7 @@ import static cofh.thermal.core.init.registries.TCoreRecipeTypes.PULVERIZER_RECY
 
 public class PulverizerRecycleRecipe extends PulverizerRecipe {
 
-    public PulverizerRecycleRecipe(int energy, float experience, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
+    public PulverizerRecycleRecipe(int energy, float experience, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStackTemplate> outputItems, List<Float> outputItemChances, List<FluidStackTemplate> outputFluids) {
 
         super(energy, experience, inputItems, inputFluids, outputItems, outputItemChances, outputFluids);
 

@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -24,9 +25,10 @@ public class RockGenMapping extends SerializableRecipe {
     protected final int time;
     protected final Block below;
     protected final Block adjacent;
-    protected final ItemStack result;
+    protected final ItemStackTemplate result;
+    private ItemStack resultStack;
 
-    public RockGenMapping(int time, Block below, Block adjacent, ItemStack result) {
+    public RockGenMapping(int time, Block below, Block adjacent, ItemStackTemplate result) {
 
         this.time = time;
         this.below = below;
@@ -62,9 +64,17 @@ public class RockGenMapping extends SerializableRecipe {
         return adjacent;
     }
 
-    public ItemStack getResult() {
+    public ItemStackTemplate getResultTemplate() {
 
         return result;
+    }
+
+    public ItemStack getResult() {
+
+        if (resultStack == null) {
+            resultStack = result.create();
+        }
+        return resultStack;
     }
     // endregion
 
@@ -73,7 +83,7 @@ public class RockGenMapping extends SerializableRecipe {
                     Codec.INT.optionalFieldOf(TIME, RockGenManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.time),
                     BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf(BELOW, Blocks.AIR).forGetter(recipe -> recipe.below),
                     BuiltInRegistries.BLOCK.byNameCodec().fieldOf(ADJACENT).forGetter(recipe -> recipe.adjacent),
-                    ItemStack.CODEC.fieldOf(RESULT).forGetter(recipe -> recipe.result)
+                    ItemStackTemplate.CODEC.fieldOf(RESULT).forGetter(recipe -> recipe.result)
             ).apply(builder, RockGenMapping::new)
     );
 
@@ -118,7 +128,7 @@ public class RockGenMapping extends SerializableRecipe {
         int time = buffer.readInt();
         Block trunk = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
         Block leaves = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
-        ItemStack result = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
+        ItemStackTemplate result = ItemStackTemplate.STREAM_CODEC.decode(buffer);
 
         return new RockGenMapping(time, trunk, leaves, result);
     }
@@ -128,7 +138,7 @@ public class RockGenMapping extends SerializableRecipe {
         buffer.writeInt(recipe.time);
         buffer.writeIdentifier(getRegistryName(recipe.below));
         buffer.writeIdentifier(getRegistryName(recipe.adjacent));
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
     }
     // endregion
 }

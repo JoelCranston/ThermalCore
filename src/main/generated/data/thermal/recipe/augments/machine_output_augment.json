@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "tag": "c:gears/bronze"
-    },
-    "I": {
-      "tag": "c:plates/invar"
-    },
-    "X": {
-      "item": "thermal:redstone_servo"
-    }
+    "B": "#c:gears/bronze",
+    "I": "#c:plates/invar",
+    "X": "thermal:redstone_servo"
   },
   "pattern": [
     " B ",
@@ -24,7 +18,6 @@
     " B "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:machine_output_augment"
   }
 }

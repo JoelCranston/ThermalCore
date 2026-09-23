@@ -8,27 +8,22 @@ already done and why.
 The plan for all four repos is `../CoFHCore/docs/port-plan.md`; this repo's steps are §4 (Phase 0,
 per repo), §5 A.2/A.3 (1.21.1) and §6 B.10 (26.1.2).
 
-Phase A (1.21.1) is **code-complete** on branch `1.21.1`: `./gradlew build` is clean,
-`verify_runserver.sh` reaches `Done`, and `runData` runs and matches the committed output
-(2026-09-22). This repo builds against whatever branch `../CoFHCore` has checked out, so
-**put CoFHCore on `1.21.1` to build or run it**. CoFHCore's working branch is `26.1.2` now.
+Phase B (26.1.2) is done for this repo on branch `26.1.2` (2026-09-22): 0 errors, `runData` matches the
+committed output, and the dedicated server boots to `Done` with 1760 recipes and no data errors. The
+shapes, decisions and forced behaviour changes are in `../CoFHCore/docs/api-notes-26.1.2.md` ("B.10
+ThermalCore") and `../CoFHCore/docs/TODO.md` (Inbox, "B.10 ThermalCore behaviour changes"). This repo
+builds against whatever branch `../CoFHCore` has checked out; both are on `26.1.2` now.
 
-1. **Joel's `runClient` pass** (port plan §A.4). It is the one Phase A exit criterion left, and
-   everything client-side is unverified. See `../CoFHCore/docs/TODO.md` for the checklist and
-   for `MouseHandlerMixin`, a specific suspect.
-2. **Phase B (B.10) waits for CoFHCore's 26.1.2 port** (B.0-B.5 done there, ~895 errors left: recipes, client, mixins).
-   **Before starting B.10, read `../CoFHCore/docs/TODO.md`'s "B.10 inherits from B.3/B.4/B.5"
-   notes.** They list what changes here: the persistence bridge, capability registration on the new
-   transfer API, armour and tool material records, the `ENCHANTABLE` component, the new
-   `neighborChanged` without a neighbour position (TD's ducts), and more. The shapes are in
-   `../CoFHCore/docs/api-notes-26.1.2.md`.
-   Nothing to do here until CoFHCore compiles on 26.1.2. When it does, branch `26.1.2` from
-   `1.21.1`, switch the data run back to `clientData()`, and **regenerate `src/main/generated`
-   rather than hand-migrating it** (see the progress log's runData entry for why).
+1. **Joel's `runClient` pass** (port plan §A.4 / §B.10) — everything client-side is unverified on both
+   hops: the six baked models and their item forms, the fluid models and fog, the entity renderers,
+   the screens, the armour equipment assets, the `range_dispatch` item definitions.
+2. **Florbs show no fluid tint** until CoFH's fluid-container items expose `Capabilities.Fluid.ITEM`
+   (CoFHCore TODO, "After the port", item 1).
 
 ## Inbox
 
-- **24 `c:` tags are referenced but defined by nobody.** Not a NeoForge convention, not emitted
+- ~~24 `c:` tags are referenced but defined by nobody~~ **emitted empty on 26.1.2** (a missing tag is a
+  hard recipe error there); decide per tag whether to keep the compat recipe. Originally: Not a NeoForge convention, not emitted
   by this repo's datagen: `c:dusts/{lead,silver,tin}`,
   `c:gears/{bronze,constantan,electrum,lead,nickel,silver,tin}`,
   `c:ingots/{electrum,invar,lead,silver,tin}`, `c:nuggets/{lead,tin}`,
@@ -45,7 +40,8 @@ Phase A (1.21.1) is **code-complete** on branch `1.21.1`: `./gradlew build` is c
   literal `tag("...")` calls — `c:dyes/<colour>` and `c:dyed/<colour>` come from NeoForge's
   `DyeColor` patch — so grepping `Tags.java` alone gives false "does not exist" answers.
   `c:slimeballs` still works but is deprecated in favour of `c:slime_balls`.
-- **`data/thermal/recipe/tools/guidebook.json` is still on the pre-1.20.5 recipe shape** — a
+- ~~`data/thermal/recipe/tools/guidebook.json` is still on the pre-1.20.5 recipe shape~~ fixed on 26.1.2
+  (`components` + string ingredients). Originally: — a
   `"nbt"` string in `result` and `{"item": …}` ingredients. Needs `components` /
   `DataComponents` when recipes are done (A.2). Its condition type was fixed to
   `neoforge:mod_loaded` during the sweep (it was `forge:mod_loaded` — a condition, not a tag,

@@ -1,16 +1,14 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "minecraft:book"
-    },
-    {
-      "item": "thermal:wrench"
-    }
+    "minecraft:book",
+    "thermal:wrench"
   ],
   "result": {
-    "nbt": "{\"patchouli:book\":\"thermal:guidebook\"}",
-    "id": "patchouli:guide_book"
+    "id": "patchouli:guide_book",
+    "components": {
+      "patchouli:book": "thermal:guidebook"
+    }
   },
   "neoforge:conditions": [
     {

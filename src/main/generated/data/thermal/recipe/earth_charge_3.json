@@ -2,19 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "equipment",
   "ingredients": [
-    {
-      "tag": "c:gunpowders"
-    },
-    {
-      "item": "thermal:basalz_powder"
-    },
+    "#c:gunpowders",
+    "thermal:basalz_powder",
     [
-      {
-        "item": "minecraft:coal"
-      },
-      {
-        "item": "minecraft:charcoal"
-      }
+      "minecraft:coal",
+      "minecraft:charcoal"
     ]
   ],
   "result": {

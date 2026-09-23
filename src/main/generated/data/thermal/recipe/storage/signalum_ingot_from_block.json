@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:signalum_block"
-    }
+    "thermal:signalum_block"
   ],
   "result": {
     "count": 9,

@@ -8,18 +8,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:wheat"
-    },
-    {
-      "item": "minecraft:beetroot"
-    },
-    {
-      "item": "minecraft:slime_ball"
-    },
-    {
-      "tag": "c:nuggets/lead"
-    }
+    "minecraft:wheat",
+    "minecraft:beetroot",
+    "minecraft:slime_ball",
+    "#c:nuggets/lead"
   ],
   "result": {
     "count": 4,

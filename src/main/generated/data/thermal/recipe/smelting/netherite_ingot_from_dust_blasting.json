@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 100,
   "experience": 0.0,
-  "ingredient": {
-    "item": "thermal:netherite_dust"
-  },
+  "ingredient": "thermal:netherite_dust",
   "result": {
-    "count": 1,
     "id": "minecraft:netherite_ingot"
   }
 }

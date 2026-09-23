@@ -439,6 +439,32 @@ public class TCoreTagsProvider {
             tag(ItemTagsCoFH.LOCKS).add(ITEMS.get(ID_LOCK));
             tag(ItemTagsCoFH.SECURABLE).add(ITEMS.get(ID_SATCHEL));
 
+            // Referenced by compat recipes; empty unless another mod provides the material.
+            tag(ItemTagsCoFH.DUSTS_LEAD);
+            tag(ItemTagsCoFH.DUSTS_SILVER);
+            tag(ItemTagsCoFH.DUSTS_TIN);
+            tag(ItemTagsCoFH.GEARS_BRONZE);
+            tag(ItemTagsCoFH.GEARS_CONSTANTAN);
+            tag(ItemTagsCoFH.GEARS_ELECTRUM);
+            tag(ItemTagsCoFH.GEARS_LEAD);
+            tag(ItemTagsCoFH.GEARS_NICKEL);
+            tag(ItemTagsCoFH.GEARS_SILVER);
+            tag(ItemTagsCoFH.GEARS_TIN);
+            tag(ItemTagsCoFH.GEMS_RUBY);
+            tag(ItemTagsCoFH.GEMS_SAPPHIRE);
+            tag(ItemTagsCoFH.INGOTS_ELECTRUM);
+            tag(ItemTagsCoFH.INGOTS_INVAR);
+            tag(ItemTagsCoFH.INGOTS_LEAD);
+            tag(ItemTagsCoFH.INGOTS_SILVER);
+            tag(ItemTagsCoFH.INGOTS_TIN);
+            tag(ItemTagsCoFH.NUGGETS_LEAD);
+            tag(ItemTagsCoFH.NUGGETS_TIN);
+            tag(ItemTagsCoFH.PLATES_CONSTANTAN);
+            tag(ItemTagsCoFH.PLATES_ELECTRUM);
+            tag(ItemTagsCoFH.PLATES_INVAR);
+            tag(ItemTagsCoFH.PLATES_LEAD);
+            tag(ItemTagsCoFH.PLATES_SILVER);
+
             tag(TCoreItems.REPAIRS_BEEKEEPER_ARMOR).add(ITEMS.get("beekeeper_fabric"));
             tag(TCoreItems.REPAIRS_DIVING_ARMOR).add(ITEMS.get("diving_fabric"));
             tag(TCoreItems.REPAIRS_HAZMAT_ARMOR).add(ITEMS.get("hazmat_fabric"));

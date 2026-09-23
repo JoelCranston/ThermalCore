@@ -8,18 +8,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gems/quartz"
-    },
-    "I": {
-      "tag": "c:ingots/electrum"
-    },
-    "R": {
-      "tag": "c:gears/signalum"
-    },
-    "X": {
-      "item": "thermal:upgrade_augment_1"
-    }
+    "G": "#c:gems/quartz",
+    "I": "#c:ingots/electrum",
+    "R": "#c:gears/signalum",
+    "X": "thermal:upgrade_augment_1"
   },
   "pattern": [
     "IGI",
@@ -27,7 +19,6 @@
     "IGI"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:upgrade_augment_2"
   }
 }

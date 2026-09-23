@@ -2,15 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:gems/emerald"
-    },
-    {
-      "item": "thermal:earth_charge"
-    }
+    "#c:gems/emerald",
+    "thermal:earth_charge"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:emerald_dust"
   }
 }

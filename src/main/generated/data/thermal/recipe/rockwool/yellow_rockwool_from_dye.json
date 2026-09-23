@@ -2,15 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "thermal:white_rockwool"
-    },
-    {
-      "tag": "c:dyes/yellow"
-    }
+    "thermal:white_rockwool",
+    "#c:dyes/yellow"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:yellow_rockwool"
   }
 }

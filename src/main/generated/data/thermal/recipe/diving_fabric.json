@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "H": {
-      "tag": "c:gems/prismarine"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "H": "#c:gems/prismarine",
+    "S": "#c:strings"
   },
   "pattern": [
     " S ",
@@ -21,7 +17,6 @@
     " S "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:diving_fabric"
   }
 }

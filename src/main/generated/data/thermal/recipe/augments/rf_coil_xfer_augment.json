@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:ingots/gold"
-    },
-    "S": {
-      "tag": "c:ingots/silver"
-    },
-    "X": {
-      "item": "thermal:rf_coil"
-    }
+    "G": "#c:ingots/gold",
+    "S": "#c:ingots/silver",
+    "X": "thermal:rf_coil"
   },
   "pattern": [
     " S ",
@@ -24,7 +18,6 @@
     " G "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:rf_coil_xfer_augment"
   }
 }

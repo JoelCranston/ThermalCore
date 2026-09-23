@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.0,
-  "ingredient": {
-    "item": "thermal:copper_dust"
-  },
+  "ingredient": "thermal:copper_dust",
   "result": {
-    "count": 1,
     "id": "minecraft:copper_ingot"
   }
 }

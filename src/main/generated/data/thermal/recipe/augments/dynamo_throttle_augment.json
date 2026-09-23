@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": {
-      "tag": "c:ingots/electrum"
-    },
-    "l": {
-      "tag": "c:nuggets/lead"
-    }
+    "E": "#c:ingots/electrum",
+    "l": "#c:nuggets/lead"
   },
   "pattern": [
     " l ",
@@ -21,7 +17,6 @@
     " l "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:dynamo_throttle_augment"
   }
 }

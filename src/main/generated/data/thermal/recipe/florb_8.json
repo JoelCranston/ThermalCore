@@ -2,20 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
+    "#c:sawdust",
+    "#c:slag",
     {
-      "tag": "c:sawdust"
-    },
-    {
-      "tag": "c:slag"
-    },
-    [
-      {
-        "tag": "c:rosin"
-      },
-      {
-        "tag": "c:slimeballs"
-      }
-    ]
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:rosin",
+        "#c:slime_balls"
+      ]
+    }
   ],
   "result": {
     "count": 8,

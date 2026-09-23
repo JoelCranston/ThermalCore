@@ -8,12 +8,13 @@ import cofh.thermal.lib.util.recipes.MachineRecipeSerializer;
 import cofh.thermal.lib.util.recipes.ThermalRecipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ import static cofh.thermal.core.init.registries.TCoreRecipeTypes.INSOLATOR_RECIP
 
 public class InsolatorRecipe extends ThermalRecipe {
 
-    public InsolatorRecipe(int energy, float experience, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
+    protected int water;
+
+    public InsolatorRecipe(int energy, float experience, List<Ingredient> inputItems, List<FluidIngredient> inputFluids, List<ItemStackTemplate> outputItems, List<Float> outputItemChances, List<FluidStackTemplate> outputFluids) {
 
         super(energy, experience, inputItems, inputFluids, outputItems, outputItemChances, outputFluids);
 
@@ -34,6 +37,16 @@ public class InsolatorRecipe extends ThermalRecipe {
             ThermalCore.LOG.warn("Energy value for a Phytogenic Insolator recipe was out of allowable range and has been set to a default value of " + defaultEnergy + ".");
             this.energy = defaultEnergy;
         }
+    }
+
+    // Water is added on first use; fluid stacks cannot be created while recipes load.
+    @Override
+    public List<FluidIngredient> getInputFluids() {
+
+        if (inputFluids.isEmpty()) {
+            inputFluids.add(FluidIngredient.of(new FluidStack(Fluids.WATER, water > 0 ? water : InsolatorRecipeManager.instance().getDefaultWater())));
+        }
+        return inputFluids;
     }
 
     @Nonnull
@@ -70,9 +83,9 @@ public class InsolatorRecipe extends ThermalRecipe {
 
             ArrayList<Ingredient> inputItems = new ArrayList<>();
             ArrayList<FluidIngredient> inputFluids = new ArrayList<>();
-            ArrayList<ItemStack> outputItems = new ArrayList<>();
+            ArrayList<ItemStackTemplate> outputItems = new ArrayList<>();
             ArrayList<Float> outputItemChances = new ArrayList<>();
-            ArrayList<FluidStack> outputFluids = new ArrayList<>();
+            ArrayList<FluidStackTemplate> outputFluids = new ArrayList<>();
 
             /* INPUT */
             if (json.has(INGREDIENT)) {
@@ -87,13 +100,13 @@ public class InsolatorRecipe extends ThermalRecipe {
 
             /* OUTPUT */
             if (json.has(RESULT)) {
-                parseOutputs(outputItems, outputItemChances, outputFluids, json.get(RESULT));
+                parseOutputTemplates(outputItems, outputItemChances, outputFluids, json.get(RESULT));
             } else if (json.has(RESULTS)) {
-                parseOutputs(outputItems, outputItemChances, outputFluids, json.get(RESULTS));
+                parseOutputTemplates(outputItems, outputItemChances, outputFluids, json.get(RESULTS));
             } else if (json.has(OUTPUT)) {
-                parseOutputs(outputItems, outputItemChances, outputFluids, json.get(OUTPUT));
+                parseOutputTemplates(outputItems, outputItemChances, outputFluids, json.get(OUTPUT));
             } else if (json.has(OUTPUTS)) {
-                parseOutputs(outputItems, outputItemChances, outputFluids, json.get(OUTPUTS));
+                parseOutputTemplates(outputItems, outputItemChances, outputFluids, json.get(OUTPUTS));
             }
 
             /* ENERGY */
@@ -119,13 +132,14 @@ public class InsolatorRecipe extends ThermalRecipe {
             if (json.has(WATER_MOD)) {
                 water *= json.get(WATER_MOD).getAsFloat();
             }
-            if (inputFluids.isEmpty()) {
-                inputFluids.add(FluidIngredient.of(new FluidStack(Fluids.WATER, water)));
-            }
             if (inputItems.isEmpty() || outputItems.isEmpty() && outputFluids.isEmpty() || energy <= 0) {
                 throw new JsonSyntaxException("Invalid Thermal Series recipe! Please check your datapacks!");
             }
-            return factory.create(energy, experience, inputItems, inputFluids, outputItems, outputItemChances, outputFluids);
+            T recipe = factory.create(energy, experience, inputItems, inputFluids, outputItems, outputItemChances, outputFluids);
+            if (recipe instanceof InsolatorRecipe insolatorRecipe) {
+                insolatorRecipe.water = water;
+            }
+            return recipe;
         }
 
     }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:enderium_ingot"
-    }
+    "thermal:enderium_ingot"
   ],
   "result": {
     "count": 9,

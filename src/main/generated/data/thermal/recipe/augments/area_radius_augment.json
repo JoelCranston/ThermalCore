@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/iron"
-    },
-    "I": {
-      "tag": "c:ingots/tin"
-    },
-    "X": {
-      "item": "thermal:redstone_servo"
-    }
+    "G": "#c:gears/iron",
+    "I": "#c:ingots/tin",
+    "X": "thermal:redstone_servo"
   },
   "pattern": [
     " G ",
@@ -24,7 +18,6 @@
     " G "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:area_radius_augment"
   }
 }

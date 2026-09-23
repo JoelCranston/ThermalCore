@@ -1,22 +1,24 @@
 package cofh.thermal.core.util.recipes.device;
 
-import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.util.Utils;
 import cofh.lib.util.recipes.JsonMapCodec;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 import static cofh.thermal.core.init.registries.TCoreRecipeSerializers.TREE_EXTRACTOR_SERIALIZER;
@@ -27,13 +29,15 @@ public class TreeExtractorMapping extends SerializableRecipe {
     protected final Block sapling;
     protected final BlockIngredient trunk;
     protected final BlockIngredient leaves;
-    protected final FluidStack fluid;
+    @Nullable
+    protected final FluidStackTemplate fluid;
+    private FluidStack fluidStack;
     protected final int minHeight;
     protected final int maxHeight;
     protected final int minLeaves;
     protected final int maxLeaves;
 
-    public TreeExtractorMapping(BlockIngredient trunk, BlockIngredient leaves, Block sapling, FluidStack fluid, int minHeight, int maxHeight, int minLeaves, int maxLeaves) {
+    public TreeExtractorMapping(BlockIngredient trunk, BlockIngredient leaves, Block sapling, @Nullable FluidStackTemplate fluid, int minHeight, int maxHeight, int minLeaves, int maxLeaves) {
 
         this.trunk = trunk;
         this.leaves = leaves;
@@ -73,9 +77,18 @@ public class TreeExtractorMapping extends SerializableRecipe {
         return sapling;
     }
 
-    public FluidStack getFluid() {
+    @Nullable
+    public FluidStackTemplate getFluidTemplate() {
 
         return fluid;
+    }
+
+    public FluidStack getFluid() {
+
+        if (fluidStack == null) {
+            fluidStack = fluid == null ? FluidStack.EMPTY : fluid.create();
+        }
+        return fluidStack;
     }
 
     public int getMinLeaves() {
@@ -100,14 +113,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static final MapCodec<TreeExtractorMapping> CODEC = JsonMapCodec.INSTANCE
-            .flatXmap(json -> {
-                try {
-                    return DataResult.success(fromJson(json));
-                } catch (JsonParseException e) {
-                    return DataResult.error(e::getMessage);
-                }
-            }, recipe -> DataResult.success(toJson(recipe)));
+    public static final MapCodec<TreeExtractorMapping> CODEC = JsonMapCodec.of(TreeExtractorMapping::fromJson, TreeExtractorMapping::toJson);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> STREAM_CODEC = StreamCodec.of(TreeExtractorMapping::toNetwork, TreeExtractorMapping::fromNetwork);
 
@@ -116,7 +122,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
         BlockIngredient logs = BlockIngredient.EMPTY;
         BlockIngredient leaves = BlockIngredient.EMPTY;
         Block sapling = Blocks.AIR;
-        FluidStack fluid = FluidStack.EMPTY;
+        FluidStackTemplate fluid = null;
         int minLeaves = 3;
         int maxLeaves = 3;
         int minHeight = 3;
@@ -137,9 +143,9 @@ public class TreeExtractorMapping extends SerializableRecipe {
         }
 
         if (json.has(RESULT)) {
-            fluid = parseFluidStack(json.get(RESULT));
+            fluid = parseFluidStackTemplate(json.get(RESULT));
         } else if (json.has(FLUID)) {
-            fluid = parseFluidStack(json.get(FLUID));
+            fluid = parseFluidStackTemplate(json.get(FLUID));
         }
 
         if (json.has(MIN_HEIGHT)) {
@@ -167,7 +173,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
         BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
         BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
         Block sapling = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
-        FluidStack fluid = FluidHelper.readFluidStack(buffer);
+        FluidStackTemplate fluid = ByteBufCodecs.optional(FluidStackTemplate.STREAM_CODEC).decode(buffer).orElse(null);
         int minHeight = buffer.readInt();
         int maxHeight = buffer.readInt();
         int minLeaves = buffer.readInt();
@@ -181,7 +187,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
         recipe.trunk.toNetwork(buffer);
         recipe.leaves.toNetwork(buffer);
         buffer.writeIdentifier(Utils.getRegistryName(recipe.sapling));
-        FluidHelper.writeFluidStack(buffer, recipe.fluid);
+        ByteBufCodecs.optional(FluidStackTemplate.STREAM_CODEC).encode(buffer, Optional.ofNullable(recipe.fluid));
         buffer.writeInt(recipe.minHeight);
         buffer.writeInt(recipe.maxHeight);
         buffer.writeInt(recipe.minLeaves);

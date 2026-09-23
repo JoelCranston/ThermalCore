@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:cured_rubber_block"
-    }
+    "thermal:cured_rubber_block"
   ],
   "result": {
     "count": 4,

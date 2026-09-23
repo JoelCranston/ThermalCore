@@ -1,0 +1,32 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:primed",
+    "entries": [
+      {
+        "threshold": 1,
+        "model": {
+          "type": "minecraft:model",
+          "model": "thermal:item/detonator_primed"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:range_dispatch",
+      "property": "minecraft:armed",
+      "entries": [
+        {
+          "threshold": 1,
+          "model": {
+            "type": "minecraft:model",
+            "model": "thermal:item/detonator_armed"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "thermal:item/detonator"
+      }
+    }
+  }
+}

@@ -22,6 +22,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -284,7 +285,7 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
                 new BottlerRecipe(energy, experience,
                         singletonList(Ingredient.of(inputItem.getItem())),
                         singletonList(FluidIngredient.of(inputFluid).setAmount(inputFluid.getAmount())),
-                        singletonList(outputItem),
+                        singletonList(ItemStackTemplate.fromNonEmptyStack(outputItem)),
                         emptyList(),
                         emptyList())));
         return new BottlerRecipeNBT(energy, experience, inputItem, inputFluid, outputItem);

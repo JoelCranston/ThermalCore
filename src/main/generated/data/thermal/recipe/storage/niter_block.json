@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:gems/niter"
-    },
-    "I": {
-      "item": "thermal:niter"
-    }
+    "#": "#c:gems/niter",
+    "I": "thermal:niter"
   },
   "pattern": [
     "###",
@@ -15,7 +11,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:niter_block"
   }
 }

@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "thermal:cured_rubber"
-    }
+    "#": "thermal:cured_rubber"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:cured_rubber_block"
   }
 }

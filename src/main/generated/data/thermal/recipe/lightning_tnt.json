@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "item": "thermal:blitz_powder"
-    }
+    "G": "#c:gunpowders",
+    "P": "thermal:blitz_powder"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:lightning_tnt"
   }
 }

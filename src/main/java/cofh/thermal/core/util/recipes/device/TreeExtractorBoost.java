@@ -60,7 +60,7 @@ public class TreeExtractorBoost extends SerializableRecipe {
 
     // region SERIALIZER
     public static final MapCodec<TreeExtractorBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    INGREDIENT_CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                     Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
                     Codec.INT.optionalFieldOf(CYCLES, TreeExtractorManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)
             ).apply(builder, TreeExtractorBoost::new)

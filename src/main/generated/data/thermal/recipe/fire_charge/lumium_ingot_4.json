@@ -2,47 +2,37 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    [
-      {
-        "tag": "c:dusts/tin"
-      },
-      {
-        "tag": "c:ingots/tin"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/tin"
-      },
-      {
-        "tag": "c:ingots/tin"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/tin"
-      },
-      {
-        "tag": "c:ingots/tin"
-      }
-    ],
-    [
-      {
-        "tag": "c:dusts/silver"
-      },
-      {
-        "tag": "c:ingots/silver"
-      }
-    ],
     {
-      "tag": "c:dusts/glowstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/tin",
+        "#c:ingots/tin"
+      ]
     },
     {
-      "tag": "c:dusts/glowstone"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/tin",
+        "#c:ingots/tin"
+      ]
     },
     {
-      "item": "minecraft:fire_charge"
-    }
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/tin",
+        "#c:ingots/tin"
+      ]
+    },
+    {
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/silver",
+        "#c:ingots/silver"
+      ]
+    },
+    "#c:dusts/glowstone",
+    "#c:dusts/glowstone",
+    "minecraft:fire_charge"
   ],
   "result": {
     "count": 4,

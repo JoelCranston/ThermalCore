@@ -18,6 +18,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -25,7 +26,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static cofh.core.util.helpers.ItemHelper.cloneStack;
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.*;
@@ -376,7 +376,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
                 new SmelterRecipe(getDefaultEnergy() / 2, 0.0F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Collections.singletonList(cloneStack(ingot, 1)),
+                        Collections.singletonList(ItemStackTemplate.fromNonEmptyStack(ingot).withCount(1)),
                         List.of(-1.0F), // output chances
                         Collections.emptyList())); // no fluid output
     }
@@ -387,7 +387,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
                 new SmelterRecipe(getDefaultEnergy(), 0.5F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Arrays.asList(cloneStack(ingot, 1), new ItemStack(ITEMS.get("rich_slag"))),
+                        Arrays.asList(ItemStackTemplate.fromNonEmptyStack(ingot).withCount(1), new ItemStackTemplate(ITEMS.get("rich_slag"))),
                         Arrays.asList(1.0F, 0.2F), // output chances
                         Collections.emptyList())); // no fluid output
     }
@@ -398,7 +398,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
                 new SmelterRecipe(getDefaultEnergy(), 0.5F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Collections.singletonList(cloneStack(ingot, 1)),
+                        Collections.singletonList(ItemStackTemplate.fromNonEmptyStack(ingot).withCount(1)),
                         List.of(-1.5F), // output chances
                         Collections.emptyList())); // no fluid output
     }

@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "tag": "c:gears/constantan"
-    },
-    "L": {
-      "tag": "c:plates/lead"
-    },
-    "X": {
-      "item": "thermal:redstone_servo"
-    }
+    "C": "#c:gears/constantan",
+    "L": "#c:plates/lead",
+    "X": "thermal:redstone_servo"
   },
   "pattern": [
     " C ",
@@ -24,7 +18,6 @@
     " C "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:machine_catalyst_augment"
   }
 }

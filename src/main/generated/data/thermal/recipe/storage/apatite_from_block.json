@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:apatite_block"
-    }
+    "thermal:apatite_block"
   ],
   "result": {
     "count": 9,

@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.2,
-  "ingredient": {
-    "item": "thermal:rubber"
-  },
+  "ingredient": "thermal:rubber",
   "result": {
-    "count": 1,
     "id": "thermal:cured_rubber"
   }
 }

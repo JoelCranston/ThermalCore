@@ -1,6 +1,5 @@
 package cofh.thermal.core.util.recipes.device;
 
-import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.recipes.SerializableRecipe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -8,10 +7,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 import static cofh.lib.util.Utils.getRegistryName;
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
@@ -21,10 +22,13 @@ import static cofh.thermal.core.init.registries.TCoreRecipeTypes.HIVE_EXTRACTOR_
 public class HiveExtractorMapping extends SerializableRecipe {
 
     protected final Block hive;
-    protected final ItemStack item;
-    protected final FluidStack fluid;
+    protected final ItemStackTemplate item;
+    protected final FluidStackTemplate fluid;
 
-    public HiveExtractorMapping(Block hive, ItemStack item, FluidStack fluid) {
+    private ItemStack itemStack;
+    private FluidStack fluidStack;
+
+    public HiveExtractorMapping(Block hive, ItemStackTemplate item, FluidStackTemplate fluid) {
 
         this.hive = hive;
         this.item = item;
@@ -49,22 +53,38 @@ public class HiveExtractorMapping extends SerializableRecipe {
         return hive;
     }
 
-    public ItemStack getItem() {
+    public ItemStackTemplate getItemTemplate() {
 
         return item;
     }
 
-    public FluidStack getFluid() {
+    public FluidStackTemplate getFluidTemplate() {
 
         return fluid;
+    }
+
+    public ItemStack getItem() {
+
+        if (itemStack == null) {
+            itemStack = item.create();
+        }
+        return itemStack;
+    }
+
+    public FluidStack getFluid() {
+
+        if (fluidStack == null) {
+            fluidStack = fluid.create();
+        }
+        return fluidStack;
     }
     // endregion
 
     // region SERIALIZER
     public static final MapCodec<HiveExtractorMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
                     Block.CODEC.fieldOf(HIVE).forGetter(recipe -> recipe.hive),
-                    ItemStack.CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
-                    FluidStack.CODEC.fieldOf(FLUID).forGetter(recipe -> recipe.fluid)
+                    ItemStackTemplate.CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
+                    FluidStackTemplate.CODEC.fieldOf(FLUID).forGetter(recipe -> recipe.fluid)
             ).apply(builder, HiveExtractorMapping::new)
     );
 
@@ -92,8 +112,8 @@ public class HiveExtractorMapping extends SerializableRecipe {
     public static HiveExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
         Block hive = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
-        ItemStack item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
-        FluidStack fluid = FluidHelper.readFluidStack(buffer);
+        ItemStackTemplate item = ItemStackTemplate.STREAM_CODEC.decode(buffer);
+        FluidStackTemplate fluid = FluidStackTemplate.STREAM_CODEC.decode(buffer);
 
         return new HiveExtractorMapping(hive, item, fluid);
     }
@@ -101,8 +121,8 @@ public class HiveExtractorMapping extends SerializableRecipe {
     public static void toNetwork(RegistryFriendlyByteBuf buffer, HiveExtractorMapping recipe) {
 
         buffer.writeIdentifier(getRegistryName(recipe.hive));
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.item);
-        FluidHelper.writeFluidStack(buffer, recipe.fluid);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.item);
+        FluidStackTemplate.STREAM_CODEC.encode(buffer, recipe.fluid);
     }
     // endregion
 }

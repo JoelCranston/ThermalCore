@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:strings"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "n": {
-      "tag": "c:nuggets/iron"
-    }
+    "#": "#c:strings",
+    "S": "minecraft:stick",
+    "n": "#c:nuggets/iron"
   },
   "pattern": [
     "n#n",
@@ -24,7 +18,6 @@
     "n#n"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:junk_net"
   }
 }

@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "R": {
-      "item": "thermal:cured_rubber"
-    },
-    "X": {
-      "tag": "thermal:glass/hardened"
-    }
+    "I": "#c:ingots/iron",
+    "R": "thermal:cured_rubber",
+    "X": "#thermal:glass/hardened"
   },
   "pattern": [
     "RIR",
@@ -24,7 +18,6 @@
     "RIR"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:fluid_tank_augment"
   }
 }

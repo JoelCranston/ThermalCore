@@ -67,7 +67,7 @@ public class PotionDiffuserBoost extends SerializableRecipe {
 
     // region SERIALIZER
     public static final MapCodec<PotionDiffuserBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    INGREDIENT_CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                     Codec.INT.optionalFieldOf(AMPLIFIER, 0).forGetter(recipe -> recipe.amplifier),
                     Codec.FLOAT.optionalFieldOf(DURATION_MOD, 0.0F).forGetter(recipe -> recipe.durationMod),
                     Codec.INT.optionalFieldOf(CYCLES, PotionDiffuserManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)

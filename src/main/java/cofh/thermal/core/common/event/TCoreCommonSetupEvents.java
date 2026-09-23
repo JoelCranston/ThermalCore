@@ -6,6 +6,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
+import net.neoforged.neoforge.event.DefaultDataComponentsBoundEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 
@@ -38,8 +39,15 @@ public class TCoreCommonSetupEvents {
         if (event instanceof TagsUpdatedEvent.ServerDataLoad serverLoad) {
             ThermalRecipeManagers.instance().setServerRecipeManager(serverLoad.getServerResources().getRecipeManager());
         }
-        ThermalRecipeManagers.instance().refreshServer();
-        ThermalRecipeManagers.instance().refreshClient();
+    }
+
+    // The managers create stacks, so they wait for the default components to be bound.
+    @SubscribeEvent
+    public static void defaultDataComponentsBound(final DefaultDataComponentsBoundEvent event) {
+
+        if (event.getUpdateCause() == DefaultDataComponentsBoundEvent.UpdateCause.SERVER_DATA_LOAD) {
+            ThermalRecipeManagers.instance().refreshServer();
+        }
     }
 
     // The client only receives the recipe types asked for here; the vanilla types feed the converted recipes.

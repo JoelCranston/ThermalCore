@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "S": {
-      "tag": "c:ingots/signalum"
-    },
-    "t": {
-      "tag": "c:nuggets/tin"
-    }
+    "S": "#c:ingots/signalum",
+    "t": "#c:nuggets/tin"
   },
   "pattern": [
     " t ",
@@ -21,7 +17,6 @@
     " t "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:item_filter_augment"
   }
 }

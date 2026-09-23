@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "item": "thermal:basalz_powder"
-    }
+    "G": "#c:gunpowders",
+    "P": "thermal:basalz_powder"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:earth_tnt"
   }
 }

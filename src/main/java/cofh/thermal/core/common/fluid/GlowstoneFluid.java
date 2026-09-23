@@ -11,9 +11,9 @@ import net.neoforged.neoforge.fluids.FluidType;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Utils.itemProperties;
 import static cofh.thermal.core.ThermalCore.*;
 import static cofh.thermal.core.init.registries.ThermalCreativeTabs.toolsTab;
+import static cofh.thermal.core.util.RegistrationHelper.itemProperties;
 import static cofh.thermal.lib.util.ThermalIDs.ID_FLUID_GLOWSTONE;
 
 public class GlowstoneFluid extends FluidCoFH {
@@ -32,7 +32,7 @@ public class GlowstoneFluid extends FluidCoFH {
 
         super(FLUIDS, ID_FLUID_GLOWSTONE);
 
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_GLOWSTONE), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_GLOWSTONE), id -> new BucketItem(stillFluid.get(), itemProperties(id).craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

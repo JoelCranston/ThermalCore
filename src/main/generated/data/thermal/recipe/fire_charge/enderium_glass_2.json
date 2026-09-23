@@ -2,23 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
+    "thermal:obsidian_glass",
+    "thermal:obsidian_glass",
     {
-      "item": "thermal:obsidian_glass"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:dusts/enderium",
+        "#c:ingots/enderium"
+      ]
     },
-    {
-      "item": "thermal:obsidian_glass"
-    },
-    [
-      {
-        "tag": "c:dusts/enderium"
-      },
-      {
-        "tag": "c:ingots/enderium"
-      }
-    ],
-    {
-      "item": "minecraft:fire_charge"
-    }
+    "minecraft:fire_charge"
   ],
   "result": {
     "count": 2,

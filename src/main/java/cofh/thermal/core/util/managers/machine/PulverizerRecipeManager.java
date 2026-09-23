@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
@@ -19,7 +20,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static cofh.core.util.helpers.ItemHelper.cloneStack;
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.*;
 
@@ -210,7 +210,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
                 new PulverizerRecipe(getDefaultEnergy() / 2, 0.0F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Collections.singletonList(cloneStack(getItems(dust).get(0), 1)),
+                        Collections.singletonList(ItemStackTemplate.fromNonEmptyStack(getItems(dust).get(0)).withCount(1)),
                         List.of(-1.0F), // output chances
                         Collections.emptyList())); // no fluid output
     }
@@ -221,7 +221,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
                 new PulverizerRecipe(getDefaultEnergy(), 0.2F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Arrays.asList(cloneStack(getItems(dust).get(0), 1), new ItemStack(Blocks.GRAVEL)),
+                        Arrays.asList(ItemStackTemplate.fromNonEmptyStack(getItems(dust).get(0)).withCount(1), new ItemStackTemplate(Blocks.GRAVEL.asItem())),
                         Arrays.asList(2.0F, 0.2F), // output chances
                         Collections.emptyList())); // no fluid output
     }
@@ -232,7 +232,7 @@ public class PulverizerRecipeManager extends SingleItemRecipeManager.Catalyzed {
                 new PulverizerRecipe(getDefaultEnergy(), 0.1F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
-                        Collections.singletonList(cloneStack(getItems(dust).get(0), 1)),
+                        Collections.singletonList(ItemStackTemplate.fromNonEmptyStack(getItems(dust).get(0)).withCount(1)),
                         List.of(1.25F), // output chances
                         Collections.emptyList())); // no fluid output
     }

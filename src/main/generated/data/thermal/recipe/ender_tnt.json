@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "tag": "c:ender_pearls"
-    }
+    "G": "#c:gunpowders",
+    "P": "#c:ender_pearls"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:ender_tnt"
   }
 }

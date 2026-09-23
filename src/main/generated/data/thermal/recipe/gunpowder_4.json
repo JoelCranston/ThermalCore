@@ -2,33 +2,28 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
+    "minecraft:charcoal",
     {
-      "item": "minecraft:charcoal"
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:gems/niter",
+        "#c:dusts/niter"
+      ]
     },
-    [
-      {
-        "tag": "c:gems/niter"
-      },
-      {
-        "tag": "c:dusts/niter"
-      }
-    ],
-    [
-      {
-        "tag": "c:gems/niter"
-      },
-      {
-        "tag": "c:dusts/niter"
-      }
-    ],
-    [
-      {
-        "tag": "c:gems/sulfur"
-      },
-      {
-        "tag": "c:dusts/sulfur"
-      }
-    ]
+    {
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:gems/niter",
+        "#c:dusts/niter"
+      ]
+    },
+    {
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        "#c:gems/sulfur",
+        "#c:dusts/sulfur"
+      ]
+    }
   ],
   "result": {
     "count": 4,

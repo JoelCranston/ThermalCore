@@ -34,12 +34,12 @@ import org.joml.Vector4f;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Utils.itemProperties;
 import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static cofh.thermal.core.ThermalCore.*;
 import static cofh.thermal.core.init.registries.ThermalCreativeTabs.toolsTab;
+import static cofh.thermal.core.util.RegistrationHelper.blockProperties;
+import static cofh.thermal.core.util.RegistrationHelper.itemProperties;
 import static cofh.thermal.lib.util.ThermalIDs.ID_FLUID_ENDER;
-import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;
 
 public class EnderFluid extends FluidCoFH {
 
@@ -59,8 +59,8 @@ public class EnderFluid extends FluidCoFH {
 
         particleColor = new Vector3f(0.035F, 0.215F, 0.333F);
 
-        block = BLOCKS.register(fluid(ID_FLUID_ENDER), () -> new FluidBlock(stillFluid, of().mapColor(MapColor.COLOR_CYAN).lightLevel(lightValue(3)).replaceable().noCollision().strength(1200.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
-        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_ENDER), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
+        block = BLOCKS.register(fluid(ID_FLUID_ENDER), id -> new FluidBlock(stillFluid, blockProperties(id).mapColor(MapColor.COLOR_CYAN).lightLevel(lightValue(3)).replaceable().noCollision().strength(1200.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
+        bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_ENDER), id -> new BucketItem(stillFluid.get(), itemProperties(id).craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
     @Override

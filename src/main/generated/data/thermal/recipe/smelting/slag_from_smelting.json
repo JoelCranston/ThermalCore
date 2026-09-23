@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
+  "ingredient": "minecraft:gravel",
   "result": {
-    "count": 1,
     "id": "thermal:slag"
   }
 }

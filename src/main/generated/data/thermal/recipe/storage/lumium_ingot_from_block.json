@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:lumium_block"
-    }
+    "thermal:lumium_block"
   ],
   "result": {
     "count": 9,

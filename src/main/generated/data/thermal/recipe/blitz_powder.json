@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:blitz_rod"
-    }
+    "thermal:blitz_rod"
   ],
   "result": {
     "count": 2,

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "thermal:polished_rich_slag"
-    }
+    "#": "thermal:polished_rich_slag"
   },
   "pattern": [
     "##",

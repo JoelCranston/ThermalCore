@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "item": "thermal:phytogro"
-    }
+    "G": "#c:gunpowders",
+    "P": "thermal:phytogro"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:phyto_tnt"
   }
 }

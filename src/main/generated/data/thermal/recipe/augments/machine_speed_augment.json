@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": {
-      "tag": "c:plates/electrum"
-    },
-    "L": {
-      "tag": "c:gears/lead"
-    },
-    "X": {
-      "item": "thermal:rf_coil"
-    }
+    "E": "#c:plates/electrum",
+    "L": "#c:gears/lead",
+    "X": "thermal:rf_coil"
   },
   "pattern": [
     " L ",
@@ -24,7 +18,6 @@
     " L "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:machine_speed_augment"
   }
 }

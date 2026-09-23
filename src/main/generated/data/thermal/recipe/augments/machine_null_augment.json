@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "minecraft:cactus"
-    },
-    "i": {
-      "tag": "c:nuggets/iron"
-    }
+    "C": "minecraft:cactus",
+    "i": "#c:nuggets/iron"
   },
   "pattern": [
     " i ",
@@ -21,7 +17,6 @@
     " i "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:machine_null_augment"
   }
 }

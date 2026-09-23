@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/silver"
-    },
-    "S": {
-      "tag": "c:plates/signalum"
-    },
-    "X": {
-      "tag": "thermal:glass/hardened"
-    }
+    "G": "#c:gears/silver",
+    "S": "#c:plates/signalum",
+    "X": "#thermal:glass/hardened"
   },
   "pattern": [
     " G ",
@@ -24,7 +18,6 @@
     " G "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:dynamo_output_augment"
   }
 }

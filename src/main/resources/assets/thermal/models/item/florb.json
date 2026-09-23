@@ -1,5 +1,4 @@
 {
-  "loader": "cofh_core:fluid_container",
   "parent": "neoforge:item/default",
   "textures": {
     "layer0": "thermal:item/florb",

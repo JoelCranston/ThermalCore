@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "thermal:cinnabar_block"
-    }
+    "thermal:cinnabar_block"
   ],
   "result": {
     "count": 9,

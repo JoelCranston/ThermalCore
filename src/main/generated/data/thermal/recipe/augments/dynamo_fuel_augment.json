@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:gears/lead"
-    },
-    "L": {
-      "tag": "c:plates/lumium"
-    },
-    "X": {
-      "tag": "thermal:glass/hardened"
-    }
+    "G": "#c:gears/lead",
+    "L": "#c:plates/lumium",
+    "X": "#thermal:glass/hardened"
   },
   "pattern": [
     " G ",
@@ -24,7 +18,6 @@
     " G "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:dynamo_fuel_augment"
   }
 }

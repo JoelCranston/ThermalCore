@@ -71,7 +71,7 @@ public class FisherBoost extends SerializableRecipe {
 
     // region SERIALIZER
     public static final MapCodec<FisherBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    INGREDIENT_CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                     ResourceKey.codec(Registries.LOOT_TABLE).optionalFieldOf(LOOT_TABLE, BuiltInLootTables.FISHING_FISH).forGetter(recipe -> recipe.lootTable),
                     Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
                     Codec.FLOAT.optionalFieldOf(USE_CHANCE, 1.0F).forGetter(recipe -> recipe.useChance)

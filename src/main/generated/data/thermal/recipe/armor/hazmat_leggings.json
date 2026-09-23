@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "X": {
-      "item": "thermal:hazmat_fabric"
-    }
+    "I": "#c:ingots/iron",
+    "X": "thermal:hazmat_fabric"
   },
   "pattern": [
     "XXX",
@@ -21,7 +17,6 @@
     "X X"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:hazmat_leggings"
   }
 }

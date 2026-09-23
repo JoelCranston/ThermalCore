@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "minecraft:experience_bottle"
-    },
-    "E": {
-      "tag": "c:gems/emerald"
-    },
-    "L": {
-      "tag": "c:gems/lapis"
-    }
+    "B": "minecraft:experience_bottle",
+    "E": "#c:gems/emerald",
+    "L": "#c:gems/lapis"
   },
   "pattern": [
     " L ",
@@ -18,7 +12,6 @@
     " L "
   ],
   "result": {
-    "count": 1,
     "id": "thermal:xp_crystal"
   }
 }

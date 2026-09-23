@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "P": {
-      "tag": "c:dusts/glowstone"
-    }
+    "G": "#c:gunpowders",
+    "P": "#c:dusts/glowstone"
   },
   "pattern": [
     "GPG",
@@ -21,7 +17,6 @@
     "GPG"
   ],
   "result": {
-    "count": 1,
     "id": "thermal:glowstone_tnt"
   }
 }
