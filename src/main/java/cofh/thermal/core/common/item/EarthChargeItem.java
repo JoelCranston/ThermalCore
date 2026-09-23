@@ -67,9 +67,9 @@ public class EarthChargeItem extends ItemCoFH {
             double d1 = iposition.y() + (double) ((float) direction.getStepY() * 0.3F);
             double d2 = iposition.z() + (double) ((float) direction.getStepZ() * 0.3F);
             Level world = source.level();
-            double d3 = world.random.nextGaussian() * 0.05D + (double) direction.getStepX();
-            double d4 = world.random.nextGaussian() * 0.05D + (double) direction.getStepY();
-            double d5 = world.random.nextGaussian() * 0.05D + (double) direction.getStepZ();
+            double d3 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepX();
+            double d4 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepY();
+            double d5 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepZ();
             world.addFreshEntity(new BasalzProjectile(d0, d1, d2, d3, d4, d5, world));
             stack.shrink(1);
             return stack;

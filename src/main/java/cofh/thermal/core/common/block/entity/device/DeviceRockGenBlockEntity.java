@@ -13,7 +13,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -247,8 +247,8 @@ public class DeviceRockGenBlockEntity extends DeviceBlockEntity implements ITick
         process = buffer.readInt();
         adjLava = buffer.readInt();
 
-        below = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(buffer.readUtf()));
-        adjacent = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(buffer.readUtf()));
+        below = BuiltInRegistries.BLOCK.get(Identifier.parse(buffer.readUtf()));
+        adjacent = BuiltInRegistries.BLOCK.get(Identifier.parse(buffer.readUtf()));
     }
     // endregion
 
@@ -262,8 +262,8 @@ public class DeviceRockGenBlockEntity extends DeviceBlockEntity implements ITick
         processMax = nbt.getInt(TAG_PROCESS_MAX);
         adjLava = nbt.getInt("Lava");
 
-        below = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("Below")));
-        adjacent = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("Adjacent")));
+        below = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("Below")));
+        adjacent = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("Adjacent")));
     }
 
     @Override

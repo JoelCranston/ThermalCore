@@ -1,6 +1,6 @@
 package cofh.thermal.core.init.registries;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -19,7 +19,7 @@ public class TCoreSounds {
 
     public static DeferredHolder<SoundEvent, SoundEvent> registerSound(String soundID) {
 
-        return SOUND_EVENTS.register(soundID, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, soundID)));
+        return SOUND_EVENTS.register(soundID, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(ID_THERMAL, soundID)));
     }
 
     // region IDs

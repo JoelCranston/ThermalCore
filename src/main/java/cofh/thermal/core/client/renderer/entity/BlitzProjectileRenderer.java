@@ -3,13 +3,13 @@ package cofh.thermal.core.client.renderer.entity;
 import cofh.thermal.core.common.entity.projectile.BlitzProjectile;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class BlitzProjectileRenderer extends ElementalProjectileRenderer<BlitzProjectile> {
 
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(ID_THERMAL + ":textures/entity/blitz_projectile.png");
+    public static final Identifier TEXTURE = Identifier.parse(ID_THERMAL + ":textures/entity/blitz_projectile.png");
 
     public BlitzProjectileRenderer(EntityRendererProvider.Context ctx) {
 
@@ -22,7 +22,7 @@ public class BlitzProjectileRenderer extends ElementalProjectileRenderer<BlitzPr
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BlitzProjectile entity) {
+    public Identifier getTextureLocation(BlitzProjectile entity) {
 
         return TEXTURE;
     }

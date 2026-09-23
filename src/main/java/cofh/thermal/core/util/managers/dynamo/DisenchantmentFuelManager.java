@@ -8,7 +8,7 @@ import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -121,7 +121,7 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<DisenchantmentFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "disenchantment_" + getName(item)), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "disenchantment_" + getName(item)), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
     }
     // endregion
 }

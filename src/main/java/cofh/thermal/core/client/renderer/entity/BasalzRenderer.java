@@ -14,15 +14,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Quaternionf;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class BasalzRenderer extends MobRenderer<Basalz, BasalzModel<Basalz>> {
 
-    private static final ResourceLocation CALM_TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz.png");
-    private static final ResourceLocation ANGRY_TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz_angry.png");
+    private static final Identifier CALM_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz.png");
+    private static final Identifier ANGRY_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz_angry.png");
 
     protected ElementalProjectileModel<BasalzProjectile> projectileModel;
 
@@ -77,7 +77,7 @@ public class BasalzRenderer extends MobRenderer<Basalz, BasalzModel<Basalz>> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Basalz entity) {
+    public Identifier getTextureLocation(Basalz entity) {
 
         return entity.isAngry() ? ANGRY_TEXTURE : CALM_TEXTURE;
     }

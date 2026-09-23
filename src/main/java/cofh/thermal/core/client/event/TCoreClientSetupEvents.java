@@ -6,7 +6,7 @@ import cofh.thermal.core.client.renderer.model.*;
 import cofh.thermal.core.common.config.ThermalClientConfig;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -60,12 +60,12 @@ public class TCoreClientSetupEvents {
     @SubscribeEvent
     public static void registerModels(final RegisterGeometryLoaders event) {
 
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "underlay"), new SimpleModel.Loader(UnderlayBakedModel::new));
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "dynamo"), new SimpleModel.Loader(DynamoBakedModel::new));
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "reconfigurable"), new SimpleModel.Loader(ReconfigurableBakedModel::new));
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "energy_cell"), new SimpleModel.Loader(EnergyCellBakedModel::new));
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "fluid_cell"), new SimpleModel.Loader(FluidCellBakedModel::new));
-        event.register(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "item_cell"), new SimpleModel.Loader(ItemCellBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "underlay"), new SimpleModel.Loader(UnderlayBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "dynamo"), new SimpleModel.Loader(DynamoBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "reconfigurable"), new SimpleModel.Loader(ReconfigurableBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "energy_cell"), new SimpleModel.Loader(EnergyCellBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "fluid_cell"), new SimpleModel.Loader(FluidCellBakedModel::new));
+        event.register(Identifier.fromNamespaceAndPath(ID_THERMAL, "item_cell"), new SimpleModel.Loader(ItemCellBakedModel::new));
     }
 
 }

@@ -72,7 +72,7 @@ public class IceChargeItem extends ItemCoFH {
             world.setBlockAndUpdate(pos, permanentWater.get() ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState());
             used = true;
             if (!permanentWater.get()) {
-                world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.random, 60, 120));
+                world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.getRandom(), 60, 120));
             }
         }
         // LAVA
@@ -81,7 +81,7 @@ public class IceChargeItem extends ItemCoFH {
             world.setBlockAndUpdate(pos, permanentLava.get() ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState());
             used = true;
             if (!permanentLava.get()) {
-                world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
+                world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.getRandom(), 60, 120));
             }
         }
         if (used) {
@@ -110,9 +110,9 @@ public class IceChargeItem extends ItemCoFH {
             double d1 = iposition.y() + (double) ((float) direction.getStepY() * 0.3F);
             double d2 = iposition.z() + (double) ((float) direction.getStepZ() * 0.3F);
             Level world = source.level();
-            double d3 = world.random.nextGaussian() * 0.05D + (double) direction.getStepX();
-            double d4 = world.random.nextGaussian() * 0.05D + (double) direction.getStepY();
-            double d5 = world.random.nextGaussian() * 0.05D + (double) direction.getStepZ();
+            double d3 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepX();
+            double d4 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepY();
+            double d5 = world.getRandom().nextGaussian() * 0.05D + (double) direction.getStepZ();
             world.addFreshEntity(new BlizzProjectile(d0, d1, d2, d3, d4, d5, world));
             stack.shrink(1);
             return stack;

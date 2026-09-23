@@ -7,7 +7,7 @@ import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -133,7 +133,7 @@ public class GourmandFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<GourmandFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "gourmand_" + getName(item)), new GourmandFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "gourmand_" + getName(item)), new GourmandFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
     }
     // endregion
 }

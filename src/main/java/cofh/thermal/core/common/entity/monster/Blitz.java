@@ -118,7 +118,7 @@ public class Blitz extends Monster {
         if (!this.onGround() && this.getDeltaMovement().y < 0.0D) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D));
         }
-        if (this.level.isClientSide) {
+        if (this.level.isClientSide()) {
             //            if (this.rand.nextInt(256) == 0 && !this.isSilent()) {
             //                this.world.playSound(this.getPosX() + 0.5D, this.getPosY() + 0.5D, this.getPosZ() + 0.5D, SOUND_BLITZ_ROAM, this.getSoundCategory(), 0.5F + 0.25F * this.rand.nextFloat(), this.rand.nextFloat() * 0.7F + 0.3F, true);
             //            }

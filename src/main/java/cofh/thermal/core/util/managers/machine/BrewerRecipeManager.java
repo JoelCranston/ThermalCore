@@ -19,7 +19,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -226,7 +226,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
 
     protected RecipeHolder<BrewerRecipe> convert(Holder<Potion> inputPotion, Ingredient reagent, Holder<Potion> outputPotion) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode() + "_" + outputPotion.hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode() + "_" + outputPotion.hashCode()),
                 new BrewerRecipe(defaultEnergy, 0.0F,
                         Collections.singletonList(reagent),
                         Collections.singletonList(FluidIngredient.of(PotionFluid.getPotionAsFluid(defaultPotion, inputPotion))),

@@ -9,7 +9,7 @@ import cofh.thermal.core.common.inventory.storage.EnergyCellMenu;
 import cofh.thermal.lib.client.gui.StorageCellScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 import static cofh.core.util.helpers.GuiHelper.*;
@@ -21,7 +21,7 @@ import static cofh.lib.util.helpers.StringHelper.format;
 public class EnergyCellScreen extends StorageCellScreen<EnergyCellMenu> {
 
     public static final String TEX_PATH = ID_THERMAL + ":textures/gui/container/energy_cell.png";
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(TEX_PATH);
+    public static final Identifier TEXTURE = Identifier.parse(TEX_PATH);
 
     public static final String TEX_INCREMENT = ID_COFH_CORE + ":textures/gui/elements/button_increment.png";
     public static final String TEX_DECREMENT = ID_COFH_CORE + ":textures/gui/elements/button_decrement.png";

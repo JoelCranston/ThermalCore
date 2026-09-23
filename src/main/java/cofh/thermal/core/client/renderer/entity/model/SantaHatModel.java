@@ -7,7 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
@@ -19,8 +19,8 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 public class SantaHatModel<T extends Entity> extends EntityModel<T> {
 
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation HAT_LAYER = new ModelLayerLocation(ResourceLocation.parse("thermal:santa_hat"), "main");
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(ID_THERMAL + ":textures/entity/santa_hat.png");
+    public static final ModelLayerLocation HAT_LAYER = new ModelLayerLocation(Identifier.parse("thermal:santa_hat"), "main");
+    public static final Identifier TEXTURE = Identifier.parse(ID_THERMAL + ":textures/entity/santa_hat.png");
 
     private final ModelPart hat;
 

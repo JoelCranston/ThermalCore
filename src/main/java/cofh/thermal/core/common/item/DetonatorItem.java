@@ -12,12 +12,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,8 +53,8 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
     public DetonatorItem(Properties builder) {
 
         super(builder);
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("primed"), (stack, world, living, seed) -> (getMode(stack) == 0 && getPrimedCount(stack) > 0 ? 1.0F : 0.0F));
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("armed"), (stack, world, living, seed) -> (getMode(stack) == 1 && getPrimedCount(stack) > 0 ? 1.0F : 0.0F));
+        ProxyUtils.registerItemModelProperty(this, Identifier.parse("primed"), (stack, world, living, seed) -> (getMode(stack) == 0 && getPrimedCount(stack) > 0 ? 1.0F : 0.0F));
+        ProxyUtils.registerItemModelProperty(this, Identifier.parse("armed"), (stack, world, living, seed) -> (getMode(stack) == 1 && getPrimedCount(stack) > 0 ? 1.0F : 0.0F));
     }
 
     @Override
@@ -166,20 +165,20 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
         if (player.isSecondaryUseActive()) {
             ItemHelper.mutateCustomData(stack, tag -> tag.remove(TAG_PRIMED));
             player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 0.3F);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
         if (getMode(stack) == 1 && detonateTNT(stack, world, player)) {
             player.swing(hand);
             player.playSound(SoundEvents.LEVER_CLICK, 0.4F, 1.0F);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
-        return InteractionResultHolder.pass(stack);
+        return InteractionResult.PASS;
     }
 
     // region IMultiModeItem

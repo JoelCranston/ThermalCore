@@ -20,18 +20,18 @@ import cofh.thermal.core.common.config.ThermalCoreConfig;
 import cofh.thermal.core.common.inventory.storage.SatchelMenu;
 import cofh.thermal.lib.common.item.InventoryContainerItemAugmentable;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -63,7 +63,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
             BANNED_ITEMS.clear();
 
             for (String loc : itemLocs) {
-                Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(loc));
+                Item item = BuiltInRegistries.ITEM.get(Identifier.parse(loc));
                 if (item != null) {
                     BANNED_ITEMS.add(item);
                 }
@@ -77,7 +77,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
 
         super(builder, slots);
 
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("color"), (stack, world, entity, seed) -> (stack.has(DataComponents.DYED_COLOR) ? 1F : 0));
+        ProxyUtils.registerItemModelProperty(this, Identifier.parse("color"), (stack, world, entity, seed) -> (stack.has(DataComponents.DYED_COLOR) ? 1F : 0));
         ProxyUtils.registerColorable(this);
 
         numSlots = () -> ThermalCoreConfig.storageAugments;
@@ -98,10 +98,10 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         ItemStack stack = playerIn.getItemInHand(handIn);
-        return useDelegate(stack, playerIn, handIn) ? InteractionResultHolder.success(stack) : InteractionResultHolder.pass(stack);
+        return useDelegate(stack, playerIn, handIn) ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
 
     // region HELPERS

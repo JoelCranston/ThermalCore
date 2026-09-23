@@ -9,14 +9,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
 
 public class BlizzModel<T extends LivingEntity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation BLIZZ_LAYER = new ModelLayerLocation(ResourceLocation.parse("thermal:blizz"), "main");
+    public static final ModelLayerLocation BLIZZ_LAYER = new ModelLayerLocation(Identifier.parse("thermal:blizz"), "main");
     private static final int CUBES = 4;
 
     private final ModelPart root;

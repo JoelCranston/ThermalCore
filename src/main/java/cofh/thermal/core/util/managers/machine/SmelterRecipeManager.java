@@ -14,7 +14,7 @@ import cofh.thermal.lib.util.recipes.ThermalRecipe;
 import cofh.thermal.lib.util.recipes.internal.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.neoforged.neoforge.common.Tags;
@@ -370,7 +370,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
 
     protected RecipeHolder<SmelterRecipe> convertDust(Ingredient input, ItemStack ingot) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "smelter_dust_" + input.hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "smelter_dust_" + input.hashCode()),
                 new SmelterRecipe(getDefaultEnergy() / 2, 0.0F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
@@ -381,7 +381,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
 
     protected RecipeHolder<SmelterRecipe> convertOre(Ingredient input, ItemStack ingot) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "smelter_ore_" + input.hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "smelter_ore_" + input.hashCode()),
                 new SmelterRecipe(getDefaultEnergy(), 0.5F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input
@@ -392,7 +392,7 @@ public class SmelterRecipeManager extends AbstractManager implements IRecipeMana
 
     protected RecipeHolder<SmelterRecipe> convertRaw(Ingredient input, ItemStack ingot) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "smelter_raw_" + input.hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "smelter_raw_" + input.hashCode()),
                 new SmelterRecipe(getDefaultEnergy(), 0.5F,
                         Collections.singletonList(input),
                         Collections.emptyList(), // no fluid input

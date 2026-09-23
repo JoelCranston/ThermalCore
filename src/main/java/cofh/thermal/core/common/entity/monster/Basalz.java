@@ -124,7 +124,7 @@ public class Basalz extends Monster {
         if (!this.onGround() && this.getDeltaMovement().y < 0.0D) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D));
         }
-        if (this.level.isClientSide) {
+        if (this.level.isClientSide()) {
             //if (this.random.nextInt(256) == 0 && !this.isSilent()) {
             //    this.playSound(SOUND_BASALZ_ROAM, 0.5F + 0.25F * this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F);
             //}
@@ -233,7 +233,7 @@ public class Basalz extends Monster {
     public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
 
         super.onSyncedDataUpdated(data);
-        if (level.isClientSide && data.equals(ANGRY) && (isAngry() != wasAngry)) {
+        if (level.isClientSide() && data.equals(ANGRY) && (isAngry() != wasAngry)) {
             angerTime = Math.max(0, DEPLOY_TIME - angerTime);
             wasAngry = isAngry();
         }

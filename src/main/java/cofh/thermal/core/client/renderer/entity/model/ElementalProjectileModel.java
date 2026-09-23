@@ -8,12 +8,12 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
 public class ElementalProjectileModel<T extends Entity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation PROJECTILE_LAYER = new ModelLayerLocation(ResourceLocation.parse("thermal:elemental_projectile"), "main");
+    public static final ModelLayerLocation PROJECTILE_LAYER = new ModelLayerLocation(Identifier.parse("thermal:elemental_projectile"), "main");
 
     protected final ModelPart root;
     protected final ModelPart cube;

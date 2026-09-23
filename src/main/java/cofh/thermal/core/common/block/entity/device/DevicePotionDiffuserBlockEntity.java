@@ -32,7 +32,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

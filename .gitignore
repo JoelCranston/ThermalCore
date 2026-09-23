@@ -21,6 +21,7 @@
 # Include Important Folders
 !src/
 !docs/
+!libs/
 
 # Session context exports are local-only, not for the repo
 docs/context/

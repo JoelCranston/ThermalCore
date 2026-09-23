@@ -54,7 +54,7 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         data {
-            data()
+            clientData()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output',
                     file('src/main/generated/').getAbsolutePath(), '--existing',
                     file('src/main/resources/').getAbsolutePath()
@@ -154,9 +154,8 @@ dependencies {
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     localRuntime("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
 
-    implementation("vazkii.patchouli:Patchouli:${patchouli_version}") {
-        transitive false
-    }
+    // GitHub release jar until Patchouli 26.1 reaches a maven.
+    implementation files("libs/patchouli-neoforge-${patchouli_version}.jar")
     implementation("top.theillusivec4.curios:curios-neoforge:${curios_version}") {
         transitive false
     }

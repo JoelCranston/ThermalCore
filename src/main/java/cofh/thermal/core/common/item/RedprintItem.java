@@ -11,12 +11,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -39,7 +38,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
 
         super(builder);
 
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("has_data"), ((stack, world, entity, seed) -> ItemHelper.hasCustomData(stack) ? 1F : 0F));
+        ProxyUtils.registerItemModelProperty(this, Identifier.parse("has_data"), ((stack, world, entity, seed) -> ItemHelper.hasCustomData(stack) ? 1F : 0F));
     }
 
     @Override
@@ -131,7 +130,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
         if (player.isSecondaryUseActive()) {
@@ -142,7 +141,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             stack.remove(DataComponents.RARITY);
         }
         player.swing(hand);
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
     }
 
     // region IPlacementItem

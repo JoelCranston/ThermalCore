@@ -13,7 +13,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -26,9 +26,9 @@ import static cofh.lib.util.Constants.PATH_GUI;
 
 public class SatchelScreen extends ContainerScreenCoFH<SatchelMenu> {
 
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(PATH_GUI + "generic.png");
-    public static final ResourceLocation TEXTURE_EXT = ResourceLocation.parse(PATH_GUI + "generic_extension.png");
-    public static final ResourceLocation SLOT_OVERLAY = ResourceLocation.parse(PATH_ELEMENTS + "locked_overlay_slot.png");
+    public static final Identifier TEXTURE = Identifier.parse(PATH_GUI + "generic.png");
+    public static final Identifier TEXTURE_EXT = Identifier.parse(PATH_GUI + "generic_extension.png");
+    public static final Identifier SLOT_OVERLAY = Identifier.parse(PATH_ELEMENTS + "locked_overlay_slot.png");
 
     protected int renderExtension;
 

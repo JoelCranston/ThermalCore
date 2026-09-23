@@ -3,7 +3,7 @@ package cofh.thermal.core.client.gui.device;
 import cofh.thermal.core.common.inventory.device.DeviceFisherMenu;
 import cofh.thermal.lib.client.gui.AugmentableTileScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 import static cofh.core.util.helpers.GuiHelper.generatePanelInfo;
@@ -12,7 +12,7 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 public class DeviceFisherScreen extends AugmentableTileScreen<DeviceFisherMenu> {
 
     public static final String TEX_PATH = ID_THERMAL + ":textures/gui/container/fisher.png";
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(TEX_PATH);
+    public static final Identifier TEXTURE = Identifier.parse(TEX_PATH);
 
     public DeviceFisherScreen(DeviceFisherMenu container, Inventory inv, Component titleIn) {
 

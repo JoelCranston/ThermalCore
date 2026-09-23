@@ -11,7 +11,7 @@ import cofh.lib.util.helpers.BlockHelper;
 import cofh.thermal.lib.common.block.entity.AugmentableBlockEntity;
 import cofh.thermal.lib.common.block.entity.Reconfigurable4WayBlockEntity;
 import cofh.thermal.lib.common.block.entity.StorageCellBlockEntity;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static cofh.core.util.helpers.GuiHelper.ICON_ENERGY;
 import static cofh.core.util.helpers.RenderHelper.getFluidTexture;
@@ -226,22 +226,22 @@ public class ThermalGuiHelper {
     // endregion
 
     // region COMMON UX
-    public static ElementScaled createDefaultProgress(IGuiAccess gui, int posX, int posY, ResourceLocation texture, AugmentableBlockEntity tile) {
+    public static ElementScaled createDefaultProgress(IGuiAccess gui, int posX, int posY, Identifier texture, AugmentableBlockEntity tile) {
 
         return GuiHelper.createDefaultProgress(gui, posX, posY, texture, tile::getScaledProgress, () -> tile.getRenderFluid().isEmpty());
     }
 
-    public static ElementScaledFluid createDefaultFluidProgress(IGuiAccess gui, int posX, int posY, ResourceLocation texture, AugmentableBlockEntity tile) {
+    public static ElementScaledFluid createDefaultFluidProgress(IGuiAccess gui, int posX, int posY, Identifier texture, AugmentableBlockEntity tile) {
 
         return GuiHelper.createDefaultFluidProgress(gui, posX, posY, texture, tile::getScaledProgress, tile::getRenderFluid, () -> !tile.getRenderFluid().isEmpty());
     }
 
-    public static ElementScaled createDefaultSpeed(IGuiAccess gui, int posX, int posY, ResourceLocation texture, AugmentableBlockEntity tile) {
+    public static ElementScaled createDefaultSpeed(IGuiAccess gui, int posX, int posY, Identifier texture, AugmentableBlockEntity tile) {
 
         return GuiHelper.createDefaultSpeed(gui, posX, posY, texture, tile::getScaledSpeed);
     }
 
-    public static ElementScaled createDefaultDuration(IGuiAccess gui, int posX, int posY, ResourceLocation texture, AugmentableBlockEntity tile) {
+    public static ElementScaled createDefaultDuration(IGuiAccess gui, int posX, int posY, Identifier texture, AugmentableBlockEntity tile) {
 
         return GuiHelper.createDefaultDuration(gui, posX, posY, texture, tile::getScaledDuration);
     }

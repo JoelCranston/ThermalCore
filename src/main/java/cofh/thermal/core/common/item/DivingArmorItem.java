@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -33,7 +33,7 @@ public class DivingArmorItem extends ArmorItemCoFH {
     protected static final double[] SWIM_SPEED_BONUS = new double[]{0.60D, 0.30D, 0.10D, 0.0D};
     protected static final int AIR_DURATION = 1800;
 
-    private static final ResourceLocation SWIM_SPEED_MODIFIER = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "diving_swim_speed");
+    private static final Identifier SWIM_SPEED_MODIFIER = Identifier.fromNamespaceAndPath(ID_THERMAL, "diving_swim_speed");
 
     public DivingArmorItem(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
 
@@ -65,7 +65,7 @@ public class DivingArmorItem extends ArmorItemCoFH {
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 
         if (getType().getSlot() == EquipmentSlot.HEAD && entity instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD) == stack) {
-            if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(5) > 0) {
+            if (player.getAirSupply() < player.getMaxAirSupply() && world.getRandom().nextInt(5) > 0) {
                 player.setAirSupply(player.getAirSupply() + 1);
             }
             // TODO: Revisit

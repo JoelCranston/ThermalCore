@@ -20,7 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 
@@ -84,9 +84,9 @@ public class TCoreJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
 
-        return ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "core");
+        return Identifier.fromNamespaceAndPath(ID_THERMAL, "core");
     }
 
     // region HELPERS

@@ -36,11 +36,11 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
     public void tick() {
 
         Entity owner = getOwner();
-        if (level.isClientSide || (owner == null || !owner.isRemoved()) && level.hasChunkAt(blockPosition())) {
+        if (level.isClientSide() || (owner == null || !owner.isRemoved()) && level.hasChunkAt(blockPosition())) {
             if (!leftOwner) {
                 leftOwner = checkLeftOwner();
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 setSharedFlag(6, isCurrentlyGlowing());
             }
             baseTick();

@@ -6,14 +6,14 @@ import cofh.thermal.core.common.entity.monster.Blitz;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class BlitzRenderer extends MobRenderer<Blitz, BlitzModel<Blitz>> {
 
-    private static final ResourceLocation CALM_TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/blitz.png");
-    private static final ResourceLocation ANGRY_TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/blitz_angry.png");
+    private static final Identifier CALM_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/blitz.png");
+    private static final Identifier ANGRY_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/blitz_angry.png");
 
     public BlitzRenderer(EntityRendererProvider.Context ctx) {
 
@@ -28,7 +28,7 @@ public class BlitzRenderer extends MobRenderer<Blitz, BlitzModel<Blitz>> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Blitz entity) {
+    public Identifier getTextureLocation(Blitz entity) {
 
         return entity.isAngry() ? ANGRY_TEXTURE : CALM_TEXTURE;
     }

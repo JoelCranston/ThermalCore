@@ -53,7 +53,7 @@ public class FertilizerItem extends ItemCoFH {
         BlockPos pos = context.getClickedPos();
 
         if (attemptGrowPlant(world, pos, context, strength)) {
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 world.levelEvent(2005, pos, 0);
             }
             return InteractionResult.SUCCESS;
@@ -75,7 +75,7 @@ public class FertilizerItem extends ItemCoFH {
         boolean used;
         used = growPlant(world, pos, state, strength);
         used |= growWaterPlant(world, pos, context.getClickedFace());
-        if (Utils.isServerWorld(world) && used && world.random.nextInt(strength) == 0) {
+        if (Utils.isServerWorld(world) && used && world.getRandom().nextInt(strength) == 0) {
             stack.shrink(1);
         }
         return used;
@@ -191,7 +191,7 @@ public class FertilizerItem extends ItemCoFH {
             this.setSuccess(used);
             if (used) {
                 stack.shrink(1);
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     level.levelEvent(1505, pos, 0);
                 }
             }

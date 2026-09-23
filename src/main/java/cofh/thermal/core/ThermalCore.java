@@ -75,7 +75,7 @@ import static cofh.thermal.lib.util.ThermalIDs.ID_TINKER_BENCH;
 public class ThermalCore {
 
     public static final Logger LOG = LogManager.getLogger(ID_THERMAL);
-    public static final ThermalProxy PROXY = FMLEnvironment.dist.isClient() ? new ThermalProxyClient() : new ThermalProxy();
+    public static final ThermalProxy PROXY = FMLEnvironment.getDist().isClient() ? new ThermalProxyClient() : new ThermalProxy();
     public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
 
     public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK, ID_THERMAL);

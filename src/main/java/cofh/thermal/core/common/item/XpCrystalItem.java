@@ -6,7 +6,7 @@ import cofh.core.util.ProxyUtils;
 import cofh.lib.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +27,7 @@ public class XpCrystalItem extends XpContainerItem implements IMultiModeItem {
 
         super(builder, xpCapacity);
 
-        ProxyUtils.registerItemModelProperty(this, ResourceLocation.parse("stored"), (stack, world, living, seed) -> ((float) getStoredXp(stack)) / getCapacityXp(stack));
+        ProxyUtils.registerItemModelProperty(this, Identifier.parse("stored"), (stack, world, living, seed) -> ((float) getStoredXp(stack)) / getCapacityXp(stack));
     }
 
     @Override

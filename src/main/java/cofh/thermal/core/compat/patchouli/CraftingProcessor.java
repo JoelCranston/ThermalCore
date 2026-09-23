@@ -1,6 +1,6 @@
 package cofh.thermal.core.compat.patchouli;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -23,7 +23,7 @@ public class CraftingProcessor implements IComponentProcessor {
 
         if (!variables.has("recipe"))
             return;
-        ResourceLocation recipeId = ResourceLocation.parse(variables.get("recipe", level.registryAccess()).asString());
+        Identifier recipeId = Identifier.parse(variables.get("recipe", level.registryAccess()).asString());
         Optional<? extends RecipeHolder<?>> recipe = level.getRecipeManager().byKey(recipeId);
         if (recipe.isPresent() && recipe.get().value() instanceof CraftingRecipe) {
             this.recipe = (CraftingRecipe) recipe.get().value();

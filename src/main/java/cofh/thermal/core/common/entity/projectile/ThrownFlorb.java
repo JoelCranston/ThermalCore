@@ -12,7 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -73,7 +73,7 @@ public class ThrownFlorb extends ThrowableItemProjectile {
         //        System.out.println(result.location);
         //        System.out.println(BlockPos.containing(result.location));
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             FluidStack fluid = getFluid(getItem());
             if (!fluid.isEmpty()) {
                 BlockPos hitPos = blockPosition();
@@ -97,7 +97,7 @@ public class ThrownFlorb extends ThrowableItemProjectile {
         if (event == 3) {
             // level.addParticle(new CylindricalParticleOptions(BLAST_WAVE.get(), radius * 2.0F, radius * 3.0F, 2.5F), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             level.addParticle(ParticleTypes.BUBBLE_POP, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
-            level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+            level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.getRandom().nextFloat() - this.level.getRandom().nextFloat()) * 0.2F) * 0.7F, false);
         } else {
             super.handleEntityEvent(event);
         }

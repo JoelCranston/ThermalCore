@@ -2,7 +2,7 @@ package cofh.thermal.lib.compat.jei;
 
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 
@@ -46,7 +46,7 @@ public class Drawables {
     public static final int SCALE_SNOWFLAKE = 10;
     public static final int SCALE_BOOK = 11;
 
-    public static final ResourceLocation JEI_TEXTURE = ResourceLocation.parse(ID_THERMAL + ":textures/gui/jei_handler.png");
+    public static final Identifier JEI_TEXTURE = Identifier.parse(ID_THERMAL + ":textures/gui/jei_handler.png");
 
     private final IDrawableStatic[] slot = new IDrawableStatic[3];
 

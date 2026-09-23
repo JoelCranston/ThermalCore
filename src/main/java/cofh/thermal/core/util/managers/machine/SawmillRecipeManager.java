@@ -4,7 +4,7 @@ import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.machine.SawmillRecipe;
 import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -107,7 +107,7 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
 
     protected RecipeHolder<SawmillRecipe> convert(Ingredient log, ItemStack planks) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "sawmill_" + log.hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "sawmill_" + log.hashCode()),
                 new SawmillRecipe(getDefaultEnergy() / 2, 0.15F,
                         Collections.singletonList(log),
                         Collections.emptyList(), // no fluid input

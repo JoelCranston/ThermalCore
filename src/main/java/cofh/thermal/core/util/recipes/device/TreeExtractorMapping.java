@@ -178,7 +178,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
 
             BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
             BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
-            Block sapling = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
+            Block sapling = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
             FluidStack fluid = FluidHelper.readFluidStack(buffer);
             int minHeight = buffer.readInt();
             int maxHeight = buffer.readInt();
@@ -192,7 +192,7 @@ public class TreeExtractorMapping extends SerializableRecipe {
 
             recipe.trunk.toNetwork(buffer);
             recipe.leaves.toNetwork(buffer);
-            buffer.writeResourceLocation(Utils.getRegistryName(recipe.sapling));
+            buffer.writeIdentifier(Utils.getRegistryName(recipe.sapling));
             FluidHelper.writeFluidStack(buffer, recipe.fluid);
             buffer.writeInt(recipe.minHeight);
             buffer.writeInt(recipe.maxHeight);

@@ -10,12 +10,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -75,7 +75,7 @@ public class UnderlayBakedModel extends BakedModelWrapper<BakedModel> implements
                 quads.offerFirst(cachedFluidQuads[sideIndex]);
             }
         } else if (extraData.has(ModelUtils.UNDERLAY)) {
-            ResourceLocation loc = extraData.get(ModelUtils.UNDERLAY);
+            Identifier loc = extraData.get(ModelUtils.UNDERLAY);
             BakedQuad[] cachedUnderlayQuads = UNDERLAY_QUAD_CACHE.get(state);
             if (cachedUnderlayQuads == null || cachedUnderlayQuads.length < 6) {
                 cachedUnderlayQuads = new BakedQuad[6];

@@ -18,7 +18,7 @@ import cofh.thermal.lib.util.recipes.internal.SimpleMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -278,7 +278,7 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
 
     protected BottlerRecipeNBT convert(int energy, float experience, @Nonnull ItemStack inputItem, @Nonnull FluidStack inputFluid, @Nonnull ItemStack outputItem) {
 
-        convertedRecipes.add(new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "bottler_" + getName(outputItem)),
+        convertedRecipes.add(new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "bottler_" + getName(outputItem)),
                 new BottlerRecipe(energy, experience,
                         singletonList(Ingredient.of(inputItem)),
                         singletonList(FluidIngredient.of(inputFluid).setAmount(inputFluid.getAmount())),

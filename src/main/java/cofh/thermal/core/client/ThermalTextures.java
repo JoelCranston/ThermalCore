@@ -3,7 +3,7 @@ package cofh.thermal.core.client;
 import cofh.thermal.core.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -50,33 +50,33 @@ public class ThermalTextures {
         ITEM_CELL_LEVELS = new TextureAtlasSprite[9];
 
         for (int i = 0; i < 9; ++i) {
-            ENERGY_CELL_LEVELS[i] = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/energy_cell_level_" + i));
-            FLUID_CELL_LEVELS[i] = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/fluid_cell_level_" + i));
-            ITEM_CELL_LEVELS[i] = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/item_cell_level_" + i));
+            ENERGY_CELL_LEVELS[i] = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/energy_cell_level_" + i));
+            FLUID_CELL_LEVELS[i] = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/fluid_cell_level_" + i));
+            ITEM_CELL_LEVELS[i] = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/item_cell_level_" + i));
         }
-        ENERGY_CELL_LEVEL_8_C = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/energy_cell_level_8c"));
-        FLUID_CELL_LEVEL_0_C = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/fluid_cell_level_0c"));
-        FLUID_CELL_LEVEL_8_C = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/fluid_cell_level_8c"));
-        ITEM_CELL_LEVEL_8_C = map.getSprite(ResourceLocation.parse(ID_THERMAL + ":block/cells/item_cell_level_8c"));
+        ENERGY_CELL_LEVEL_8_C = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/energy_cell_level_8c"));
+        FLUID_CELL_LEVEL_0_C = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/fluid_cell_level_0c"));
+        FLUID_CELL_LEVEL_8_C = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/fluid_cell_level_8c"));
+        ITEM_CELL_LEVEL_8_C = map.getSprite(Identifier.parse(ID_THERMAL + ":block/cells/item_cell_level_8c"));
     }
 
-    public static final ResourceLocation BLANK_TEXTURE = ResourceLocation.parse("thermal:block/blank");
+    public static final Identifier BLANK_TEXTURE = Identifier.parse("thermal:block/blank");
 
-    public static final ResourceLocation DEVICE_COLLECTOR_UNDERLAY_LOC = ResourceLocation.parse(ID_THERMAL + ":block/devices/device_collector_underlay");
+    public static final Identifier DEVICE_COLLECTOR_UNDERLAY_LOC = Identifier.parse(ID_THERMAL + ":block/devices/device_collector_underlay");
 
     // region CONFIG
     private static final String CONFIG_ = ID_THERMAL + ":block/config/";
 
-    public static final ResourceLocation MACHINE_CONFIG_NONE_LOC = ResourceLocation.parse(CONFIG_ + "machine_config_none");
-    public static final ResourceLocation MACHINE_CONFIG_INPUT_LOC = ResourceLocation.parse(CONFIG_ + "machine_config_input");
-    public static final ResourceLocation MACHINE_CONFIG_OUTPUT_LOC = ResourceLocation.parse(CONFIG_ + "machine_config_output");
-    public static final ResourceLocation MACHINE_CONFIG_BOTH_LOC = ResourceLocation.parse(CONFIG_ + "machine_config_both");
-    public static final ResourceLocation MACHINE_CONFIG_ACCESSIBLE_LOC = ResourceLocation.parse(CONFIG_ + "machine_config_accessible");
+    public static final Identifier MACHINE_CONFIG_NONE_LOC = Identifier.parse(CONFIG_ + "machine_config_none");
+    public static final Identifier MACHINE_CONFIG_INPUT_LOC = Identifier.parse(CONFIG_ + "machine_config_input");
+    public static final Identifier MACHINE_CONFIG_OUTPUT_LOC = Identifier.parse(CONFIG_ + "machine_config_output");
+    public static final Identifier MACHINE_CONFIG_BOTH_LOC = Identifier.parse(CONFIG_ + "machine_config_both");
+    public static final Identifier MACHINE_CONFIG_ACCESSIBLE_LOC = Identifier.parse(CONFIG_ + "machine_config_accessible");
 
-    public static final ResourceLocation CELL_CONFIG_NONE_LOC = ResourceLocation.parse(CONFIG_ + "cell_config_none");
-    public static final ResourceLocation CELL_CONFIG_INPUT_LOC = ResourceLocation.parse(CONFIG_ + "cell_config_input");
-    public static final ResourceLocation CELL_CONFIG_OUTPUT_LOC = ResourceLocation.parse(CONFIG_ + "cell_config_output");
-    public static final ResourceLocation CELL_CONFIG_BOTH_LOC = ResourceLocation.parse(CONFIG_ + "cell_config_both");
+    public static final Identifier CELL_CONFIG_NONE_LOC = Identifier.parse(CONFIG_ + "cell_config_none");
+    public static final Identifier CELL_CONFIG_INPUT_LOC = Identifier.parse(CONFIG_ + "cell_config_input");
+    public static final Identifier CELL_CONFIG_OUTPUT_LOC = Identifier.parse(CONFIG_ + "cell_config_output");
+    public static final Identifier CELL_CONFIG_BOTH_LOC = Identifier.parse(CONFIG_ + "cell_config_both");
 
     public static TextureAtlasSprite MACHINE_CONFIG_NONE;
     public static TextureAtlasSprite MACHINE_CONFIG_INPUT;

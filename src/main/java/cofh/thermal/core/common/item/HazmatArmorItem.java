@@ -53,7 +53,7 @@ public class HazmatArmorItem extends ArmorItemCoFH {
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 
         if (getType().getSlot() == EquipmentSlot.HEAD && entity instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD) == stack) {
-            if (player.getAirSupply() < player.getMaxAirSupply() && world.random.nextInt(3) > 0) {
+            if (player.getAirSupply() < player.getMaxAirSupply() && world.getRandom().nextInt(3) > 0) {
                 player.setAirSupply(player.getAirSupply() + 1);
             }
             // TODO: Revisit

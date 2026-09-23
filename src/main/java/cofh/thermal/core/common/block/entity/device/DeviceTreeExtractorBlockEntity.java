@@ -29,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -96,7 +96,7 @@ public class DeviceTreeExtractorBlockEntity extends DeviceBlockEntity implements
     @Override
     protected void updateValidity() {
 
-        if (level == null || !level.isAreaLoaded(worldPosition, 1) || level.isClientSide) {
+        if (level == null || !level.isAreaLoaded(worldPosition, 1) || level.isClientSide()) {
             return;
         }
         cached = true;

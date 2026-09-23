@@ -29,15 +29,15 @@ public class ThermalProxyClient extends ThermalProxy {
         double speedY = 0;
 
         for (int i = 0; i < 4 * radius * radius; ++i) {
-            double degrees = world.random.nextDouble() * MathHelper.PI_2;
-            double speedMult = world.random.nextDouble() * radius * MathHelper.SQRT_2;
+            double degrees = world.getRandom().nextDouble() * MathHelper.PI_2;
+            double speedMult = world.getRandom().nextDouble() * radius * MathHelper.SQRT_2;
             speedMult *= speedMult;
 
             double speedX = Math.cos(degrees) * speedMult;
             double speedZ = Math.sin(degrees) * speedMult;
-            Particle particle = Minecraft.getInstance().levelRenderer.addParticleInternal(particleData, particleData.getType().getOverrideLimiter(), vec.x + speedX * 0.1D, vec.y - (world.random.nextDouble() + 0.5D), vec.z + speedZ * 0.1D, speedX, speedY, speedZ);
+            Particle particle = Minecraft.getInstance().levelRenderer.addParticleInternal(particleData, particleData.getType().getOverrideLimiter(), vec.x + speedX * 0.1D, vec.y - (world.getRandom().nextDouble() + 0.5D), vec.z + speedZ * 0.1D, speedX, speedY, speedZ);
             if (particle != null) {
-                float colorMult = 0.75F + world.random.nextFloat() * 0.25F;
+                float colorMult = 0.75F + world.getRandom().nextFloat() * 0.25F;
                 particle.setColor(r * colorMult, g * colorMult, b * colorMult);
             }
         }

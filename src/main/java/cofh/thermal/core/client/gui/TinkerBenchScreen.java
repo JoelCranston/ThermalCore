@@ -6,7 +6,7 @@ import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.thermal.core.common.inventory.TinkerBenchMenu;
 import cofh.thermal.lib.client.gui.AugmentableTileScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 import static cofh.core.util.helpers.GuiHelper.*;
@@ -17,7 +17,7 @@ import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 public class TinkerBenchScreen extends AugmentableTileScreen<TinkerBenchMenu> {
 
     public static final String TEX_PATH = ID_THERMAL + ":textures/gui/container/tinker_bench.png";
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse(TEX_PATH);
+    public static final Identifier TEXTURE = Identifier.parse(TEX_PATH);
 
     public static final String TEX_AUGMENT = ID_THERMAL + ":textures/gui/container/tinker_bench_mode_augment.png";
     public static final String TEX_REPLENISH = ID_THERMAL + ":textures/gui/container/tinker_bench_mode_replenish.png";

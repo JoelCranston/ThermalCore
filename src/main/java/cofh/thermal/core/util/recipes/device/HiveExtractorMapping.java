@@ -105,7 +105,7 @@ public class HiveExtractorMapping extends SerializableRecipe {
 
         public static HiveExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            Block hive = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
+            Block hive = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
             ItemStack item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
             FluidStack fluid = FluidHelper.readFluidStack(buffer);
 
@@ -114,7 +114,7 @@ public class HiveExtractorMapping extends SerializableRecipe {
 
         public static void toNetwork(RegistryFriendlyByteBuf buffer, HiveExtractorMapping recipe) {
 
-            buffer.writeResourceLocation(getRegistryName(recipe.hive));
+            buffer.writeIdentifier(getRegistryName(recipe.hive));
             ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.item);
             FluidHelper.writeFluidStack(buffer, recipe.fluid);
         }

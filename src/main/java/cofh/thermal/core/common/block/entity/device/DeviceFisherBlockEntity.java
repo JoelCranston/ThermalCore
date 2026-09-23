@@ -185,7 +185,7 @@ public class DeviceFisherBlockEntity extends DeviceBlockEntity implements ITicka
                     inputSlot.consume(1);
                 }
                 if (xpStorageFeature) {
-                    xpStorage.receiveXp(caught + level.random.nextInt(2 * caught), false);
+                    xpStorage.receiveXp(caught + level.getRandom().nextInt(2 * caught), false);
                 }
                 if (particles) {
                     Vec3 splashVec = Vec3.upFromBottomCenterOf(worldPosition.relative(getBlockState().getValue(FACING_HORIZONTAL)), 1.0);

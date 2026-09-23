@@ -6,7 +6,7 @@ import cofh.thermal.core.util.recipes.dynamo.StirlingFuel;
 import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -111,7 +111,7 @@ public class StirlingFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<StirlingFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "stirling_" + getName(item)), new StirlingFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "stirling_" + getName(item)), new StirlingFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
     }
     // endregion
 }

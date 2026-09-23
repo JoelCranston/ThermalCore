@@ -4,7 +4,7 @@ import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.machine.FurnaceRecipe;
 import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -115,7 +115,7 @@ public class FurnaceRecipeManager extends SingleItemRecipeManager {
         ItemStack recipeOutput = recipe.result;
         float experience = recipe.getExperience();
         int energy = defaultFoodRecipes && recipeOutput.has(DataComponents.FOOD) ? defaultEnergy / 2 : defaultEnergy;
-        return new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "furnace_" + recipe.getIngredients().get(0).hashCode()),
+        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "furnace_" + recipe.getIngredients().get(0).hashCode()),
                 new FurnaceRecipe(energy, experience, recipe));
     }
     // endregion

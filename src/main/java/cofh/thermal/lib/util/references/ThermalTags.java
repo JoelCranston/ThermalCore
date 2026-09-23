@@ -1,6 +1,6 @@
 package cofh.thermal.lib.util.references;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -30,12 +30,12 @@ public class ThermalTags {
         // region HELPERS
         private static TagKey<Block> thermalTag(String name) {
 
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath(ID_THERMAL, name));
         }
 
         private static TagKey<Block> commonTag(String name) {
 
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
         }
         // endregion
     }
@@ -63,12 +63,12 @@ public class ThermalTags {
         // region HELPERS
         private static TagKey<Item> thermalTag(String name) {
 
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ID_THERMAL, name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath(ID_THERMAL, name));
         }
 
         private static TagKey<Item> commonTag(String name) {
 
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
         }
         // endregion
     }

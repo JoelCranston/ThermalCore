@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -91,31 +91,31 @@ public class EnderFluid extends FluidCoFH {
 
             consumer.accept(new IClientFluidTypeExtensions() {
 
-                private static final ResourceLocation
-                        STILL = ResourceLocation.parse("thermal:block/fluids/ender_still"),
-                        FLOW = ResourceLocation.parse("thermal:block/fluids/ender_flow");
+                private static final Identifier
+                        STILL = Identifier.parse("thermal:block/fluids/ender_still"),
+                        FLOW = Identifier.parse("thermal:block/fluids/ender_flow");
 
                 @Override
-                public ResourceLocation getStillTexture() {
+                public Identifier getStillTexture() {
 
                     return STILL;
                 }
 
                 @Override
-                public ResourceLocation getFlowingTexture() {
+                public Identifier getFlowingTexture() {
 
                     return FLOW;
                 }
 
                 @Nullable
                 @Override
-                public ResourceLocation getOverlayTexture() {
+                public Identifier getOverlayTexture() {
 
                     return WATER_OVERLAY;
                 }
 
                 @Override
-                public ResourceLocation getRenderOverlayTexture(Minecraft mc) {
+                public Identifier getRenderOverlayTexture(Minecraft mc) {
 
                     return UNDERWATER_LOCATION;
                 }

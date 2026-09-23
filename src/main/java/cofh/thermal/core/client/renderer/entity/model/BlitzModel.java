@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class BlitzModel<T extends LivingEntity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation BLITZ_LAYER = new ModelLayerLocation(ResourceLocation.parse("thermal:blitz"), "main");
+    public static final ModelLayerLocation BLITZ_LAYER = new ModelLayerLocation(Identifier.parse("thermal:blitz"), "main");
 
     private final ModelPart root;
     private final ModelPart head;

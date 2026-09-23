@@ -1,7 +1,7 @@
 package cofh.thermal.core.common.fluid;
 
 import cofh.lib.common.fluid.FluidCoFH;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Items;
@@ -63,18 +63,18 @@ public class GlowstoneFluid extends FluidCoFH {
 
             consumer.accept(new IClientFluidTypeExtensions() {
 
-                private static final ResourceLocation
-                        STILL = ResourceLocation.parse("thermal:block/fluids/glowstone_still"),
-                        FLOW = ResourceLocation.parse("thermal:block/fluids/glowstone_flow");
+                private static final Identifier
+                        STILL = Identifier.parse("thermal:block/fluids/glowstone_still"),
+                        FLOW = Identifier.parse("thermal:block/fluids/glowstone_flow");
 
                 @Override
-                public ResourceLocation getStillTexture() {
+                public Identifier getStillTexture() {
 
                     return STILL;
                 }
 
                 @Override
-                public ResourceLocation getFlowingTexture() {
+                public Identifier getFlowingTexture() {
 
                     return FLOW;
                 }

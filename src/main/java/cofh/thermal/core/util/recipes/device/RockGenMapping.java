@@ -130,8 +130,8 @@ public class RockGenMapping extends SerializableRecipe {
         public static RockGenMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
             int time = buffer.readInt();
-            Block trunk = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
-            Block leaves = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
+            Block trunk = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
+            Block leaves = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
             ItemStack result = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
 
             return new RockGenMapping(time, trunk, leaves, result);
@@ -140,8 +140,8 @@ public class RockGenMapping extends SerializableRecipe {
         public static void toNetwork(RegistryFriendlyByteBuf buffer, RockGenMapping recipe) {
 
             buffer.writeInt(recipe.time);
-            buffer.writeResourceLocation(getRegistryName(recipe.below));
-            buffer.writeResourceLocation(getRegistryName(recipe.adjacent));
+            buffer.writeIdentifier(getRegistryName(recipe.below));
+            buffer.writeIdentifier(getRegistryName(recipe.adjacent));
             ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.result);
         }
 
