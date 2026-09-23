@@ -48,7 +48,7 @@ the api-notes docs, not in code comments.
 575 errors on the first real compile → 0, in seventeen commits, one per root cause.
 
 Branch **`1.21.1`**, ModDevGradle 2.0.147, `META-INF/neoforge.mods.toml`.
-`verify_runserver.sh` reaches `Done (…)` with no registry, recipe or loot-table errors, and
+`../CoFHCore/scripts/verify_runserver.sh` reaches `Done (…)` with no registry, recipe or loot-table errors, and
 Patchouli 1.21.1-93 loads.
 
 Three things here needed design rather than translation, and are worth knowing before touching
