@@ -2,30 +2,31 @@ package cofh.thermal.core.client.renderer.model;
 
 import cofh.core.client.renderer.model.ModelUtils;
 import cofh.core.client.renderer.model.ModelUtils.FluidCacheWrapper;
+import cofh.core.client.renderer.model.ModelUtils.WrappedBakedModelBuilder;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.renderer.block.model.RetexturedBakedQuad;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.IDynamicBakedModel;
+import net.neoforged.neoforge.client.model.DelegateBlockStateModel;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class UnderlayBakedModel extends BakedModelWrapper<BakedModel> implements IDynamicBakedModel {
+import static cofh.lib.util.Constants.DIRECTIONS;
+
+public class UnderlayBakedModel extends DelegateBlockStateModel {
 
     private static final Map<FluidCacheWrapper, BakedQuad[]> FLUID_QUAD_CACHE = new Object2ObjectOpenHashMap<>();
     private static final IdentityHashMap<BlockState, BakedQuad[]> UNDERLAY_QUAD_CACHE = new IdentityHashMap<>();
@@ -38,23 +39,38 @@ public class UnderlayBakedModel extends BakedModelWrapper<BakedModel> implements
 
     protected int underlayQuadLevel = 0;
 
-    public UnderlayBakedModel(BakedModel originalModel) {
+    public UnderlayBakedModel(BlockStateModel originalModel) {
 
         super(originalModel);
     }
 
     @Override
-    @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType renderType) {
+    public void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts) {
 
-        return addUnderlayQuads(new LinkedList<>(originalModel.getQuads(state, side, rand, extraData, renderType)), state, side, rand, extraData, renderType);
+        List<BlockStateModelPart> originalParts = new ArrayList<>();
+        delegate.collectParts(level, pos, state, random, originalParts);
+        ModelData extraData = level.getModelData(pos);
+
+        for (BlockStateModelPart part : originalParts) {
+            WrappedBakedModelBuilder builder = new WrappedBakedModelBuilder(part);
+            for (Direction side : DIRECTIONS) {
+                addQuads(builder, state, side, extraData);
+            }
+            parts.add(builder.build());
+        }
     }
 
     // region HELPERS
-    protected List<BakedQuad> addUnderlayQuads(LinkedList<BakedQuad> quads, @Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType renderType) {
+    protected void addQuads(WrappedBakedModelBuilder builder, BlockState state, Direction side, ModelData extraData) {
 
-        if (side == null || quads.isEmpty()) {
-            return quads;
+        addUnderlayQuads(builder, state, side, extraData);
+    }
+
+    protected void addUnderlayQuads(WrappedBakedModelBuilder builder, BlockState state, Direction side, ModelData extraData) {
+
+        List<BakedQuad> quads = builder.getQuads(side);
+        if (quads.isEmpty()) {
+            return;
         }
         BakedQuad baseQuad = quads.get(underlayQuadLevel);
         int sideIndex = side.get3DDataValue();
@@ -69,10 +85,10 @@ public class UnderlayBakedModel extends BakedModelWrapper<BakedModel> implements
                     cachedFluidQuads = new BakedQuad[6];
                 }
                 if (cachedFluidQuads[sideIndex] == null) {
-                    cachedFluidQuads[sideIndex] = new RetexturedBakedQuad(RenderHelper.mulColor(baseQuad, FluidHelper.color(fluid)), RenderHelper.getFluidTexture(fluid));
+                    cachedFluidQuads[sideIndex] = ModelUtils.retexture(RenderHelper.mulColor(baseQuad, FluidHelper.color(fluid)), RenderHelper.getFluidTexture(fluid));
                     FLUID_QUAD_CACHE.put(wrapper, cachedFluidQuads);
                 }
-                quads.offerFirst(cachedFluidQuads[sideIndex]);
+                builder.addUnderlayQuad(side, cachedFluidQuads[sideIndex]);
             }
         } else if (extraData.has(ModelUtils.UNDERLAY)) {
             Identifier loc = extraData.get(ModelUtils.UNDERLAY);
@@ -81,12 +97,11 @@ public class UnderlayBakedModel extends BakedModelWrapper<BakedModel> implements
                 cachedUnderlayQuads = new BakedQuad[6];
             }
             if (cachedUnderlayQuads[sideIndex] == null) {
-                cachedUnderlayQuads[sideIndex] = new RetexturedBakedQuad(baseQuad, RenderHelper.getTexture(loc));
+                cachedUnderlayQuads[sideIndex] = ModelUtils.retexture(baseQuad, RenderHelper.getTexture(loc));
                 UNDERLAY_QUAD_CACHE.put(state, cachedUnderlayQuads);
             }
-            quads.offerFirst(cachedUnderlayQuads[sideIndex]);
+            builder.addUnderlayQuad(side, cachedUnderlayQuads[sideIndex]);
         }
-        return quads;
     }
     // endregion
 }

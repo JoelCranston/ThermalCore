@@ -10,7 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import static cofh.lib.util.constants.NBTTags.TAG_PRIMED;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
 
@@ -81,13 +80,13 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
     private static CompoundTag writePos(BlockPos pos) {
 
         CompoundTag tag = new CompoundTag();
-        tag.put(TAG_POS, NbtUtils.writeBlockPos(pos));
+        tag.put(TAG_POS, BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, pos).getOrThrow());
         return tag;
     }
 
     private static Optional<BlockPos> readPos(CompoundTag tag) {
 
-        return NbtUtils.readBlockPos(tag, TAG_POS);
+        return Optional.ofNullable(tag.get(TAG_POS)).flatMap(pos -> BlockPos.CODEC.parse(NbtOps.INSTANCE, pos).result());
     }
 
     protected boolean primeTNT(ItemStack stack, Level world, BlockPos pos, Player player) {
@@ -96,7 +95,7 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
             return false;
         }
         if (TNT_MAP.containsKey(world.getBlockState(pos).getBlock())) {
-            ListTag primedTNT = ItemHelper.getCustomData(stack).getList(TAG_PRIMED, TAG_COMPOUND);
+            ListTag primedTNT = ItemHelper.getCustomData(stack).getListOrEmpty(TAG_PRIMED);
             CompoundTag tntPos = writePos(pos);
             if (primedTNT.size() >= MAX_PRIMED || primedTNT.contains(tntPos)) {
                 return false;
@@ -114,9 +113,9 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
             return false;
         }
         if (Utils.isServerWorld(world)) {
-            ListTag primedTNT = ItemHelper.getCustomData(stack).getList(TAG_PRIMED, TAG_COMPOUND);
+            ListTag primedTNT = ItemHelper.getCustomData(stack).getListOrEmpty(TAG_PRIMED);
             for (int i = 0; i < primedTNT.size(); ++i) {
-                readPos(primedTNT.getCompound(i)).ifPresent(tntPos -> attemptDetonate(world, tntPos, player, 0));
+                readPos(primedTNT.getCompoundOrEmpty(i)).ifPresent(tntPos -> attemptDetonate(world, tntPos, player, 0));
             }
             ItemHelper.mutateCustomData(stack, tag -> tag.remove(TAG_PRIMED));
         }
@@ -141,7 +140,7 @@ public class DetonatorItem extends ItemCoFH implements IMultiModeItem {
 
     protected int getPrimedCount(ItemStack stack) {
 
-        return ItemHelper.getCustomData(stack).getList(TAG_PRIMED, TAG_COMPOUND).size();
+        return ItemHelper.getCustomData(stack).getListOrEmpty(TAG_PRIMED).size();
     }
 
     @Override

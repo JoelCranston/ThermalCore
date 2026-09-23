@@ -31,14 +31,14 @@ public class CrystallizerRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CrystallizerRecipe> getSerializer() {
 
         return CRYSTALLIZER_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CrystallizerRecipe> getType() {
 
         return CRYSTALLIZER_RECIPE.get();
     }

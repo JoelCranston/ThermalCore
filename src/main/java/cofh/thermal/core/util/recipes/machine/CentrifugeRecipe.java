@@ -31,14 +31,14 @@ public class CentrifugeRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CentrifugeRecipe> getSerializer() {
 
         return CENTRIFUGE_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CentrifugeRecipe> getType() {
 
         return CENTRIFUGE_RECIPE.get();
     }

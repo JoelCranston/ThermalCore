@@ -31,14 +31,14 @@ public class SmelterRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends SmelterRecipe> getSerializer() {
 
         return SMELTER_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends SmelterRecipe> getType() {
 
         return SMELTER_RECIPE.get();
     }

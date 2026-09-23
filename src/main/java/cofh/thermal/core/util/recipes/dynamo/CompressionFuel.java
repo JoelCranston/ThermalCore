@@ -33,14 +33,14 @@ public class CompressionFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CompressionFuel> getSerializer() {
 
         return COMPRESSION_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CompressionFuel> getType() {
 
         return COMPRESSION_FUEL.get();
     }

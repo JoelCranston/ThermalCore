@@ -13,16 +13,17 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.minecraft.world.level.storage.ValueInput;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -206,9 +207,9 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ValueInput valueInput) {
 
-        super.onDataPacket(net, pkt, registries);
+        super.onDataPacket(net, valueInput);
 
         if (level != null) {
             level.getModelDataManager().requestRefresh(this);
@@ -265,11 +266,11 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
 
         super.loadAdditional(nbt, registries);
 
-        fuelMax = nbt.getInt(TAG_FUEL_MAX);
-        fuel = nbt.getInt(TAG_FUEL);
-        coolantMax = nbt.getInt(TAG_COOLANT_MAX);
-        coolant = nbt.getInt(TAG_COOLANT);
-        processTick = nbt.getInt(TAG_PROCESS_TICK);
+        fuelMax = nbt.getIntOr(TAG_FUEL_MAX, 0);
+        fuel = nbt.getIntOr(TAG_FUEL, 0);
+        coolantMax = nbt.getIntOr(TAG_COOLANT_MAX, 0);
+        coolant = nbt.getIntOr(TAG_COOLANT, 0);
+        processTick = nbt.getIntOr(TAG_PROCESS_TICK, 0);
 
         updateHandlers();
     }
@@ -349,7 +350,7 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
 
     // region CAPABILITIES
     @Override
-    public IEnergyStorage getEnergyCapability(@Nullable Direction side) {
+    public EnergyHandler getEnergyCapability(@Nullable Direction side) {
 
         if (side == null || side.equals(getFacing())) {
             return super.getEnergyCapability(side);
@@ -358,7 +359,7 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
     }
 
     @Override
-    public IItemHandler getItemHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<ItemResource> getItemHandlerCapability(@Nullable Direction side) {
 
         if (side != null && side.equals(getFacing())) {
             return null;
@@ -367,7 +368,7 @@ public abstract class DynamoBlockEntity extends AugmentableBlockEntity implement
     }
 
     @Override
-    public IFluidHandler getFluidHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<FluidResource> getFluidHandlerCapability(@Nullable Direction side) {
 
         if (side != null && side.equals(getFacing())) {
             return null;

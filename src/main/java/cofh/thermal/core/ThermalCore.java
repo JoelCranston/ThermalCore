@@ -19,13 +19,10 @@ import cofh.thermal.core.common.entity.explosive.DetonateUtils;
 import cofh.thermal.core.common.entity.monster.Basalz;
 import cofh.thermal.core.common.entity.monster.Blitz;
 import cofh.thermal.core.common.entity.monster.Blizz;
-import cofh.thermal.core.common.fluid.RedstoneFluid;
 import cofh.thermal.core.init.registries.*;
 import cofh.thermal.lib.util.ThermalProxy;
 import cofh.thermal.lib.util.ThermalProxyClient;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -34,7 +31,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -83,7 +79,6 @@ public class ThermalCore {
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(BuiltInRegistries.FLUID, ID_THERMAL);
     public static final DeferredRegisterCoFH<CreativeModeTab> CREATIVE_TABS = DeferredRegisterCoFH.create(BuiltInRegistries.CREATIVE_MODE_TAB, ID_THERMAL);
     public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(BuiltInRegistries.MOB_EFFECT, ID_THERMAL);
-    public static final DeferredRegisterCoFH<ArmorMaterial> ARMOR_MATERIALS = DeferredRegisterCoFH.create(BuiltInRegistries.ARMOR_MATERIAL, ID_THERMAL);
 
     public static final DeferredRegisterCoFH<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_THERMAL);
     public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(BuiltInRegistries.MENU, ID_THERMAL);
@@ -125,7 +120,6 @@ public class ThermalCore {
         FLUIDS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
         EFFECTS.register(modEventBus);
-        ARMOR_MATERIALS.register(modEventBus);
 
         BLOCK_ENTITIES.register(modEventBus);
         CONTAINERS.register(modEventBus);
@@ -270,8 +264,6 @@ public class ThermalCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        event.enqueueWork(this::registerRenderLayers);
-
         event.enqueueWork(() -> CoreClientEvents.addNamespace(ID_THERMAL));
     }
 
@@ -280,14 +272,6 @@ public class ThermalCore {
         CONFIG_MANAGER.setupClient();
         CONFIG_MANAGER.setupServer();
         CONFIG_MANAGER.setupCommon();
-    }
-    // endregion
-
-    // region HELPERS
-    private void registerRenderLayers() {
-
-        ItemBlockRenderTypes.setRenderLayer(RedstoneFluid.instance().still().get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(RedstoneFluid.instance().flowing().get(), RenderType.translucent());
     }
     // endregion
 }

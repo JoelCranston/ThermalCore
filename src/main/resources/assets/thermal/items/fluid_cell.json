@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "thermal:fluid_cell",
+    "model": "thermal:block/fluid_cell"
+  }
+}

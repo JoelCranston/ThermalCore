@@ -1,7 +1,8 @@
 package cofh.thermal.core.common.item;
 
 import cofh.core.common.item.ItemCoFH;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemInstance;
+import net.minecraft.world.item.ItemStackTemplate;
 
 public class SlotSealItem extends ItemCoFH {
 
@@ -17,15 +18,9 @@ public class SlotSealItem extends ItemCoFH {
     }
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) {
+    public ItemStackTemplate getCraftingRemainder(ItemInstance stack) {
 
-        return new ItemStack(this);
-    }
-
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-
-        return true;
+        return new ItemStackTemplate(this);
     }
 
 }

@@ -53,28 +53,28 @@ public class TCoreBlockEntities {
         );
 
         for (var type : entities) {
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getItemHandlerCapability(side));
-            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getFluidHandlerCapability(side));
-            event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getEnergyCapability(side));
+            event.registerBlockEntity(Capabilities.Item.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getItemHandlerCapability(side));
+            event.registerBlockEntity(Capabilities.Fluid.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getFluidHandlerCapability(side));
+            event.registerBlockEntity(Capabilities.Energy.BLOCK, type, (blockEntity, side) -> ((AugmentableBlockEntity) blockEntity).getEnergyCapability(side));
         }
     }
 
-    public static final Supplier<BlockEntityType<?>> DEVICE_HIVE_EXTRACTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_HIVE_EXTRACTOR, () -> BlockEntityType.Builder.of(DeviceHiveExtractorBlockEntity::new, BLOCKS.get(ID_DEVICE_HIVE_EXTRACTOR)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_TREE_EXTRACTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_TREE_EXTRACTOR, () -> BlockEntityType.Builder.of(DeviceTreeExtractorBlockEntity::new, BLOCKS.get(ID_DEVICE_TREE_EXTRACTOR)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_FISHER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_FISHER, () -> BlockEntityType.Builder.of(DeviceFisherBlockEntity::new, BLOCKS.get(ID_DEVICE_FISHER)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_COMPOSTER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_COMPOSTER, () -> BlockEntityType.Builder.of(DeviceComposterBlockEntity::new, BLOCKS.get(ID_DEVICE_COMPOSTER)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_SOIL_INFUSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_SOIL_INFUSER, () -> BlockEntityType.Builder.of(DeviceSoilInfuserBlockEntity::new, BLOCKS.get(ID_DEVICE_SOIL_INFUSER)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_WATER_GEN_TILE = BLOCK_ENTITIES.register(ID_DEVICE_WATER_GEN, () -> BlockEntityType.Builder.of(DeviceWaterGenBlockEntity::new, BLOCKS.get(ID_DEVICE_WATER_GEN)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_ROCK_GEN_TILE = BLOCK_ENTITIES.register(ID_DEVICE_ROCK_GEN, () -> BlockEntityType.Builder.of(DeviceRockGenBlockEntity::new, BLOCKS.get(ID_DEVICE_ROCK_GEN)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_COLLECTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_COLLECTOR, () -> BlockEntityType.Builder.of(DeviceCollectorBlockEntity::new, BLOCKS.get(ID_DEVICE_COLLECTOR)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_XP_CONDENSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_XP_CONDENSER, () -> BlockEntityType.Builder.of(DeviceXpCondenserBlockEntity::new, BLOCKS.get(ID_DEVICE_XP_CONDENSER)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_NULLIFIER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_NULLIFIER, () -> BlockEntityType.Builder.of(DeviceNullifierBlockEntity::new, BLOCKS.get(ID_DEVICE_NULLIFIER)).build(null));
-    public static final Supplier<BlockEntityType<?>> DEVICE_POTION_DIFFUSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_POTION_DIFFUSER, () -> BlockEntityType.Builder.of(DevicePotionDiffuserBlockEntity::new, BLOCKS.get(ID_DEVICE_POTION_DIFFUSER)).build(null));
+    public static final Supplier<BlockEntityType<?>> DEVICE_HIVE_EXTRACTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_HIVE_EXTRACTOR, () -> new BlockEntityType<>(DeviceHiveExtractorBlockEntity::new, BLOCKS.get(ID_DEVICE_HIVE_EXTRACTOR)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_TREE_EXTRACTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_TREE_EXTRACTOR, () -> new BlockEntityType<>(DeviceTreeExtractorBlockEntity::new, BLOCKS.get(ID_DEVICE_TREE_EXTRACTOR)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_FISHER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_FISHER, () -> new BlockEntityType<>(DeviceFisherBlockEntity::new, BLOCKS.get(ID_DEVICE_FISHER)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_COMPOSTER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_COMPOSTER, () -> new BlockEntityType<>(DeviceComposterBlockEntity::new, BLOCKS.get(ID_DEVICE_COMPOSTER)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_SOIL_INFUSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_SOIL_INFUSER, () -> new BlockEntityType<>(DeviceSoilInfuserBlockEntity::new, BLOCKS.get(ID_DEVICE_SOIL_INFUSER)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_WATER_GEN_TILE = BLOCK_ENTITIES.register(ID_DEVICE_WATER_GEN, () -> new BlockEntityType<>(DeviceWaterGenBlockEntity::new, BLOCKS.get(ID_DEVICE_WATER_GEN)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_ROCK_GEN_TILE = BLOCK_ENTITIES.register(ID_DEVICE_ROCK_GEN, () -> new BlockEntityType<>(DeviceRockGenBlockEntity::new, BLOCKS.get(ID_DEVICE_ROCK_GEN)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_COLLECTOR_TILE = BLOCK_ENTITIES.register(ID_DEVICE_COLLECTOR, () -> new BlockEntityType<>(DeviceCollectorBlockEntity::new, BLOCKS.get(ID_DEVICE_COLLECTOR)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_XP_CONDENSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_XP_CONDENSER, () -> new BlockEntityType<>(DeviceXpCondenserBlockEntity::new, BLOCKS.get(ID_DEVICE_XP_CONDENSER)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_NULLIFIER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_NULLIFIER, () -> new BlockEntityType<>(DeviceNullifierBlockEntity::new, BLOCKS.get(ID_DEVICE_NULLIFIER)));
+    public static final Supplier<BlockEntityType<?>> DEVICE_POTION_DIFFUSER_TILE = BLOCK_ENTITIES.register(ID_DEVICE_POTION_DIFFUSER, () -> new BlockEntityType<>(DevicePotionDiffuserBlockEntity::new, BLOCKS.get(ID_DEVICE_POTION_DIFFUSER)));
 
-    public static final Supplier<BlockEntityType<?>> TINKER_BENCH_TILE = BLOCK_ENTITIES.register(ID_TINKER_BENCH, () -> BlockEntityType.Builder.of(TinkerBenchBlockEntity::new, BLOCKS.get(ID_TINKER_BENCH)).build(null));
-    public static final Supplier<BlockEntityType<?>> CHARGE_BENCH_TILE = BLOCK_ENTITIES.register(ID_CHARGE_BENCH, () -> BlockEntityType.Builder.of(ChargeBenchBlockEntity::new, BLOCKS.get(ID_CHARGE_BENCH)).build(null));
+    public static final Supplier<BlockEntityType<?>> TINKER_BENCH_TILE = BLOCK_ENTITIES.register(ID_TINKER_BENCH, () -> new BlockEntityType<>(TinkerBenchBlockEntity::new, BLOCKS.get(ID_TINKER_BENCH)));
+    public static final Supplier<BlockEntityType<?>> CHARGE_BENCH_TILE = BLOCK_ENTITIES.register(ID_CHARGE_BENCH, () -> new BlockEntityType<>(ChargeBenchBlockEntity::new, BLOCKS.get(ID_CHARGE_BENCH)));
 
-    public static final Supplier<BlockEntityType<?>> ENERGY_CELL_TILE = BLOCK_ENTITIES.register(ID_ENERGY_CELL, () -> BlockEntityType.Builder.of(EnergyCellBlockEntity::new, BLOCKS.get(ID_ENERGY_CELL)).build(null));
-    public static final Supplier<BlockEntityType<?>> FLUID_CELL_TILE = BLOCK_ENTITIES.register(ID_FLUID_CELL, () -> BlockEntityType.Builder.of(FluidCellBlockEntity::new, BLOCKS.get(ID_FLUID_CELL)).build(null));
+    public static final Supplier<BlockEntityType<?>> ENERGY_CELL_TILE = BLOCK_ENTITIES.register(ID_ENERGY_CELL, () -> new BlockEntityType<>(EnergyCellBlockEntity::new, BLOCKS.get(ID_ENERGY_CELL)));
+    public static final Supplier<BlockEntityType<?>> FLUID_CELL_TILE = BLOCK_ENTITIES.register(ID_FLUID_CELL, () -> new BlockEntityType<>(FluidCellBlockEntity::new, BLOCKS.get(ID_FLUID_CELL)));
 
 }

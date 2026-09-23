@@ -16,7 +16,7 @@ public class BlizzProjectileRenderer extends ElementalProjectileRenderer<BlizzPr
     }
 
     @Override
-    public Identifier getTextureLocation(BlizzProjectile entity) {
+    public Identifier getTextureLocation(ElementalProjectileRenderState state) {
 
         return TEXTURE;
     }

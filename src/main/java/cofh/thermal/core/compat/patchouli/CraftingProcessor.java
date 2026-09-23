@@ -1,7 +1,13 @@
 package cofh.thermal.core.compat.patchouli;
 
+import cofh.thermal.lib.util.ThermalRecipeManagers;
+import cofh.thermal.lib.util.managers.AbstractManager;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
@@ -10,9 +16,11 @@ import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static cofh.thermal.lib.util.managers.AbstractManager.getResultItem;
 
 public class CraftingProcessor implements IComponentProcessor {
 
@@ -24,9 +32,9 @@ public class CraftingProcessor implements IComponentProcessor {
         if (!variables.has("recipe"))
             return;
         Identifier recipeId = Identifier.parse(variables.get("recipe", level.registryAccess()).asString());
-        Optional<? extends RecipeHolder<?>> recipe = level.getRecipeManager().byKey(recipeId);
-        if (recipe.isPresent() && recipe.get().value() instanceof CraftingRecipe) {
-            this.recipe = (CraftingRecipe) recipe.get().value();
+        RecipeHolder<?> recipe = ThermalRecipeManagers.instance().getClientRecipeMap().byKey(ResourceKey.create(Registries.RECIPE, recipeId));
+        if (recipe != null && recipe.value() instanceof CraftingRecipe) {
+            this.recipe = (CraftingRecipe) recipe.value();
         } else {
             LogManager.getLogger().warn("Thermalpedia missing the crafting recipe: " + recipeId);
         }
@@ -39,7 +47,7 @@ public class CraftingProcessor implements IComponentProcessor {
             return null;
         }
         if (key.equals("out")) {
-            return IVariable.from(recipe.getResultItem(level.registryAccess()), level.registryAccess());
+            return IVariable.from(getResultItem(recipe), level.registryAccess());
         } else if (key.startsWith("in")) {
             int index = Integer.parseInt(key.substring(key.length() - 1));
             if (recipe instanceof ShapedRecipe) {
@@ -51,12 +59,14 @@ public class CraftingProcessor implements IComponentProcessor {
                     index = index * width / 3 + index % 3;
                 }
             }
-            if (recipe.getIngredients().size() <= index) {
+            List<Optional<Ingredient>> ingredients = recipe instanceof ShapedRecipe shaped ? shaped.getIngredients() : recipe.placementInfo().ingredients().stream().map(Optional::of).toList();
+            if (ingredients.size() <= index) {
                 return null;
             }
-            return IVariable.wrapList(Arrays.stream(recipe.getIngredients().get(index).getItems()).map(stack -> IVariable.from(stack, level.registryAccess())).collect(Collectors.toList()), level.registryAccess());
+            List<ItemStack> stacks = ingredients.get(index).map(AbstractManager::getItems).orElse(List.of());
+            return IVariable.wrapList(stacks.stream().map(stack -> IVariable.from(stack, level.registryAccess())).collect(Collectors.toList()), level.registryAccess());
         } else if (key.equals("title")) {
-            return IVariable.from(recipe.getResultItem(level.registryAccess()).getHoverName(), level.registryAccess());
+            return IVariable.from(getResultItem(recipe).getHoverName(), level.registryAccess());
         } else if (key.equals("show")) {
             return IVariable.wrap(true);
         }

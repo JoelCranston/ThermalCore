@@ -1,16 +1,13 @@
 package cofh.thermal.core.common.fluid;
 
 import cofh.lib.common.fluid.FluidCoFH;
-import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Utils.itemProperties;
@@ -53,31 +50,6 @@ public class ResinFluid extends FluidCoFH {
             .density(900)
             .viscosity(3000)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
-
-        @Override
-        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-
-            consumer.accept(new IClientFluidTypeExtensions() {
-
-                private static final Identifier
-                        STILL = Identifier.parse("thermal:block/fluids/resin_still"),
-                        FLOW = Identifier.parse("thermal:block/fluids/resin_flow");
-
-                @Override
-                public Identifier getStillTexture() {
-
-                    return STILL;
-                }
-
-                @Override
-                public Identifier getFlowingTexture() {
-
-                    return FLOW;
-                }
-
-            });
-        }
-    });
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)));
 
 }

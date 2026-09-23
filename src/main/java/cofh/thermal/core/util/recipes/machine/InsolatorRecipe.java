@@ -38,14 +38,14 @@ public class InsolatorRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<InsolatorRecipe> getSerializer() {
 
         return INSOLATOR_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<InsolatorRecipe> getType() {
 
         return INSOLATOR_RECIPE.get();
     }

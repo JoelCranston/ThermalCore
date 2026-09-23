@@ -21,7 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -186,11 +187,11 @@ public class DeviceComposterBlockEntity extends DeviceBlockEntity implements ITi
 
         super.loadAdditional(nbt, registries);
 
-        process = nbt.getInt(TAG_PROCESS);
-        processMax = nbt.getInt(TAG_PROCESS_MAX);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
+        processMax = nbt.getIntOr(TAG_PROCESS_MAX, 0);
 
         hasInputsCache = hasInputs();
-        compostLevel = nbt.getFloat("Compost");
+        compostLevel = nbt.getFloatOr("Compost", 0.0F);
     }
 
     @Override
@@ -237,7 +238,7 @@ public class DeviceComposterBlockEntity extends DeviceBlockEntity implements ITi
     }
 
     @Override
-    public IItemHandler getItemHandlerCapability(@javax.annotation.Nullable Direction side) {
+    public ResourceHandler<ItemResource> getItemHandlerCapability(@javax.annotation.Nullable Direction side) {
 
         if (itemCap == null && inventory.hasAccessibleSlots()) {
             itemCap = inventory.getHandler(INPUT_OUTPUT);

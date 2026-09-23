@@ -33,14 +33,14 @@ public class LapidaryFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<LapidaryFuel> getSerializer() {
 
         return LAPIDARY_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<LapidaryFuel> getType() {
 
         return LAPIDARY_FUEL.get();
     }

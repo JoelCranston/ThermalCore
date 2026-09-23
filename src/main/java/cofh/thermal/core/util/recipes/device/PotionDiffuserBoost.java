@@ -32,13 +32,13 @@ public class PotionDiffuserBoost extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<PotionDiffuserBoost> getSerializer() {
 
         return POTION_DIFFUSER_BOOST_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<PotionDiffuserBoost> getType() {
 
         return POTION_DIFFUSER_BOOST.get();
     }
@@ -66,73 +66,57 @@ public class PotionDiffuserBoost extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<PotionDiffuserBoost> {
+    public static final MapCodec<PotionDiffuserBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    Codec.INT.optionalFieldOf(AMPLIFIER, 0).forGetter(recipe -> recipe.amplifier),
+                    Codec.FLOAT.optionalFieldOf(DURATION_MOD, 0.0F).forGetter(recipe -> recipe.durationMod),
+                    Codec.INT.optionalFieldOf(CYCLES, PotionDiffuserManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)
+            ).apply(builder, PotionDiffuserBoost::new)
+    );
 
-        public static final MapCodec<PotionDiffuserBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
-                        Codec.INT.optionalFieldOf(AMPLIFIER, 0).forGetter(recipe -> recipe.amplifier),
-                        Codec.FLOAT.optionalFieldOf(DURATION_MOD, 0.0F).forGetter(recipe -> recipe.durationMod),
-                        Codec.INT.optionalFieldOf(CYCLES, PotionDiffuserManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)
-                ).apply(builder, PotionDiffuserBoost::new)
-        );
+    public static final StreamCodec<RegistryFriendlyByteBuf, PotionDiffuserBoost> STREAM_CODEC = StreamCodec.of(PotionDiffuserBoost::toNetwork, PotionDiffuserBoost::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, PotionDiffuserBoost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    //        @Override
+    //        public PotionDiffuserBoost fromJson(ResourceLocation recipeId, JsonObject json) {
+    //
+    //            Ingredient ingredient;
+    //            int amplifier = 0;
+    //            float durationMod = 0.0F;
+    //            int cycles = PotionDiffuserManager.instance().getDefaultEnergy();
+    //
+    //            /* INPUT */
+    //            ingredient = parseIngredient(json.get(INGREDIENT));
+    //
+    //            if (json.has(AMPLIFIER)) {
+    //                amplifier = json.get(AMPLIFIER).getAsInt();
+    //            }
+    //            if (json.has(DURATION_MOD)) {
+    //                durationMod = json.get(DURATION_MOD).getAsFloat();
+    //            }
+    //            if (json.has(CYCLES)) {
+    //                cycles = json.get(CYCLES).getAsInt();
+    //            }
+    //            return new PotionDiffuserBoost(recipeId, ingredient, amplifier, durationMod, cycles);
+    //        }
 
-        @Override
-        public MapCodec<PotionDiffuserBoost> codec() {
+    public static PotionDiffuserBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            return CODEC;
-        }
+        Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, PotionDiffuserBoost> streamCodec() {
+        int amplifier = buffer.readInt();
+        float durationMod = buffer.readFloat();
+        int cycles = buffer.readInt();
 
-            return STREAM_CODEC;
-        }
+        return new PotionDiffuserBoost(ingredient, amplifier, durationMod, cycles);
+    }
 
-        //        @Override
-        //        public PotionDiffuserBoost fromJson(ResourceLocation recipeId, JsonObject json) {
-        //
-        //            Ingredient ingredient;
-        //            int amplifier = 0;
-        //            float durationMod = 0.0F;
-        //            int cycles = PotionDiffuserManager.instance().getDefaultEnergy();
-        //
-        //            /* INPUT */
-        //            ingredient = parseIngredient(json.get(INGREDIENT));
-        //
-        //            if (json.has(AMPLIFIER)) {
-        //                amplifier = json.get(AMPLIFIER).getAsInt();
-        //            }
-        //            if (json.has(DURATION_MOD)) {
-        //                durationMod = json.get(DURATION_MOD).getAsFloat();
-        //            }
-        //            if (json.has(CYCLES)) {
-        //                cycles = json.get(CYCLES).getAsInt();
-        //            }
-        //            return new PotionDiffuserBoost(recipeId, ingredient, amplifier, durationMod, cycles);
-        //        }
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, PotionDiffuserBoost recipe) {
 
-        public static PotionDiffuserBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 
-            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-
-            int amplifier = buffer.readInt();
-            float durationMod = buffer.readFloat();
-            int cycles = buffer.readInt();
-
-            return new PotionDiffuserBoost(ingredient, amplifier, durationMod, cycles);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, PotionDiffuserBoost recipe) {
-
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-
-            buffer.writeInt(recipe.amplifier);
-            buffer.writeFloat(recipe.durationMod);
-            buffer.writeInt(recipe.cycles);
-        }
-
+        buffer.writeInt(recipe.amplifier);
+        buffer.writeFloat(recipe.durationMod);
+        buffer.writeInt(recipe.cycles);
     }
     // endregion
 }

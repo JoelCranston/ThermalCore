@@ -52,7 +52,7 @@ public class DeviceCollectorBlockEntity extends DeviceBlockEntity implements ITi
             return false;
         }
         CompoundTag data = item.getPersistentData();
-        return !data.getBoolean(TAG_CONVEYOR_COMPAT) || data.getBoolean(TAG_DEMAGNETIZE_COMPAT);
+        return !data.getBooleanOr(TAG_CONVEYOR_COMPAT, false) || data.getBooleanOr(TAG_DEMAGNETIZE_COMPAT, false);
     };
 
     protected static final int RADIUS = 4;
@@ -157,8 +157,8 @@ public class DeviceCollectorBlockEntity extends DeviceBlockEntity implements ITi
         List<ExperienceOrb> orbs = level.getEntitiesOfClass(ExperienceOrb.class, area, EntitySelector.ENTITY_STILL_ALIVE);
 
         for (ExperienceOrb orb : orbs) {
-            orb.value -= xpStorage.receiveXp(orb.getValue(), false);
-            if (orb.value <= 0) {
+            orb.setValue(orb.getValue() - xpStorage.receiveXp(orb.getValue(), false));
+            if (orb.getValue() <= 0) {
                 orb.discard();
             }
         }

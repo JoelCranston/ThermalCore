@@ -1,53 +1,56 @@
 package cofh.thermal.core.client.renderer.entity;
 
 import cofh.lib.util.helpers.MathHelper;
+import cofh.thermal.core.client.renderer.entity.ElementalProjectileRenderer.ElementalProjectileRenderState;
 import cofh.thermal.core.client.renderer.entity.layers.FestiveLayer;
 import cofh.thermal.core.client.renderer.entity.model.BasalzModel;
 import cofh.thermal.core.client.renderer.entity.model.ElementalProjectileModel;
 import cofh.thermal.core.common.entity.monster.Basalz;
-import cofh.thermal.core.common.entity.projectile.BasalzProjectile;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.AABB;
 import org.joml.Quaternionf;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
-public class BasalzRenderer extends MobRenderer<Basalz, BasalzModel<Basalz>> {
+public class BasalzRenderer extends MobRenderer<Basalz, BasalzRenderer.BasalzRenderState, BasalzModel> {
 
     private static final Identifier CALM_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz.png");
     private static final Identifier ANGRY_TEXTURE = Identifier.fromNamespaceAndPath(ID_THERMAL, "textures/entity/basalz_angry.png");
 
-    protected ElementalProjectileModel<BasalzProjectile> projectileModel;
+    protected ElementalProjectileModel projectileModel;
+    protected ElementalProjectileRenderState projectileState = new ElementalProjectileRenderState();
 
     public BasalzRenderer(EntityRendererProvider.Context ctx) {
 
-        super(ctx, new BasalzModel<>(ctx.getModelSet().bakeLayer(BasalzModel.BASALZ_LAYER)), 0.5F);
+        super(ctx, new BasalzModel(ctx.bakeLayer(BasalzModel.BASALZ_LAYER)), 0.5F);
         this.addLayer(new FestiveLayer<>(ctx, this, -0.25F, 1.25F));
-        this.projectileModel = new ElementalProjectileModel<>(ctx.getModelSet().bakeLayer(ElementalProjectileModel.PROJECTILE_LAYER));
+        this.projectileModel = new ElementalProjectileModel(ctx.bakeLayer(ElementalProjectileModel.PROJECTILE_LAYER));
     }
 
     @Override
-    public void render(Basalz entity, float entityYaw, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void submit(BasalzRenderState state, PoseStack poseStackIn, SubmitNodeCollector collector, CameraRenderState camera) {
 
-        if (entity.isAlive()) {
-            float scale = 1.0F - MathHelper.clamp((entity.angerTime + partialTicks) / Basalz.DEPLOY_TIME, 0.0F, 1.0F);
+        if (state.isAlive) {
+            float scale = 1.0F - MathHelper.clamp((state.angerTime + state.partialTick) / Basalz.DEPLOY_TIME, 0.0F, 1.0F);
             scale = 1.0F - scale * scale * scale;
-            if (!entity.isAngry()) {
+            if (!state.isAngry) {
                 scale = 1.0F - scale;
             }
             if (scale > 0.0F) {
                 poseStackIn.pushPose();
-                float time = entity.tickCount + partialTicks;
-                poseStackIn.translate(0, entity.getBbHeight() * (0.35F + 0.35F * scale), 0);
+                float time = state.ageInTicks;
+                poseStackIn.translate(0, state.boundingBoxHeight * (0.35F + 0.35F * scale), 0);
                 poseStackIn.scale(scale, scale, scale);
-                int orbit = entity.getOrbit();
+                int orbit = state.orbit;
                 float inv = 1.0F / orbit;
                 Quaternionf rot = Axis.YP.rotationDegrees(360.0F * inv);
                 poseStackIn.mulPose(Axis.YP.rotationDegrees(time * Math.max(36 * inv, 12)));
@@ -59,15 +62,14 @@ public class BasalzRenderer extends MobRenderer<Basalz, BasalzModel<Basalz>> {
                     poseStackIn.mulPose(Axis.XP.rotationDegrees(MathHelper.cos(t * 0.1F) * 180.0F));
                     float invScale = 0.5F / scale;
                     poseStackIn.scale(invScale, invScale, invScale);
-                    VertexConsumer builder = bufferIn.getBuffer(projectileModel.renderType(BasalzProjectileRenderer.TEXTURE));
-                    this.projectileModel.renderToBuffer(poseStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xCCFFFFFF);
+                    collector.submitModel(this.projectileModel, projectileState, poseStackIn, projectileModel.renderType(BasalzProjectileRenderer.TEXTURE), state.lightCoords, OverlayTexture.NO_OVERLAY, 0xCCFFFFFF, null, state.outlineColor, null);
                     poseStackIn.popPose();
                     poseStackIn.mulPose(rot);
                 }
                 poseStackIn.popPose();
             }
         }
-        super.render(entity, entityYaw, partialTicks, poseStackIn, bufferIn, packedLightIn);
+        super.submit(state, poseStackIn, collector, camera);
     }
 
     @Override
@@ -77,9 +79,40 @@ public class BasalzRenderer extends MobRenderer<Basalz, BasalzModel<Basalz>> {
     }
 
     @Override
-    public Identifier getTextureLocation(Basalz entity) {
+    protected AABB getBoundingBoxForCulling(Basalz entity) {
 
-        return entity.isAngry() ? ANGRY_TEXTURE : CALM_TEXTURE;
+        return entity.isAngry() ? super.getBoundingBoxForCulling(entity).inflate(4) : super.getBoundingBoxForCulling(entity);
+    }
+
+    @Override
+    public Identifier getTextureLocation(BasalzRenderState state) {
+
+        return state.isAngry ? ANGRY_TEXTURE : CALM_TEXTURE;
+    }
+
+    @Override
+    public BasalzRenderState createRenderState() {
+
+        return new BasalzRenderState();
+    }
+
+    @Override
+    public void extractRenderState(Basalz entityIn, BasalzRenderState state, float partialTicks) {
+
+        super.extractRenderState(entityIn, state, partialTicks);
+        state.isAlive = entityIn.isAlive();
+        state.isAngry = entityIn.isAngry();
+        state.angerTime = entityIn.angerTime;
+        state.orbit = entityIn.getOrbit();
+    }
+
+    public static class BasalzRenderState extends LivingEntityRenderState {
+
+        public boolean isAlive;
+        public boolean isAngry;
+        public int angerTime;
+        public int orbit;
+
     }
 
 }

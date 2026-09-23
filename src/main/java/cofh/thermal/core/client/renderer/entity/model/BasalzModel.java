@@ -1,7 +1,7 @@
 package cofh.thermal.core.client.renderer.entity.model;
 
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -9,25 +9,23 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
 
-public class BasalzModel<T extends LivingEntity> extends HierarchicalModel<T> {
+public class BasalzModel extends EntityModel<LivingEntityRenderState> {
 
     public static final ModelLayerLocation BASALZ_LAYER = new ModelLayerLocation(Identifier.parse("thermal:basalz"), "main");
     private static final int PILLARS = 4;
 
-    private final ModelPart root;
     private final ModelPart head;
     private final ModelPart core;
     private final ModelPart[] pillars;
 
     public BasalzModel(ModelPart root) {
 
-        this.root = root;
+        super(root);
         this.head = root.getChild("head");
         this.core = root.getChild("core");
         this.pillars = new ModelPart[4];
@@ -61,22 +59,16 @@ public class BasalzModel<T extends LivingEntity> extends HierarchicalModel<T> {
     }
 
     @Override
-    public ModelPart root() {
+    public void setupAnim(LivingEntityRenderState state) {
 
-        return this.root;
-    }
+        super.setupAnim(state);
+        core.y = MathHelper.sin(state.ageInTicks * 0.1F);
 
-    @Override
-    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-        core.y = MathHelper.sin(ageInTicks * 0.1F);
-
-        float partialTicks = ageInTicks - entityIn.tickCount;
         for (ModelPart pillar : pillars) {
-            pillar.yRot = (ageInTicks * 6 - Mth.lerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot)) * (float) Math.PI / 180.0F;
+            pillar.yRot = (state.ageInTicks * 6 - state.bodyRot) * (float) Math.PI / 180.0F;
         }
-        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float) Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float) Math.PI / 180F);
     }
 
 }

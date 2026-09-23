@@ -19,14 +19,14 @@ public class PulverizerCatalyst extends ThermalCatalyst {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<PulverizerCatalyst> getSerializer() {
 
         return PULVERIZER_CATALYST_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<PulverizerCatalyst> getType() {
 
         return PULVERIZER_CATALYST.get();
     }

@@ -4,9 +4,11 @@ import cofh.core.common.item.FluidContainerItem;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.ItemHelper;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
@@ -20,7 +22,6 @@ import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.Constants.MAX_POTION_AMPLIFIER;
 import static cofh.lib.util.Constants.MAX_POTION_DURATION;
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class FluidContainerItemAugmentable extends FluidContainerItem implements IAugmentableItem {
@@ -50,10 +51,12 @@ public class FluidContainerItemAugmentable extends FluidContainerItem implements
         return this;
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    protected void updateEnchantability(ItemStack stack) {
 
-        return Math.round(super.getEnchantmentValue(stack) * getBaseMod(stack));
+        Enchantable base = stack.getPrototype().get(DataComponents.ENCHANTABLE);
+        if (base != null) {
+            stack.set(DataComponents.ENCHANTABLE, new Enchantable(Math.max(1, Math.round(base.value() * getBaseMod(stack)))));
+        }
     }
 
     protected float getBaseMod(ItemStack stack) {
@@ -64,10 +67,10 @@ public class FluidContainerItemAugmentable extends FluidContainerItem implements
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_STORAGE);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_CREATIVE);
@@ -132,6 +135,7 @@ public class FluidContainerItemAugmentable extends FluidContainerItem implements
             }
             setAttributesFromAugment(container, augmentData);
         }
+        updateEnchantability(container);
         FluidStack fluid = getFluid(container);
         if (isCreative(container, FLUID)) {
             if (!fluid.isEmpty()) {

@@ -1,17 +1,24 @@
 package cofh.thermal.core.util.managers.dynamo;
 
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.dynamo.StirlingFuel;
 import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.FuelValues;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,23 +73,37 @@ public class StirlingFuelManager extends SingleItemFuelManager {
         if (stack.isEmpty()) {
             return 0;
         }
-        if (stack.getItem().hasCraftingRemainingItem(stack)) {
+        if (stack.getItem().getCraftingRemainder(stack) != null) {
             return 0;
         }
-        int energy = stack.getBurnTime(null) * RF_PER_FURNACE_UNIT;
+        FuelValues fuelValues = fuelValues();
+        if (fuelValues == null) {
+            return 0;
+        }
+        int energy = stack.getBurnTime(null, fuelValues) * RF_PER_FURNACE_UNIT;
         return energy >= MIN_ENERGY ? energy : 0;
+    }
+
+    protected static FuelValues fuelValues() {
+
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server != null) {
+            return server.fuelValues();
+        }
+        Level level = ProxyUtils.getClientWorld();
+        return level == null ? null : level.fuelValues();
     }
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(STIRLING_FUEL.get());
+        var recipes = recipeMap.byType(STIRLING_FUEL.get());
         for (var entry : recipes) {
             addFuel(entry.value());
         }
-        createConvertedRecipes(recipeManager);
+        createConvertedRecipes(recipeMap);
     }
     // endregion
 
@@ -94,7 +115,7 @@ public class StirlingFuelManager extends SingleItemFuelManager {
         return convertedFuels;
     }
 
-    protected void createConvertedRecipes(RecipeManager recipeManager) {
+    protected void createConvertedRecipes(RecipeMap recipeMap) {
 
         ItemStack query;
         for (Item item : BuiltInRegistries.ITEM) {
@@ -111,7 +132,7 @@ public class StirlingFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<StirlingFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "stirling_" + getName(item)), new StirlingFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "stirling_" + getName(item))), new StirlingFuel(energy, singletonList(Ingredient.of(item.getItem())), emptyList()));
     }
     // endregion
 }

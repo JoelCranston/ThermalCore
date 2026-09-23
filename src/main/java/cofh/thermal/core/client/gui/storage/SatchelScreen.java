@@ -6,12 +6,9 @@ import cofh.core.client.gui.element.panel.SecurityPanel;
 import cofh.core.common.network.packet.server.FilterableGuiTogglePacket;
 import cofh.core.util.filter.IFilterableItem;
 import cofh.core.util.helpers.FilterHelper;
-import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.thermal.core.common.inventory.storage.SatchelMenu;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.MenuProvider;
@@ -34,13 +31,12 @@ public class SatchelScreen extends ContainerScreenCoFH<SatchelMenu> {
 
     public SatchelScreen(SatchelMenu container, Inventory inv, Component titleIn) {
 
-        super(container, inv, titleIn);
+        super(container, inv, titleIn, 176, 166 + container.getExtraRows() * 18);
 
         texture = TEXTURE;
         info = generatePanelInfo("info.thermal.satchel");
 
         renderExtension = container.getExtraRows() * 18;
-        imageHeight += renderExtension;
     }
 
     @Override
@@ -77,38 +73,21 @@ public class SatchelScreen extends ContainerScreenCoFH<SatchelMenu> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackgroundTexture(GuiGraphicsExtractor guiGraphics) {
 
-        RenderHelper.resetShaderColor();
-        RenderHelper.setPosTexShader();
-        RenderHelper.setShaderTexture0(texture);
+        super.drawBackgroundTexture(guiGraphics);
 
-        PoseStack poseStack = guiGraphics.pose();
-
-        drawTexturedModalRect(guiGraphics, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         if (renderExtension > 0) {
-            RenderHelper.setShaderTexture0(TEXTURE_EXT);
-            drawTexturedModalRect(guiGraphics, leftPos, topPos + renderExtension, 0, 0, imageWidth, imageHeight);
+            drawTexturedModalRect(guiGraphics, TEXTURE_EXT, leftPos, topPos + renderExtension, 0, 0, imageWidth, imageHeight);
         }
-        poseStack.pushPose();
-        poseStack.translate(leftPos, topPos, 0.0F);
-
-        drawPanels(guiGraphics, false);
-        drawElements(guiGraphics, false);
-
-        poseStack.popPose();
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
 
-        super.renderLabels(guiGraphics, mouseX, mouseY);
+        super.extractLabels(guiGraphics, mouseX, mouseY);
 
-        GlStateManager._enableBlend();
-        RenderHelper.setPosTexShader();
-        RenderHelper.setShaderTexture0(SLOT_OVERLAY);
-        drawTexturedModalRect(guiGraphics, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
-        GlStateManager._disableBlend();
+        drawTexturedModalRect(guiGraphics, SLOT_OVERLAY, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
     }
 
 }

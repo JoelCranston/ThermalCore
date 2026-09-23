@@ -35,13 +35,13 @@ public class RockGenMapping extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<RockGenMapping> getSerializer() {
 
         return ROCK_GEN_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<RockGenMapping> getType() {
 
         return ROCK_GEN_MAPPING.get();
     }
@@ -69,82 +69,66 @@ public class RockGenMapping extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<RockGenMapping> {
+    public static final MapCodec<RockGenMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+                    Codec.INT.optionalFieldOf(TIME, RockGenManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.time),
+                    BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf(BELOW, Blocks.AIR).forGetter(recipe -> recipe.below),
+                    BuiltInRegistries.BLOCK.byNameCodec().fieldOf(ADJACENT).forGetter(recipe -> recipe.adjacent),
+                    ItemStack.CODEC.fieldOf(RESULT).forGetter(recipe -> recipe.result)
+            ).apply(builder, RockGenMapping::new)
+    );
 
-        public static final MapCodec<RockGenMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Codec.INT.optionalFieldOf(TIME, RockGenManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.time),
-                        BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf(BELOW, Blocks.AIR).forGetter(recipe -> recipe.below),
-                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf(ADJACENT).forGetter(recipe -> recipe.adjacent),
-                        ItemStack.CODEC.fieldOf(RESULT).forGetter(recipe -> recipe.result)
-                ).apply(builder, RockGenMapping::new)
-        );
+    public static final StreamCodec<RegistryFriendlyByteBuf, RockGenMapping> STREAM_CODEC = StreamCodec.of(RockGenMapping::toNetwork, RockGenMapping::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, RockGenMapping> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    //        @Override
+    //        public RockGenMapping fromJson(ResourceLocation recipeId, JsonObject json) {
+    //
+    //            int time = RockGenManager.instance().getDefaultEnergy();
+    //
+    //            Block below = Blocks.AIR;
+    //            Block adjacent = Blocks.AIR;
+    //            ItemStack result = ItemStack.EMPTY;
+    //
+    //            /* BELOW */
+    //            if (json.has(BELOW)) {
+    //                below = parseBlock(json.get(BELOW));
+    //            } else if (json.has(BASE)) {
+    //                below = parseBlock(json.get(BASE));
+    //            }
+    //            /* ADJACENT */
+    //            if (json.has(ADJACENT)) {
+    //                adjacent = parseBlock(json.get(ADJACENT));
+    //            }
+    //            /* RESULT */
+    //            if (json.has(RESULT)) {
+    //                result = parseItemStack(json.get(RESULT));
+    //            } else if (json.has(ITEM)) {
+    //                result = parseItemStack(json.get(ITEM));
+    //            }
+    //            /* TIME */
+    //            if (json.has(TIME)) {
+    //                time = json.get(TIME).getAsInt();
+    //            } else if (json.has(TICKS)) {
+    //                time = json.get(TICKS).getAsInt();
+    //            }
+    //            return new RockGenMapping(recipeId, time, below, adjacent, result);
+    //        }
 
-        @Override
-        public MapCodec<RockGenMapping> codec() {
+    public static RockGenMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            return CODEC;
-        }
+        int time = buffer.readInt();
+        Block trunk = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
+        Block leaves = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
+        ItemStack result = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, RockGenMapping> streamCodec() {
+        return new RockGenMapping(time, trunk, leaves, result);
+    }
 
-            return STREAM_CODEC;
-        }
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, RockGenMapping recipe) {
 
-        //        @Override
-        //        public RockGenMapping fromJson(ResourceLocation recipeId, JsonObject json) {
-        //
-        //            int time = RockGenManager.instance().getDefaultEnergy();
-        //
-        //            Block below = Blocks.AIR;
-        //            Block adjacent = Blocks.AIR;
-        //            ItemStack result = ItemStack.EMPTY;
-        //
-        //            /* BELOW */
-        //            if (json.has(BELOW)) {
-        //                below = parseBlock(json.get(BELOW));
-        //            } else if (json.has(BASE)) {
-        //                below = parseBlock(json.get(BASE));
-        //            }
-        //            /* ADJACENT */
-        //            if (json.has(ADJACENT)) {
-        //                adjacent = parseBlock(json.get(ADJACENT));
-        //            }
-        //            /* RESULT */
-        //            if (json.has(RESULT)) {
-        //                result = parseItemStack(json.get(RESULT));
-        //            } else if (json.has(ITEM)) {
-        //                result = parseItemStack(json.get(ITEM));
-        //            }
-        //            /* TIME */
-        //            if (json.has(TIME)) {
-        //                time = json.get(TIME).getAsInt();
-        //            } else if (json.has(TICKS)) {
-        //                time = json.get(TICKS).getAsInt();
-        //            }
-        //            return new RockGenMapping(recipeId, time, below, adjacent, result);
-        //        }
-
-        public static RockGenMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
-
-            int time = buffer.readInt();
-            Block trunk = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
-            Block leaves = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
-            ItemStack result = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
-
-            return new RockGenMapping(time, trunk, leaves, result);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, RockGenMapping recipe) {
-
-            buffer.writeInt(recipe.time);
-            buffer.writeIdentifier(getRegistryName(recipe.below));
-            buffer.writeIdentifier(getRegistryName(recipe.adjacent));
-            ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.result);
-        }
-
+        buffer.writeInt(recipe.time);
+        buffer.writeIdentifier(getRegistryName(recipe.below));
+        buffer.writeIdentifier(getRegistryName(recipe.adjacent));
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.result);
     }
     // endregion
 }

@@ -16,7 +16,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -72,9 +72,15 @@ public class TreeExtractorCategory implements IRecipeCategory<RecipeHolder<TreeE
     }
 
     @Override
-    public IDrawable getBackground() {
+    public int getWidth() {
 
-        return background;
+        return background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+
+        return background.getHeight();
     }
 
     @Override
@@ -99,11 +105,13 @@ public class TreeExtractorCategory implements IRecipeCategory<RecipeHolder<TreeE
                 .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(recipe.value().getFluid()))
                 .setFluidRenderer(tankSize(TANK_MEDIUM), false, 16, 40)
                 .setOverlay(tankOverlay, 0, 0)
-                .addTooltipCallback(defaultFluidTooltip());
+                .addRichTooltipCallback(defaultFluidTooltip());
     }
 
     @Override
-    public void draw(RecipeHolder<TreeExtractorMapping> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<TreeExtractorMapping> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+
+        background.draw(guiGraphics);
 
         tankBackground.draw(guiGraphics, 115, 10);
 

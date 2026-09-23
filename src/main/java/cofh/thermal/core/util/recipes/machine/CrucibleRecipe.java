@@ -31,14 +31,14 @@ public class CrucibleRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CrucibleRecipe> getSerializer() {
 
         return CRUCIBLE_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CrucibleRecipe> getType() {
 
         return CRUCIBLE_RECIPE.get();
     }

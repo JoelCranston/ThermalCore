@@ -23,15 +23,12 @@ import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMa
 import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergyContainerItem {
 
     public EnergyCellBlockItem(Block blockIn, Properties builder) {
 
-        super(blockIn, builder);
-
-        setEnchantability(5);
+        super(blockIn, builder.enchantable(5));
     }
 
     @Override
@@ -49,10 +46,10 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
@@ -89,14 +86,14 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
     public int getExtract(ItemStack container) {
 
         CompoundTag tag = getEnergyTag(container);
-        return Math.round(tag.getInt(TAG_ENERGY_SEND));
+        return Math.round(tag.getIntOr(TAG_ENERGY_SEND, 0));
     }
 
     @Override
     public int getReceive(ItemStack container) {
 
         CompoundTag tag = getEnergyTag(container);
-        return Math.round(tag.getInt(TAG_ENERGY_RECV));
+        return Math.round(tag.getIntOr(TAG_ENERGY_RECV, 0));
     }
 
     @Override
@@ -105,7 +102,7 @@ public class EnergyCellBlockItem extends BlockItemAugmentable implements IEnergy
         CompoundTag tag = getEnergyTag(container);
         float base = getPropertyWithDefault(container, TAG_AUGMENT_BASE_MOD, 1.0F);
         float mod = getPropertyWithDefault(container, TAG_AUGMENT_RF_STORAGE, 1.0F);
-        return getMaxStored(container, Math.round(tag.getInt(TAG_ENERGY_MAX) * mod * base));
+        return getMaxStored(container, Math.round(tag.getIntOr(TAG_ENERGY_MAX, 0) * mod * base));
     }
     // endregion
 

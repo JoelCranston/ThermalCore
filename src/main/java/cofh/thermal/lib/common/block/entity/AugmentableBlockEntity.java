@@ -53,10 +53,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -75,7 +76,6 @@ import static cofh.lib.api.StorageGroup.INTERNAL;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.thermal.core.init.registries.TCoreSounds.SOUND_TINKER;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements ISecurableTile, IRedstoneControllableTile, MenuProvider, IFilterable {
 
@@ -272,7 +272,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         if (this.level != null) {
             if (this.level.hasChunkAt(this.worldPosition)) {
-                this.level.getChunkAt(this.worldPosition).setUnsaved(true);
+                this.level.getChunkAt(this.worldPosition).markUnsaved();
             }
         }
     }
@@ -506,7 +506,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
 
         super.loadAdditional(nbt, registries);
 
-        isActive = nbt.getBoolean(TAG_ACTIVE);
+        isActive = nbt.getBooleanOr(TAG_ACTIVE, false);
 
         enchantments = ItemEnchantments.CODEC
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get(TAG_ENCHANTMENTS))
@@ -515,7 +515,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         inventory.read(registries, nbt);
 
         if (nbt.contains(TAG_AUGMENTS)) {
-            inventory.readSlotsUnordered(registries, nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
+            inventory.readSlotsUnordered(registries, nbt.getListOrEmpty(TAG_AUGMENTS), invSize() - augSize());
         }
         updateAugmentState();
 
@@ -527,7 +527,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         securityControl.read(nbt);
         redstoneControl.read(nbt);
 
-        renderFluid = FluidStack.parseOptional(registries, nbt.getCompound(TAG_RENDER_FLUID));
+        renderFluid = FluidHelper.parseOptional(registries, nbt.getCompoundOrEmpty(TAG_RENDER_FLUID));
     }
 
     @Override
@@ -553,7 +553,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         redstoneControl.write(nbt);
 
         if (!renderFluid.isEmpty()) {
-            nbt.put(TAG_RENDER_FLUID, renderFluid.save(registries));
+            nbt.put(TAG_RENDER_FLUID, FluidHelper.saveOptional(registries, renderFluid));
         }
     }
     // endregion
@@ -722,9 +722,9 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
     // endregion
 
     // region CAPABILITIES
-    protected IEnergyStorage energyCap = null;
-    protected IItemHandler itemCap = null;
-    protected IFluidHandler fluidCap = null;
+    protected EnergyHandler energyCap = null;
+    protected ResourceHandler<ItemResource> itemCap = null;
+    protected ResourceHandler<FluidResource> fluidCap = null;
 
     protected void updateHandlers() {
 
@@ -735,7 +735,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         invalidateCapabilities();
     }
 
-    public IEnergyStorage getEnergyCapability(@Nullable Direction side) {
+    public EnergyHandler getEnergyCapability(@Nullable Direction side) {
 
         if (energyCap == null && energyStorage.getCapacity() > 0) {
             energyCap = energyStorage;
@@ -743,7 +743,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         return energyCap;
     }
 
-    public IItemHandler getItemHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<ItemResource> getItemHandlerCapability(@Nullable Direction side) {
 
         if (itemCap == null && inventory.hasAccessibleSlots()) {
             itemCap = inventory.getHandler(ACCESSIBLE);
@@ -751,7 +751,7 @@ public abstract class AugmentableBlockEntity extends BlockEntityCoFH implements 
         return itemCap;
     }
 
-    public IFluidHandler getFluidHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<FluidResource> getFluidHandlerCapability(@Nullable Direction side) {
 
         if (fluidCap == null && tankInv.hasAccessibleTanks()) {
             fluidCap = tankInv.getHandler(ACCESSIBLE);

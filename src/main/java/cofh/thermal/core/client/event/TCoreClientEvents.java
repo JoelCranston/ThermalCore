@@ -5,7 +5,6 @@ import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.api.block.entity.IAreaEffectTile;
 import cofh.thermal.core.common.item.WrenchItem;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.ChatFormatting;
@@ -32,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static cofh.core.client.CoreRenderType.THICK_LINES;
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.lib.util.constants.NBTTags.TAG_TYPE;
 import static cofh.lib.util.helpers.StringHelper.*;
@@ -58,7 +58,7 @@ public class TCoreClientEvents {
             if (augmentData == null || augmentData.isEmpty()) {
                 return;
             }
-            String type = augmentData.getString(TAG_TYPE);
+            String type = augmentData.getStringOr(TAG_TYPE, "");
             if (!type.isEmpty()) {
                 MutableComponent typeText = getTextComponent("info.thermal.augment.type." + type).withStyle(ChatFormatting.WHITE);
 
@@ -71,11 +71,11 @@ public class TCoreClientEvents {
                         .append(typeText)
                 );
             }
-            for (String mod : augmentData.getAllKeys()) {
+            for (String mod : augmentData.keySet()) {
                 if (mod.equals(TAG_TYPE) || !canLocalize("info.thermal.augment.attr." + mod)) {
                     continue;
                 }
-                float value = augmentData.getFloat(mod);
+                float value = augmentData.getFloatOr(mod, 0.0F);
                 boolean bad = isAdditive(mod) && value < 0
                         || isAdditive(mod) && value > 0 && isInverse(mod)
                         || isMultiplicative(mod) && (isInverse(mod) ? value > 1.0 : value < 1.0);
@@ -98,17 +98,14 @@ public class TCoreClientEvents {
     }
 
     @SubscribeEvent
-    public static void handleRenderLevelStageEvent(RenderLevelStageEvent event) {
+    public static void handleRenderLevelStageEvent(RenderLevelStageEvent.AfterTranslucentParticles event) {
 
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            return;
-        }
         LocalPlayer player = Minecraft.getInstance().player;
 
         if (player != null) {
             Item heldItem = player.getMainHandItem().getItem();
             if (heldItem instanceof WrenchItem && ((WrenchItem) heldItem).getMode(player.getMainHandItem()) > 0) {
-                renderOperationalAreas(player, event.getPoseStack());
+                renderOperationalAreas(player, event.getPoseStack(), event.getLevelRenderState().cameraRenderState.pos);
             }
         }
     }
@@ -121,10 +118,18 @@ public class TCoreClientEvents {
 
     private static void line(VertexConsumer builder, Matrix4f positionMatrix, BlockPos pos, float dx1, float dy1, float dz1, float dx2, float dy2, float dz2, int r, int g, int b, int a) {
 
+        float xn = dx2 - dx1;
+        float yn = dy2 - dy1;
+        float zn = dz2 - dz1;
+        float d = (float) Math.sqrt(xn * xn + yn * yn + zn * zn);
+        xn /= d;
+        yn /= d;
+        zn /= d;
+
         builder.addVertex(positionMatrix, pos.getX() + dx1, pos.getY() + dy1, pos.getZ() + dz1)
-                .setColor(r, g, b, a);
+                .setColor(r, g, b, a).setNormal(xn, yn, zn).setLineWidth(THICK_LINES);
         builder.addVertex(positionMatrix, pos.getX() + dx2, pos.getY() + dy2, pos.getZ() + dz2)
-                .setColor(r, g, b, a);
+                .setColor(r, g, b, a).setNormal(xn, yn, zn).setLineWidth(THICK_LINES);
     }
 
     private static void solidBox(VertexConsumer builder, Matrix4f positionMatrix, AABB area, int color) {
@@ -201,9 +206,7 @@ public class TCoreClientEvents {
         line(builder, positionMatrix, pos, lenX, offset, lenZ, lenX, lenY, lenZ, r, g, b, a);
     }
 
-    private static void renderOperationalAreas(LocalPlayer player, PoseStack matrixStack) {
-
-        Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+    private static void renderOperationalAreas(LocalPlayer player, PoseStack matrixStack, Vec3 projectedView) {
 
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         matrixStack.pushPose();
@@ -236,8 +239,6 @@ public class TCoreClientEvents {
             }
         }
         buffer.endBatch(RenderTypes.OVERLAY_LINES);
-
-        RenderSystem.disableDepthTest();
 
         builder = buffer.getBuffer(RenderTypes.OVERLAY_LINES);
         for (IAreaEffectTile tile : INSIDE_OPERATIONAL_AREA_TILES) {

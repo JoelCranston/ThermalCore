@@ -28,22 +28,22 @@ public class TCoreDamageTypes {
 
     protected static Holder.Reference<DamageType> register(BootstrapContext<DamageType> context, ResourceKey<DamageType> key, DamageScaling scaling, float exhaustion, DamageEffects effects, DeathMessageType message) {
 
-        return context.register(key, new DamageType(key.location().getPath(), scaling, exhaustion, effects, message));
+        return context.register(key, new DamageType(key.identifier().getPath(), scaling, exhaustion, effects, message));
     }
 
     protected static Holder.Reference<DamageType> register(BootstrapContext<DamageType> context, ResourceKey<DamageType> key, DamageScaling scaling, float exhaustion, DamageEffects effects) {
 
-        return context.register(key, new DamageType(key.location().getPath(), scaling, exhaustion, effects));
+        return context.register(key, new DamageType(key.identifier().getPath(), scaling, exhaustion, effects));
     }
 
     protected static Holder.Reference<DamageType> register(BootstrapContext<DamageType> context, ResourceKey<DamageType> key, float exhaustion, DamageEffects effects) {
 
-        return context.register(key, new DamageType(key.location().getPath(), exhaustion, effects));
+        return context.register(key, new DamageType(key.identifier().getPath(), exhaustion, effects));
     }
 
     protected static Holder.Reference<DamageType> register(BootstrapContext<DamageType> context, ResourceKey<DamageType> key, float exhaustion) {
 
-        return context.register(key, new DamageType(key.location().getPath(), exhaustion));
+        return context.register(key, new DamageType(key.identifier().getPath(), exhaustion));
     }
 
     protected static ResourceKey<DamageType> createKey(String id) {

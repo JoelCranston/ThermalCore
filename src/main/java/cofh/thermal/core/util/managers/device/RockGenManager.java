@@ -4,7 +4,7 @@ import cofh.thermal.core.util.recipes.device.RockGenMapping;
 import cofh.thermal.lib.util.managers.AbstractManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -82,10 +82,10 @@ public class RockGenManager extends AbstractManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var mappings = recipeManager.getAllRecipesFor(ROCK_GEN_MAPPING.get());
+        var mappings = recipeMap.byType(ROCK_GEN_MAPPING.get());
         for (var entry : mappings) {
             addMapping(entry.value());
         }

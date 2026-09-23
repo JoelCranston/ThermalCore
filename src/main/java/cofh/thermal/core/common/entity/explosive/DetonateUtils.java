@@ -13,6 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SpellParticleOption;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerExplosion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -47,7 +50,7 @@ public class DetonateUtils {
 
         AreaEffectCloud cloud = new AreaEffectCloud(level, pos.x, pos.y, pos.z);
         cloud.setRadius(1);
-        cloud.setParticle(particle);
+        cloud.setCustomParticle(particle);
         cloud.setDuration(duration);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick((radius - cloud.getRadius()) / (float) cloud.getDuration());
@@ -114,7 +117,7 @@ public class DetonateUtils {
 
         AreaUtils.GLOW_AIR_TRANSFORM.transformSphere(level, pos, radius, explosive);
         AreaUtils.GLOW_ENTITIES.applyEffectNearby(level, pos, radius, duration, amplifier);
-        makeAreaOfEffectCloud(level, ParticleTypes.INSTANT_EFFECT, pos, radius);
+        makeAreaOfEffectCloud(level, SpellParticleOption.create(ParticleTypes.INSTANT_EFFECT, -1, 1.0F), pos, radius);
     }
 
     public static void redstone(Level level, Entity explosive, @Nullable Entity owner, Vec3 pos, int radius, int duration, int amplifier) {
@@ -141,7 +144,7 @@ public class DetonateUtils {
                 d7 = d7 / d13;
                 d9 = d9 / d13;
                 double d12 = Math.sqrt(explosive.distanceToSqr(mob) / 32.0D);
-                double d14 = Explosion.getSeenPercent(explosive.position(), mob);
+                double d14 = ServerExplosion.getSeenPercent(explosive.position(), mob);
                 double d11 = (radius - d12) * d14;
                 d11 *= (1.0D - mob.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                 if (mob instanceof ServerPlayer) {
@@ -197,7 +200,7 @@ public class DetonateUtils {
         int f = Math.min(AreaUtils.HORZ_MAX, blockRadius);
         float maxResistance = 400F * blockRadius * blockRadius;
         float f2 = f * f;
-        Explosion explosion = new Explosion(level, explosive, explosive.getX(), explosive.getY(), explosive.getZ(), radius * 0.38F, true, explosionsBreakBlocks ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP);
+        Explosion explosion = new ServerExplosion((ServerLevel) level, explosive, null, null, explosive.position(), radius * 0.38F, true, explosionsBreakBlocks ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP);
 
         for (BlockPos iterPos : BlockPos.betweenClosed(blockPos.offset(-f, -f / 2, -f), blockPos.offset(f, f, f))) {
             double distance = iterPos.distToCenterSqr(explosive.position());

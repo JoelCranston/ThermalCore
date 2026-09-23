@@ -14,6 +14,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,7 +47,7 @@ public class ChargeBenchBlockEntity extends AugmentableBlockEntity implements IT
         energyStorage = new EnergyStorageCoFH(BASE_CAPACITY, BASE_XFER);
 
         for (int i = 0; i < benchSlots.length; ++i) {
-            benchSlots[i] = new ItemStorageCoFH(1, (item -> filter.valid(item) && item.getCapability(Capabilities.EnergyStorage.ITEM) != null));
+            benchSlots[i] = new ItemStorageCoFH(1, (item -> filter.valid(item) && EnergyHelper.hasEnergyHandlerCap(item)));
             inventory.addSlot(benchSlots[i], ACCESSIBLE);
         }
         inventory.addSlot(chargeSlot, INTERNAL);
@@ -68,8 +71,9 @@ public class ChargeBenchBlockEntity extends AugmentableBlockEntity implements IT
     protected void chargeEnergy() {
 
         if (!chargeSlot.isEmpty()) {
-            var handler = chargeSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null) {
+            EnergyHandler cap = ItemAccess.forStack(chargeSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap != null) {
+                IEnergyStorage handler = IEnergyStorage.of(cap);
                 energyStorage.receiveEnergy(handler.extractEnergy(Math.min(energyStorage.getMaxReceive(), energyStorage.getSpace()), false), false);
             }
         }
@@ -78,8 +82,15 @@ public class ChargeBenchBlockEntity extends AugmentableBlockEntity implements IT
     protected void chargeItems() {
 
         for (ItemStorageCoFH benchSlot : benchSlots) {
-            var handler = benchSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null && handler.getEnergyStored() < handler.getMaxEnergyStored()) {
+            if (benchSlot.isEmpty()) {
+                continue;
+            }
+            EnergyHandler cap = ItemAccess.forStack(benchSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap == null) {
+                continue;
+            }
+            IEnergyStorage handler = IEnergyStorage.of(cap);
+            if (handler.getEnergyStored() < handler.getMaxEnergyStored()) {
                 isActive = true;
                 if (!energyStorage.isEmpty()) {
                     int maxTransfer = Math.min(energyStorage.getMaxExtract(), energyStorage.getEnergyStored());

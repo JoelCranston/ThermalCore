@@ -6,6 +6,7 @@ import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cofh.thermal.core.common.entity.projectile.ThrownFlorb;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -28,6 +31,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
@@ -41,7 +45,6 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
     public FlorbItem(Properties builder, int fluidCapacity, Predicate<FluidStack> validator) {
 
         super(builder, fluidCapacity, validator);
-        setEnchantability(0);
 
         ProxyUtils.registerColorable(this);
 
@@ -63,11 +66,11 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn) {
 
         List<Component> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, context.level(), additionalTooltips, flagIn);
-        tooltip.addAll(additionalTooltips);
+        additionalTooltips.forEach(tooltip);
 
         //        if (SecurityHelper.isItemClaimable(stack)) {
         //            tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
@@ -88,6 +91,18 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
     }
 
     @Override
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+
+        return false;
+    }
+
+    @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+
+        return false;
+    }
+
+    @Override
     public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         ItemStack stack = playerIn.getItemInHand(handIn);
@@ -96,7 +111,7 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
         }
         worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (MathHelper.RANDOM.nextFloat() * 0.4F + 0.8F));
         if (cooldown > 0) {
-            playerIn.getCooldowns().addCooldown(this, cooldown);
+            playerIn.getCooldowns().addCooldown(stack, cooldown);
         }
         if (!worldIn.isClientSide()) {
             createFlorb(stack, worldIn, playerIn);
@@ -105,7 +120,7 @@ public class FlorbItem extends FluidContainerItem implements ProjectileItem {
         if (!playerIn.getAbilities().instabuild) {
             stack.shrink(1);
         }
-        return InteractionResultHolder.sidedSuccess(stack, worldIn.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     protected void createFlorb(ItemStack stack, Level world, Player player) {

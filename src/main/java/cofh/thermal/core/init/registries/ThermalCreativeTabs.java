@@ -1,6 +1,7 @@
 package cofh.thermal.core.init.registries;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -125,8 +126,8 @@ public class ThermalCreativeTabs {
 
     private static final Comparator<DeferredHolder<Item, Item>> MOD_ID_COMPARISON = (itemA, itemB) -> {
 
-        String modA = itemA.get().getCreatorModId(new ItemStack(itemA.get()));
-        String modB = itemB.get().getCreatorModId(new ItemStack(itemB.get()));
+        String modA = itemA.get().getCreatorModId(RegistryAccess.EMPTY, new ItemStack(itemA.get()));
+        String modB = itemB.get().getCreatorModId(RegistryAccess.EMPTY, new ItemStack(itemB.get()));
         return modA == null || modB == null ? 0 : modA.compareTo(modB);
     };
 

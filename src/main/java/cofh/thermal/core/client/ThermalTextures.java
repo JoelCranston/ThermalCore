@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
-@EventBusSubscriber (value = Dist.CLIENT, modid = ID_THERMAL, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber (value = Dist.CLIENT, modid = ID_THERMAL)
 public class ThermalTextures {
 
     private ThermalTextures() {

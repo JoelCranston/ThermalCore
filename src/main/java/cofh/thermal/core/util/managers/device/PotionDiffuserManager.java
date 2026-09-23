@@ -5,7 +5,7 @@ import cofh.thermal.core.util.recipes.device.PotionDiffuserBoost;
 import cofh.thermal.lib.util.managers.AbstractManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Map;
@@ -41,7 +41,7 @@ public class PotionDiffuserManager extends AbstractManager {
 
     public void addBoost(PotionDiffuserBoost boost) {
 
-        for (ItemStack ingredient : boost.getIngredient().getItems()) {
+        for (ItemStack ingredient : getItems(boost.getIngredient())) {
             boostMap.put(makeNBTComparable(ingredient), Triple.of(boost.getCycles(), boost.getAmplifier(), boost.getDurationMod()));
         }
     }
@@ -64,10 +64,10 @@ public class PotionDiffuserManager extends AbstractManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var boosts = recipeManager.getAllRecipesFor(POTION_DIFFUSER_BOOST.get());
+        var boosts = recipeMap.byType(POTION_DIFFUSER_BOOST.get());
         for (var entry : boosts) {
             addBoost(entry.value());
         }

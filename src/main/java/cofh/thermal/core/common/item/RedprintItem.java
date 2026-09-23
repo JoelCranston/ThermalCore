@@ -53,7 +53,7 @@ public class RedprintItem extends ItemCoFH implements IPlacementItem {
             tooltip.add(getTextComponent("info.thermal.redprint.use.sneak").withStyle(DARK_GRAY));
 
             tooltip.add(getTextComponent("info.thermal.redprint.contents"));
-            for (String type : conveyableData.getAllKeys()) {
+            for (String type : conveyableData.keySet()) {
                 if (!canLocalize("info.thermal.redprint.data." + type)) {
                     tooltip.add(getTextComponent("info.thermal.redprint.unknown")
                             .withStyle(DARK_GRAY));

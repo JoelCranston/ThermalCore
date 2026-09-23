@@ -1,5 +1,4 @@
 {
-  "loader": "thermal:reconfigurable",
   "parent": "minecraft:block/block",
   "render_type": "cutout",
   "elements": [

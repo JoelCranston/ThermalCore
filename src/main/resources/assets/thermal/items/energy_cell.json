@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "thermal:energy_cell",
+    "model": "thermal:block/energy_cell"
+  }
+}

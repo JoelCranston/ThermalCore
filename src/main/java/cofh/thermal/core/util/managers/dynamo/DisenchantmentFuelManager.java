@@ -9,15 +9,17 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
     @Override
     public boolean validFuel(ItemStack input) {
 
-        if (input.getCapability(Capabilities.FluidHandler.ITEM) != null) {
+        if (!input.isEmpty() && ItemAccess.forStack(input).getCapability(Capabilities.Fluid.ITEM) != null) {
             return false;
         }
         return getEnergy(input) > 0;
@@ -84,14 +86,14 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(DISENCHANTMENT_FUEL.get());
+        var recipes = recipeMap.byType(DISENCHANTMENT_FUEL.get());
         for (var entry : recipes) {
             addFuel(entry.value());
         }
-        createConvertedRecipes(recipeManager);
+        createConvertedRecipes(recipeMap);
     }
     // endregion
 
@@ -103,11 +105,11 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
         return convertedFuels;
     }
 
-    protected void createConvertedRecipes(RecipeManager recipeManager) {
+    protected void createConvertedRecipes(RecipeMap recipeMap) {
 
         List<ItemStack> books = new ArrayList<>();
         ProxyUtils.registryAccess().lookup(Registries.ENCHANTMENT).ifPresent(lookup -> lookup.listElements()
-                .forEach(holder -> books.add(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, holder.value().getMaxLevel())))));
+                .forEach(holder -> books.add(EnchantmentHelper.createBook(new EnchantmentInstance(holder, holder.value().getMaxLevel())))));
         for (ItemStack book : books) {
             try {
                 if (getFuel(book) == null && validFuel(book)) {
@@ -121,7 +123,7 @@ public class DisenchantmentFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<DisenchantmentFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "disenchantment_" + getName(item)), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "disenchantment_" + getName(item))), new DisenchantmentFuel(energy, singletonList(Ingredient.of(item.getItem())), emptyList()));
     }
     // endregion
 }

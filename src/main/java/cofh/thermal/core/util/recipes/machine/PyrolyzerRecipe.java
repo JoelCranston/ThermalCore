@@ -31,14 +31,14 @@ public class PyrolyzerRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<PyrolyzerRecipe> getSerializer() {
 
         return PYROLYZER_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<PyrolyzerRecipe> getType() {
 
         return PYROLYZER_RECIPE.get();
     }

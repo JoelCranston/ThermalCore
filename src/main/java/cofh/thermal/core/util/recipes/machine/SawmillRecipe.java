@@ -31,14 +31,14 @@ public class SawmillRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<SawmillRecipe> getSerializer() {
 
         return SAWMILL_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<SawmillRecipe> getType() {
 
         return SAWMILL_RECIPE.get();
     }

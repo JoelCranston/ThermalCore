@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "thermal:diving"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "thermal:diving"
+      }
+    ]
+  }
+}

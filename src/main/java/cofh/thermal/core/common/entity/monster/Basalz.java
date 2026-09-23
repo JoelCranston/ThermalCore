@@ -8,6 +8,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -15,9 +16,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -29,9 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -54,7 +53,7 @@ public class Basalz extends Monster {
     public int angerTime = 72000;
     protected boolean wasAngry = false;
 
-    public static boolean canSpawn(EntityType<Basalz> entityType, ServerLevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource rand) {
+    public static boolean canSpawn(EntityType<Basalz> entityType, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
 
         return getFlag(FLAG_MOB_BASALZ).get() && Monster.checkMonsterSpawnRules(entityType, world, reason, pos, rand);
     }
@@ -65,8 +64,8 @@ public class Basalz extends Monster {
 
         this.setPathfindingMalus(PathType.WATER, -1.0F);
         this.setPathfindingMalus(PathType.LAVA, 2.0F);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, 0.0F);
+        this.setPathfindingMalus(PathType.FIRE, 0.0F);
 
         this.xpReward = 10;
     }
@@ -158,9 +157,9 @@ public class Basalz extends Monster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 
-        return super.hurt(source, source.is(DamageTypeTags.IS_LIGHTNING) ? amount + 3 : amount);
+        return super.hurtServer(level, source, source.is(DamageTypeTags.IS_LIGHTNING) ? amount + 3 : amount);
     }
 
     @Override
@@ -170,27 +169,21 @@ public class Basalz extends Monster {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float damageMultiplier, DamageSource source) {
 
         return false;
     }
 
     @Override
-    public ItemStack getPickedResult(HitResult target) {
+    public ItemStack getPickResult() {
 
         return new ItemStack(ITEMS.get("basalz_spawn_egg"));
     }
 
     @Override
-    public AABB getBoundingBoxForCulling() {
+    public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
 
-        return isAngry() ? super.getBoundingBoxForCulling().inflate(4) : super.getBoundingBoxForCulling();
-    }
-
-    @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-
-        return source.is(DamageTypeTagsCoFH.IS_EARTH) || super.isInvulnerableTo(source);
+        return source.is(DamageTypeTagsCoFH.IS_EARTH) || super.isInvulnerableTo(level, source);
     }
 
     // region ANGER/ORBIT MANAGEMENT
@@ -311,7 +304,7 @@ public class Basalz extends Monster {
                     if (distSqr < 2.25) {
                         if (attackTime <= 0) {
                             attackTime = 20;
-                            basalz.doHurtTarget(target);
+                            basalz.doHurtTarget(getServerLevel(basalz), target);
                         }
                     } else if (distSqr < 12.25) {
                         basalz.navigation.stop();

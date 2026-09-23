@@ -24,7 +24,10 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,8 +191,9 @@ public abstract class MachineBlockEntity extends Reconfigurable4WayBlockEntity i
     protected void chargeEnergy() {
 
         if (!chargeSlot.isEmpty()) {
-            var handler = chargeSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null) {
+            EnergyHandler cap = ItemAccess.forStack(chargeSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap != null) {
+                IEnergyStorage handler = IEnergyStorage.of(cap);
                 energyStorage.receiveEnergy(handler.extractEnergy(Math.min(energyStorage.getMaxReceive(), energyStorage.getSpace()), false), false);
             }
         }
@@ -493,11 +497,11 @@ public abstract class MachineBlockEntity extends Reconfigurable4WayBlockEntity i
 
         super.loadAdditional(nbt, registries);
 
-        wasActive = nbt.getBoolean(TAG_ACTIVE_PREV);
+        wasActive = nbt.getBooleanOr(TAG_ACTIVE_PREV, false);
 
-        process = nbt.getInt(TAG_PROCESS);
-        processMax = nbt.getInt(TAG_PROCESS_MAX);
-        processTick = nbt.getInt(TAG_PROCESS_TICK);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
+        processMax = nbt.getIntOr(TAG_PROCESS_MAX, 0);
+        processTick = nbt.getIntOr(TAG_PROCESS_TICK, 0);
     }
 
     @Override

@@ -19,14 +19,14 @@ public class InsolatorCatalyst extends ThermalCatalyst {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<InsolatorCatalyst> getSerializer() {
 
         return INSOLATOR_CATALYST_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<InsolatorCatalyst> getType() {
 
         return INSOLATOR_CATALYST.get();
     }

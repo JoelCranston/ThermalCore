@@ -1,12 +1,11 @@
 package cofh.thermal.core.common.fluid;
 
 import cofh.lib.common.fluid.FluidCoFH;
-import com.mojang.blaze3d.shaders.FogShape;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
@@ -19,11 +18,10 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Utils.itemProperties;
@@ -50,7 +48,7 @@ public class CrudeOilFluid extends FluidCoFH {
 
         particleColor = new Vector3f(0.05F, 0.05F, 0.05F);
 
-        block = BLOCKS.register(fluid(ID_FLUID_CRUDE_OIL), () -> new FluidBlock(stillFluid, of().mapColor(MapColor.COLOR_BLACK).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
+        block = BLOCKS.register(fluid(ID_FLUID_CRUDE_OIL), () -> new FluidBlock(stillFluid, of().mapColor(MapColor.COLOR_BLACK).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable()));
         bucket = toolsTab(1000, ITEMS.register(bucket(ID_FLUID_CRUDE_OIL), () -> new BucketItem(stillFluid.get(), itemProperties().craftRemainder(Items.BUCKET).stacksTo(1))));
     }
 
@@ -74,66 +72,36 @@ public class CrudeOilFluid extends FluidCoFH {
             .canSwim(false)
             .supportsBoating(true)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)));
+
+    // region CLIENT
+    public static class ClientExtensions implements IClientFluidTypeExtensions {
 
         @Override
-        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+        public Identifier getRenderOverlayTexture(Minecraft mc) {
 
-            consumer.accept(new IClientFluidTypeExtensions() {
-
-                private static final Identifier
-                        STILL = Identifier.parse("thermal:block/fluids/crude_oil_still"),
-                        FLOW = Identifier.parse("thermal:block/fluids/crude_oil_flow");
-
-                @Override
-                public Identifier getStillTexture() {
-
-                    return STILL;
-                }
-
-                @Override
-                public Identifier getFlowingTexture() {
-
-                    return FLOW;
-                }
-
-                @Nullable
-                @Override
-                public Identifier getOverlayTexture() {
-
-                    return WATER_OVERLAY;
-                }
-
-                @Override
-                public Identifier getRenderOverlayTexture(Minecraft mc) {
-
-                    return UNDERWATER_LOCATION;
-                }
-
-                @Override
-                public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-
-                    return instance().particleColor;
-                }
-
-                @Override
-                public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape) {
-
-                    nearDistance = -8F;
-                    farDistance = 4F;
-
-                    if (farDistance > renderDistance) {
-                        farDistance = renderDistance;
-                        shape = FogShape.CYLINDER;
-                    }
-
-                    RenderSystem.setShaderFogStart(nearDistance);
-                    RenderSystem.setShaderFogEnd(farDistance);
-                    RenderSystem.setShaderFogShape(shape);
-                }
-            });
+            return UNDERWATER_LOCATION;
         }
-    });
+
+        @Override
+        public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+
+            fluidFogColor.set(instance().particleColor, 1.0F);
+        }
+
+        @Override
+        public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fogData) {
+
+            float farDistance = Math.min(4F, renderDistance * 16);
+
+            fogData.environmentalStart = -8F;
+            fogData.environmentalEnd = farDistance;
+            fogData.skyEnd = farDistance;
+            fogData.cloudEnd = farDistance;
+        }
+
+    }
+    // endregion
 
     // region BLOCK CLASS
     public static class FluidBlock extends LiquidBlock {

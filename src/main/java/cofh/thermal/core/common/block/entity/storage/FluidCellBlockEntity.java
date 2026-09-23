@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -221,8 +223,8 @@ public class FluidCellBlockEntity extends StorageCellBlockEntity implements ITic
     // endregion
 
     // region CAPABILITIES
-    protected IFluidHandler inputFluidCap = null;
-    protected IFluidHandler outputFluidCap = null;
+    protected ResourceHandler<FluidResource> inputFluidCap = null;
+    protected ResourceHandler<FluidResource> outputFluidCap = null;
 
     @Override
     protected void updateHandlers() {
@@ -230,10 +232,12 @@ public class FluidCellBlockEntity extends StorageCellBlockEntity implements ITic
         fluidCap = fluidStorage;
         inputFluidCap = new FluidHandlerRestrictionWrapper(fluidStorage, true, false);
         outputFluidCap = new FluidHandlerRestrictionWrapper(fluidStorage, false, true);
+
+        invalidateCapabilities();
     }
 
     @Override
-    public IFluidHandler getFluidHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<FluidResource> getFluidHandlerCapability(@Nullable Direction side) {
 
         if (side == null) {
             return fluidCap;

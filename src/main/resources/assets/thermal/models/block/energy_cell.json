@@ -1,5 +1,4 @@
 {
-  "loader": "thermal:energy_cell",
   "parent": "minecraft:block/block",
   "render_type": "cutout",
   "elements": [

@@ -1,7 +1,7 @@
 package cofh.thermal.core.client.renderer.entity.model;
 
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -9,24 +9,23 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
 
-public class BlizzModel<T extends LivingEntity> extends HierarchicalModel<T> {
+public class BlizzModel extends EntityModel<LivingEntityRenderState> {
 
     public static final ModelLayerLocation BLIZZ_LAYER = new ModelLayerLocation(Identifier.parse("thermal:blizz"), "main");
     private static final int CUBES = 4;
 
-    private final ModelPart root;
     private final ModelPart[] topCubes;
     private final ModelPart[] botCubes;
     private final ModelPart head;
 
     public BlizzModel(ModelPart root) {
 
-        this.root = root;
+        super(root);
         this.head = root.getChild("head");
         this.topCubes = new ModelPart[CUBES];
         this.botCubes = new ModelPart[CUBES];
@@ -61,29 +60,24 @@ public class BlizzModel<T extends LivingEntity> extends HierarchicalModel<T> {
     }
 
     @Override
-    public ModelPart root() {
+    public void setupAnim(LivingEntityRenderState state) {
 
-        return this.root;
-    }
-
-    @Override
-    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-        float x = MathHelper.bevel(ageInTicks * 0.05F);
-        float z = MathHelper.bevel(ageInTicks * 0.05F + 1.0F);
+        super.setupAnim(state);
+        float x = MathHelper.bevel(state.ageInTicks * 0.05F);
+        float z = MathHelper.bevel(state.ageInTicks * 0.05F + 1.0F);
         for (int i = 0; i < CUBES; ++i) {
             topCubes[i].x = x * -4.0F;
             topCubes[i].z = z * 4.0F;
-            topCubes[i].y = MathHelper.sin(ageInTicks * 0.2F + i * 4);
+            topCubes[i].y = MathHelper.sin(state.ageInTicks * 0.2F + i * 4);
             botCubes[i].x = x * 3.5F;
             botCubes[i].z = z * 3.5F;
-            botCubes[i].y = MathHelper.sin(ageInTicks * 0.2F + i * 4 + 2);
+            botCubes[i].y = MathHelper.sin(state.ageInTicks * 0.2F + i * 4 + 2);
             float temp = -x;
             x = z;
             z = temp;
         }
-        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float) Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float) Math.PI / 180F);
     }
 
 }

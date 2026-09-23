@@ -16,7 +16,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -76,9 +76,15 @@ public class RockGenCategory implements IRecipeCategory<RecipeHolder<RockGenMapp
     }
 
     @Override
-    public IDrawable getBackground() {
+    public int getWidth() {
 
-        return background;
+        return background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+
+        return background.getHeight();
     }
 
     @Override
@@ -119,7 +125,9 @@ public class RockGenCategory implements IRecipeCategory<RecipeHolder<RockGenMapp
     }
 
     @Override
-    public void draw(RecipeHolder<RockGenMapping> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<RockGenMapping> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+
+        background.draw(guiGraphics);
 
         if (recipe.value().getBelow() != Blocks.AIR) {
             slot.draw(guiGraphics, 33, 33);

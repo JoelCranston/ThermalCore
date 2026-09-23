@@ -42,12 +42,14 @@ public class ThrownFlorb extends ThrowableItemProjectile {
 
     public ThrownFlorb(Level pLevel, LivingEntity pShooter) {
 
-        super(THROWN_FLORB.get(), pShooter, pLevel);
+        this(pLevel, pShooter.getX(), pShooter.getEyeY() - 0.1F, pShooter.getZ());
+        this.setOwner(pShooter);
     }
 
     public ThrownFlorb(Level pLevel, double pX, double pY, double pZ) {
 
-        super(THROWN_FLORB.get(), pX, pY, pZ, pLevel);
+        super(THROWN_FLORB.get(), pLevel);
+        this.setPos(pX, pY, pZ);
     }
 
     public void setItem(ItemStack pStack) {
@@ -121,7 +123,7 @@ public class ThrownFlorb extends ThrowableItemProjectile {
         if (!tag.contains(TAG_FLUID)) {
             return FluidStack.EMPTY;
         }
-        return FluidStack.parseOptional(ProxyUtils.registryAccess(), tag.getCompound(TAG_FLUID));
+        return FluidHelper.parseOptional(ProxyUtils.registryAccess(), tag.getCompoundOrEmpty(TAG_FLUID));
     }
     // endregion
 }

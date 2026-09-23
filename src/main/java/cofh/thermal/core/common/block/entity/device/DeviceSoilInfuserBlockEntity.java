@@ -22,6 +22,9 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -139,9 +142,9 @@ public class DeviceSoilInfuserBlockEntity extends AugmentableBlockEntity impleme
 
         super.loadAdditional(nbt, registries);
 
-        process = nbt.getInt(TAG_PROCESS);
-        processMax = nbt.getInt(TAG_PROCESS_MAX);
-        processTick = nbt.getInt(TAG_PROCESS_TICK);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
+        processMax = nbt.getIntOr(TAG_PROCESS_MAX, 0);
+        processTick = nbt.getIntOr(TAG_PROCESS_TICK, 0);
     }
 
     @Override
@@ -172,8 +175,9 @@ public class DeviceSoilInfuserBlockEntity extends AugmentableBlockEntity impleme
     protected void chargeEnergy() {
 
         if (!chargeSlot.isEmpty()) {
-            var handler = chargeSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null) {
+            EnergyHandler cap = ItemAccess.forStack(chargeSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap != null) {
+                IEnergyStorage handler = IEnergyStorage.of(cap);
                 energyStorage.receiveEnergy(handler.extractEnergy(Math.min(energyStorage.getMaxReceive(), energyStorage.getSpace()), false), false);
             }
         }

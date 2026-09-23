@@ -3,6 +3,7 @@ package cofh.thermal.core.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,10 +29,10 @@ public class LumiumGlassBlock extends HardenedGlassBlock {
     }
 
     @Override
-    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
 
         if (entityIn instanceof LivingEntity mob) {
-            if (mob.getType().is(EntityTypeTags.UNDEAD)) {
+            if (mob.is(EntityTypeTags.UNDEAD)) {
                 mob.igniteForSeconds(duration);
             }
         }

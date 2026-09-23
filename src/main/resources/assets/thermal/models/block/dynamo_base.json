@@ -1,5 +1,4 @@
 {
-  "loader": "thermal:dynamo",
   "parent": "minecraft:block/block",
   "render_type": "cutout",
   "elements": [

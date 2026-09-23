@@ -13,7 +13,7 @@ import cofh.thermal.lib.util.recipes.internal.SimpleMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.*;
@@ -48,13 +48,13 @@ public class PressRecipeManager extends AbstractManager implements IRecipeManage
     public void addRecipe(ThermalRecipe recipe) {
 
         if (recipe.getInputItems().size() == 1) {
-            for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+            for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                 addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.emptyList(), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
             }
         } else {
             // The die should never have multiple variations but eh, who knows?
-            for (ItemStack dieInput : recipe.getInputItems().get(1).getItems()) {
-                for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+            for (ItemStack dieInput : getItems(recipe.getInputItems().get(1))) {
+                for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                     addRecipe(recipe.getEnergy(), recipe.getXp(), asList(recipeInput, dieInput), Collections.emptyList(), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
                 }
             }
@@ -154,7 +154,7 @@ public class PressRecipeManager extends AbstractManager implements IRecipeManage
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
         //        if (true) {
@@ -164,7 +164,7 @@ public class PressRecipeManager extends AbstractManager implements IRecipeManage
         //                addRecipe(recipe);
         //            }
         //        }
-        var recipes = recipeManager.getAllRecipesFor(PRESS_RECIPE.get());
+        var recipes = recipeMap.byType(PRESS_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }

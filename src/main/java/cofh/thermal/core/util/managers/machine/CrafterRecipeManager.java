@@ -8,7 +8,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.IdentityHashMap;
@@ -42,7 +42,7 @@ public class CrafterRecipeManager extends AbstractManager implements IManager {
 
     public CrafterRecipe getRecipe(RecipeHolder<?> recipe, RegistryAccess registryAccess) {
 
-        if (recipe == null || recipe.value().isSpecial() || recipe.value().getResultItem(registryAccess).isEmpty()) {
+        if (recipe == null || recipe.value().isSpecial() || getResultItem(recipe.value()).isEmpty()) {
             return null;
         }
         if (!recipeMap.containsKey(recipe.value())) {
@@ -53,9 +53,9 @@ public class CrafterRecipeManager extends AbstractManager implements IManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
-        recipeMap.clear();
+        this.recipeMap.clear();
     }
     // endregion
 }

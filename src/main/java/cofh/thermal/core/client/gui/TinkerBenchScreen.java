@@ -5,6 +5,7 @@ import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.thermal.core.common.inventory.TinkerBenchMenu;
 import cofh.thermal.lib.client.gui.AugmentableTileScreen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -71,12 +72,12 @@ public class TinkerBenchScreen extends AugmentableTileScreen<TinkerBenchMenu> {
     }
 
     @Override
-    protected boolean checkHotbarKeyPressed(int keyCode, int scanCode) {
+    protected boolean checkHotbarKeyPressed(KeyEvent event) {
 
         if (menu.isTinkerSlot(hoveredSlot)) {
             return false;
         }
-        return super.checkHotbarKeyPressed(keyCode, scanCode);
+        return super.checkHotbarKeyPressed(event);
     }
 
 }

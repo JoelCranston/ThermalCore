@@ -2,8 +2,15 @@ package cofh.thermal.lib.util.managers;
 
 import cofh.lib.util.crafting.ComparableItemStack;
 import cofh.lib.util.crafting.ComparableItemStackNBT;
+import cofh.lib.util.crafting.IngredientWithCount;
 import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+
+import java.util.List;
 
 public abstract class AbstractManager implements IManager {
 
@@ -48,6 +55,18 @@ public abstract class AbstractManager implements IManager {
     public static ComparableItemStack makeNBTComparable(ItemStack stack) {
 
         return new ComparableItemStackNBT(stack);
+    }
+
+    public static List<ItemStack> getItems(Ingredient ingredient) {
+
+        int count = ingredient.getCustomIngredient() instanceof IngredientWithCount counted ? counted.getCount() : 1;
+        return ingredient.items().map(item -> new ItemStack(item, count)).toList();
+    }
+
+    public static ItemStack getResultItem(Recipe<?> recipe) {
+
+        List<RecipeDisplay> displays = recipe.display();
+        return displays.isEmpty() ? ItemStack.EMPTY : displays.getFirst().result().resolveForFirstStack(ContextMap.EMPTY);
     }
 
     public int getDefaultEnergy() {

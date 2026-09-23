@@ -20,7 +20,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
@@ -85,11 +87,10 @@ public class WrenchItem extends ItemCoFH implements IMultiModeItem {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 
         target.addEffect(new MobEffectInstance(WRENCHED, 60, 0, false, false));
         stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
-        return true;
     }
 
     @Override
@@ -119,15 +120,9 @@ public class WrenchItem extends ItemCoFH implements IMultiModeItem {
     }
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) {
+    public ItemStackTemplate getCraftingRemainder(ItemInstance stack) {
 
-        return new ItemStack(this);
-    }
-
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-
-        return true;
+        return new ItemStackTemplate(this);
     }
 
     // region IMultiModeItem

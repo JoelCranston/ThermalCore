@@ -16,7 +16,7 @@ public class BasalzProjectileRenderer extends ElementalProjectileRenderer<Basalz
     }
 
     @Override
-    public Identifier getTextureLocation(BasalzProjectile entity) {
+    public Identifier getTextureLocation(ElementalProjectileRenderState state) {
 
         return TEXTURE;
     }

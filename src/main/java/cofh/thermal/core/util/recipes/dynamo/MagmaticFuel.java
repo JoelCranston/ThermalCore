@@ -33,14 +33,14 @@ public class MagmaticFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<MagmaticFuel> getSerializer() {
 
         return MAGMATIC_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<MagmaticFuel> getType() {
 
         return MAGMATIC_FUEL.get();
     }

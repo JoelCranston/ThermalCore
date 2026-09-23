@@ -1,7 +1,7 @@
 package cofh.thermal.core.util.managers.dynamo;
 
 import cofh.thermal.lib.util.managers.SingleFluidFuelManager;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.COMPRESSION_FUEL;
 
@@ -22,10 +22,10 @@ public class CompressionFuelManager extends SingleFluidFuelManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(COMPRESSION_FUEL.get());
+        var recipes = recipeMap.byType(COMPRESSION_FUEL.get());
         for (var entry : recipes) {
             addFuel(entry.value());
         }

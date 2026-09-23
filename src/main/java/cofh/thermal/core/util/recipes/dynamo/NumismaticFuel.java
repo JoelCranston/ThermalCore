@@ -33,14 +33,14 @@ public class NumismaticFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<NumismaticFuel> getSerializer() {
 
         return NUMISMATIC_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<NumismaticFuel> getType() {
 
         return NUMISMATIC_FUEL.get();
     }

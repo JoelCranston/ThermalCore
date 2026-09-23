@@ -4,8 +4,10 @@ import cofh.core.common.item.EnergyContainerItem;
 import cofh.core.common.item.IAugmentableItem;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.ItemHelper;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantable;
 
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -15,7 +17,6 @@ import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
 import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem implements IAugmentableItem {
 
@@ -43,10 +44,12 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
         // Do nothing by default.
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    protected void updateEnchantability(ItemStack stack) {
 
-        return Math.round(super.getEnchantmentValue(stack) * getBaseMod(stack));
+        Enchantable base = stack.getPrototype().get(DataComponents.ENCHANTABLE);
+        if (base != null) {
+            stack.set(DataComponents.ENCHANTABLE, new Enchantable(Math.max(1, Math.round(base.value() * getBaseMod(stack)))));
+        }
     }
 
     protected float getBaseMod(ItemStack stack) {
@@ -57,10 +60,10 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
@@ -118,6 +121,7 @@ public abstract class EnergyContainerItemAugmentable extends EnergyContainerItem
             }
             setAttributesFromAugment(container, augmentData);
         }
+        updateEnchantability(container);
         if (isCreative(container, ENERGY)) {
             setEnergyStored(container, getMaxEnergyStored(container));
         } else {

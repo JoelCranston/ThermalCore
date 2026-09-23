@@ -25,7 +25,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -125,14 +129,16 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
     protected void chargeEnergy() {
 
         if (!chargeSlot.isEmpty()) {
-            var handler = chargeSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null) {
+            EnergyHandler cap = ItemAccess.forStack(chargeSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap != null) {
+                IEnergyStorage handler = IEnergyStorage.of(cap);
                 energyStorage.receiveEnergy(handler.extractEnergy(Math.min(energyStorage.getMaxReceive(), energyStorage.getSpace()), false), false);
             }
         }
         if (!tinkerSlot.isEmpty() && mode == REPLENISH && !pause) {
-            var handler = tinkerSlot.getItemStack().getCapability(Capabilities.EnergyStorage.ITEM);
-            if (handler != null) {
+            EnergyHandler cap = ItemAccess.forStack(tinkerSlot.getItemStack()).getCapability(Capabilities.Energy.ITEM);
+            if (cap != null) {
+                IEnergyStorage handler = IEnergyStorage.of(cap);
                 energyStorage.extractEnergy(handler.receiveEnergy(Math.min(energyStorage.getMaxExtract(), energyStorage.getEnergyStored()), false), false);
             }
         }
@@ -149,7 +155,7 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
                     tankSlot.setItemStack(new ItemStack(Items.GLASS_BOTTLE));
                 }
             } else {
-                var handler = tankSlot.getItemStack().getCapability(Capabilities.FluidHandler.ITEM);
+                var handler = FluidUtil.getFluidHandler(tankSlot.getItemStack()).orElse(null);
                 if (handler != null) {
                     int toFill = tank.fill(handler.getFluidInTank(0).copyWithAmount(BUCKET_VOLUME), SIMULATE);
                     if (toFill > 0) {
@@ -160,7 +166,7 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
             }
         }
         if (!tinkerSlot.isEmpty() && mode == REPLENISH && !pause) {
-            var handler = tinkerSlot.getItemStack().getCapability(Capabilities.FluidHandler.ITEM);
+            var handler = FluidUtil.getFluidHandler(tinkerSlot.getItemStack()).orElse(null);
             if (handler != null) {
                 tank.drain(handler.fill(tank.getFluidStack().copyWithAmount(Math.min(tank.getAmount(), BUCKET_VOLUME)), EXECUTE), EXECUTE);
                 tinkerSlot.setItemStack(handler.getContainer());
@@ -209,7 +215,7 @@ public class TinkerBenchBlockEntity extends AugmentableBlockEntity implements IT
 
         super.loadAdditional(nbt, registries);
 
-        mode = nbt.getByte(TAG_MODE);
+        mode = nbt.getByteOr(TAG_MODE, (byte) 0);
     }
 
     @Override

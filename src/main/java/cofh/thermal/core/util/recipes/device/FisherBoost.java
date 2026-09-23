@@ -36,13 +36,13 @@ public class FisherBoost extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<FisherBoost> getSerializer() {
 
         return FISHER_BOOST_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<FisherBoost> getType() {
 
         return FISHER_BOOST.get();
     }
@@ -70,76 +70,60 @@ public class FisherBoost extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<FisherBoost> {
+    public static final MapCodec<FisherBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    ResourceKey.codec(Registries.LOOT_TABLE).optionalFieldOf(LOOT_TABLE, BuiltInLootTables.FISHING_FISH).forGetter(recipe -> recipe.lootTable),
+                    Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
+                    Codec.FLOAT.optionalFieldOf(USE_CHANCE, 1.0F).forGetter(recipe -> recipe.useChance)
+            ).apply(builder, FisherBoost::new)
+    );
 
-        public static final MapCodec<FisherBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
-                        ResourceKey.codec(Registries.LOOT_TABLE).optionalFieldOf(LOOT_TABLE, BuiltInLootTables.FISHING_FISH).forGetter(recipe -> recipe.lootTable),
-                        Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
-                        Codec.FLOAT.optionalFieldOf(USE_CHANCE, 1.0F).forGetter(recipe -> recipe.useChance)
-                ).apply(builder, FisherBoost::new)
-        );
+    public static final StreamCodec<RegistryFriendlyByteBuf, FisherBoost> STREAM_CODEC = StreamCodec.of(FisherBoost::toNetwork, FisherBoost::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, FisherBoost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    //        @Override
+    //        public FisherBoost fromJson(ResourceLocation recipeId, JsonObject json) {
+    //
+    //            Ingredient ingredient;
+    //            ResourceLocation lootTable = BuiltInLootTables.FISHING_FISH;
+    //            float outputMod = 1.0F;
+    //            float useChance = 1.0F;
+    //
+    //            /* INPUT */
+    //            ingredient = parseIngredient(json.get(INGREDIENT));
+    //
+    //            if (json.has(LOOT_TABLE)) {
+    //                String lootTableString = json.get(LOOT_TABLE).getAsString();
+    //                lootTable = ResourceLocation.tryParse(lootTableString);
+    //            }
+    //            if (json.has(OUTPUT)) {
+    //                outputMod = json.get(OUTPUT).getAsFloat();
+    //            } else if (json.has(OUTPUT_MOD)) {
+    //                outputMod = json.get(OUTPUT_MOD).getAsFloat();
+    //            }
+    //            if (json.has(USE_CHANCE)) {
+    //                useChance = json.get(USE_CHANCE).getAsFloat();
+    //            }
+    //            return new FisherBoost(ingredient, lootTable, outputMod, useChance);
+    //        }
 
-        @Override
-        public MapCodec<FisherBoost> codec() {
+    public static FisherBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            return CODEC;
-        }
+        Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FisherBoost> streamCodec() {
+        ResourceKey<LootTable> lootTable = buffer.readResourceKey(Registries.LOOT_TABLE);
+        float outputMod = buffer.readFloat();
+        float useChance = buffer.readFloat();
 
-            return STREAM_CODEC;
-        }
+        return new FisherBoost(ingredient, lootTable, outputMod, useChance);
+    }
 
-        //        @Override
-        //        public FisherBoost fromJson(ResourceLocation recipeId, JsonObject json) {
-        //
-        //            Ingredient ingredient;
-        //            ResourceLocation lootTable = BuiltInLootTables.FISHING_FISH;
-        //            float outputMod = 1.0F;
-        //            float useChance = 1.0F;
-        //
-        //            /* INPUT */
-        //            ingredient = parseIngredient(json.get(INGREDIENT));
-        //
-        //            if (json.has(LOOT_TABLE)) {
-        //                String lootTableString = json.get(LOOT_TABLE).getAsString();
-        //                lootTable = ResourceLocation.tryParse(lootTableString);
-        //            }
-        //            if (json.has(OUTPUT)) {
-        //                outputMod = json.get(OUTPUT).getAsFloat();
-        //            } else if (json.has(OUTPUT_MOD)) {
-        //                outputMod = json.get(OUTPUT_MOD).getAsFloat();
-        //            }
-        //            if (json.has(USE_CHANCE)) {
-        //                useChance = json.get(USE_CHANCE).getAsFloat();
-        //            }
-        //            return new FisherBoost(ingredient, lootTable, outputMod, useChance);
-        //        }
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, FisherBoost recipe) {
 
-        public static FisherBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 
-            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-
-            ResourceKey<LootTable> lootTable = buffer.readResourceKey(Registries.LOOT_TABLE);
-            float outputMod = buffer.readFloat();
-            float useChance = buffer.readFloat();
-
-            return new FisherBoost(ingredient, lootTable, outputMod, useChance);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, FisherBoost recipe) {
-
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-
-            buffer.writeResourceKey(recipe.lootTable);
-            buffer.writeFloat(recipe.outputMod);
-            buffer.writeFloat(recipe.useChance);
-        }
-
+        buffer.writeResourceKey(recipe.lootTable);
+        buffer.writeFloat(recipe.outputMod);
+        buffer.writeFloat(recipe.useChance);
     }
     // endregion
 }

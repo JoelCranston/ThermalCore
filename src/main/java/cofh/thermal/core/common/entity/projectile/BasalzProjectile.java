@@ -9,7 +9,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -54,7 +54,7 @@ public class BasalzProjectile extends ElementalProjectile {
     protected void onHitEntity(EntityHitResult result) {
 
         Entity entity = result.getEntity();
-        if (entity.hurt(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
+        if (entity.hurtOrSimulate(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(SUNDERED, getEffectDuration(entity), getEffectAmplifier(entity), false, false));
             Vec3 velocity = this.getDeltaMovement();
             if (velocity.lengthSqr() > 0.01) {

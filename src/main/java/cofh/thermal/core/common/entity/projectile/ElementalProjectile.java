@@ -3,13 +3,14 @@ package cofh.thermal.core.common.entity.projectile;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -37,9 +38,7 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
 
         Entity owner = getOwner();
         if (level.isClientSide() || (owner == null || !owner.isRemoved()) && level.hasChunkAt(blockPosition())) {
-            if (!leftOwner) {
-                leftOwner = checkLeftOwner();
-            }
+            checkLeftOwner();
             if (!level.isClientSide()) {
                 setSharedFlag(6, isCurrentlyGlowing());
             }
@@ -51,7 +50,7 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
             if (entityResult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, entityResult)) {
                 onHit(entityResult);
             }
-            checkInsideBlocks();
+            applyEffectsFromBlocks();
             Vec3 velocity = getDeltaMovement();
             Vec3 pos = position();
             ProjectileUtil.rotateTowardsMovement(this, 0.2F);
@@ -65,6 +64,7 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
             level.addParticle(getTrailParticle(), pos.x, pos.y, pos.z, 0.0D, 0.0D, 0.0D);
             setDeltaMovement(velocity.add(velocity.normalize().scale(accelerationPower)).scale(resistance));
             setPos(pos.x + velocity.x, pos.y + velocity.y, pos.z + velocity.z);
+            leftOwnerChecked = false;
         } else {
             discard();
         }
@@ -88,7 +88,7 @@ public abstract class ElementalProjectile extends AbstractHurtingProjectile {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 
         return false;
     }

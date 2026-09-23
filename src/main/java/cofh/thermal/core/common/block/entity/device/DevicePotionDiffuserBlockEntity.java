@@ -19,7 +19,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,6 +31,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.model.data.ModelData;
 
@@ -160,9 +161,9 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ValueInput valueInput) {
 
-        super.onDataPacket(net, pkt, registries);
+        super.onDataPacket(net, valueInput);
 
         if (level != null) {
             level.getModelDataManager().requestRefresh(this);
@@ -237,13 +238,13 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
 
         super.loadAdditional(nbt, registries);
 
-        boostCycles = nbt.getInt(TAG_BOOST_CYCLES);
-        boostMax = nbt.getInt(TAG_BOOST_MAX);
-        boostAmplifier = nbt.getInt(TAG_BOOST_AMP);
-        boostDuration = nbt.getFloat(TAG_BOOST_DUR);
+        boostCycles = nbt.getIntOr(TAG_BOOST_CYCLES, 0);
+        boostMax = nbt.getIntOr(TAG_BOOST_MAX, 0);
+        boostAmplifier = nbt.getIntOr(TAG_BOOST_AMP, 0);
+        boostDuration = nbt.getFloatOr(TAG_BOOST_DUR, 0.0F);
 
-        instant = nbt.getBoolean(TAG_INSTANT);
-        process = nbt.getInt(TAG_PROCESS);
+        instant = nbt.getBooleanOr(TAG_INSTANT, false);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
 
         cacheEffects();
     }
@@ -328,7 +329,7 @@ public class DevicePotionDiffuserBlockEntity extends DeviceBlockEntity implement
             if (target.isAffectedByPotions()) {
                 for (MobEffectInstance effect : effects) {
                     if (effect.getEffect().value().isInstantenous()) {
-                        effect.getEffect().value().applyInstantenousEffect(null, null, target, getEffectAmplifier(effect), 0.5D);
+                        effect.getEffect().value().applyInstantenousEffect((ServerLevel) level, null, null, target, getEffectAmplifier(effect), 0.5D);
                     } else {
                         MobEffectInstance potion = new MobEffectInstance(effect.getEffect(), getEffectDuration(effect), getEffectAmplifier(effect), effect.isAmbient(), effect.isVisible());
                         target.addEffect(potion);

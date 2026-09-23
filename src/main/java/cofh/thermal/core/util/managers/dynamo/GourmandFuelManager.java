@@ -7,14 +7,19 @@ import cofh.thermal.lib.util.managers.SingleItemFuelManager;
 import cofh.thermal.lib.util.recipes.internal.IDynamoFuel;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,18 +73,23 @@ public class GourmandFuelManager extends SingleItemFuelManager {
         if (stack.isEmpty()) {
             return 0;
         }
-        if (stack.getItem().hasCraftingRemainingItem(stack)) {
+        if (stack.getItem().getCraftingRemainder(stack) != null) {
             return 0;
         }
         FoodProperties food = stack.get(DataComponents.FOOD);
         if (food == null) {
             return 0;
         }
+        Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         int energy = food.nutrition() * DEFAULT_ENERGY;
 
-        if (!food.effects().isEmpty()) {
-            for (FoodProperties.PossibleEffect effect : food.effects()) {
-                if (effect.effect().getEffect().value().getCategory() == MobEffectCategory.HARMFUL) {
+        List<MobEffectInstance> effects = consumable == null ? List.of() : consumable.onConsumeEffects().stream()
+                .filter(ApplyStatusEffectsConsumeEffect.class::isInstance)
+                .flatMap(effect -> ((ApplyStatusEffectsConsumeEffect) effect).effects().stream())
+                .toList();
+        if (!effects.isEmpty()) {
+            for (MobEffectInstance effect : effects) {
+                if (effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL) {
                     return 0;
                 }
             }
@@ -89,7 +99,7 @@ public class GourmandFuelManager extends SingleItemFuelManager {
         if (food.nutrition() > 0 && food.saturation() > food.nutrition() * 2.0F) {
             energy *= 4;
         }
-        if (food.eatDurationTicks() < 32) {
+        if (consumable != null && consumable.consumeTicks() < 32) {
             energy *= 2;
         }
         return energy >= MIN_ENERGY ? energy : 0;
@@ -97,14 +107,14 @@ public class GourmandFuelManager extends SingleItemFuelManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(GOURMAND_FUEL.get());
+        var recipes = recipeMap.byType(GOURMAND_FUEL.get());
         for (var entry : recipes) {
             addFuel(entry.value());
         }
-        createConvertedRecipes(recipeManager);
+        createConvertedRecipes(recipeMap);
     }
     // endregion
 
@@ -116,7 +126,7 @@ public class GourmandFuelManager extends SingleItemFuelManager {
         return convertedFuels;
     }
 
-    protected void createConvertedRecipes(RecipeManager recipeManager) {
+    protected void createConvertedRecipes(RecipeMap recipeMap) {
 
         ItemStack query;
         for (Item item : BuiltInRegistries.ITEM) {
@@ -133,7 +143,7 @@ public class GourmandFuelManager extends SingleItemFuelManager {
 
     protected RecipeHolder<GourmandFuel> convert(ItemStack item, int energy) {
 
-        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "gourmand_" + getName(item)), new GourmandFuel(energy, singletonList(Ingredient.of(item)), emptyList()));
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "gourmand_" + getName(item))), new GourmandFuel(energy, singletonList(Ingredient.of(item.getItem())), emptyList()));
     }
     // endregion
 }

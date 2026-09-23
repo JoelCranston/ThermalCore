@@ -14,7 +14,7 @@ import cofh.thermal.lib.util.recipes.internal.SimpleMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -52,7 +52,7 @@ public class ChillerRecipeManager extends AbstractManager implements IRecipeMana
         if (!recipe.getInputFluids().isEmpty()) {
             for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
                 if (!recipe.getInputItems().isEmpty()) {
-                    for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+                    for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                         addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
                     }
                 } else {
@@ -60,7 +60,7 @@ public class ChillerRecipeManager extends AbstractManager implements IRecipeMana
                 }
             }
         } else if (!recipe.getInputItems().isEmpty()) {
-            for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+            for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                 addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.emptyList(), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
             }
         }
@@ -164,10 +164,10 @@ public class ChillerRecipeManager extends AbstractManager implements IRecipeMana
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(CHILLER_RECIPE.get());
+        var recipes = recipeMap.byType(CHILLER_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }

@@ -8,6 +8,7 @@ import cofh.thermal.core.init.data.damage.TCoreDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SpellParticleOption;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageType;
@@ -15,7 +16,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -44,7 +45,7 @@ public class BlitzProjectile extends ElementalProjectile {
     @Override
     protected ParticleOptions getTrailParticle() {
 
-        return ParticleTypes.INSTANT_EFFECT;
+        return SpellParticleOption.create(ParticleTypes.INSTANT_EFFECT, -1, 1.0F);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class BlitzProjectile extends ElementalProjectile {
     protected void onHitEntity(EntityHitResult result) {
 
         Entity entity = result.getEntity();
-        if (entity.hurt(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
+        if (entity.hurtOrSimulate(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(SHOCKED, getEffectDuration(entity), getEffectAmplifier(entity), false, false));
         }
     }

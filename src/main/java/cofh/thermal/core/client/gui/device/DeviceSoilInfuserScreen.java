@@ -5,7 +5,7 @@ import cofh.core.util.helpers.GuiHelper;
 import cofh.thermal.core.client.gui.ThermalGuiHelper;
 import cofh.thermal.core.common.inventory.device.DeviceSoilInfuserMenu;
 import cofh.thermal.lib.client.gui.AugmentableTileScreen;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -43,12 +43,12 @@ public class DeviceSoilInfuserScreen extends AugmentableTileScreen<DeviceSoilInf
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor pGuiGraphics, int mouseX, int mouseY) {
 
         String radius = format(1 + 2L * menu.tile.getRadius());
-        pGuiGraphics.drawString(font, localize("info.cofh.area") + ": " + radius + " x " + radius, 70, 39, 0x404040, false);
+        drawString(pGuiGraphics, localize("info.cofh.area") + ": " + radius + " x " + radius, 70, 39, 0x404040, false);
 
-        super.renderLabels(pGuiGraphics, mouseX, mouseY);
+        super.extractLabels(pGuiGraphics, mouseX, mouseY);
     }
 
 }

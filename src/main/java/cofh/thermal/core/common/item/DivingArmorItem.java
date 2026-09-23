@@ -1,27 +1,23 @@
 package cofh.thermal.core.common.item;
 
-import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.common.item.ArmorItemCoFH;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
@@ -35,16 +31,16 @@ public class DivingArmorItem extends ArmorItemCoFH {
 
     private static final Identifier SWIM_SPEED_MODIFIER = Identifier.fromNamespaceAndPath(ID_THERMAL, "diving_swim_speed");
 
-    public DivingArmorItem(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
+    public DivingArmorItem(ArmorMaterial pMaterial, ArmorType pType, Item.Properties pProperties) {
 
         super(pMaterial, pType, pProperties);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn) {
 
         if (getType().getSlot() == EquipmentSlot.HEAD) {
-            tooltip.add(getTextComponent("info.thermal.diving_helmet").withStyle(ChatFormatting.GOLD));
+            tooltip.accept(getTextComponent("info.thermal.diving_helmet").withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -62,7 +58,7 @@ public class DivingArmorItem extends ArmorItemCoFH {
 
     // Also ticks in the main inventory, so only act while worn.
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel world, Entity entity, @Nullable EquipmentSlot slot) {
 
         if (getType().getSlot() == EquipmentSlot.HEAD && entity instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD) == stack) {
             if (player.getAirSupply() < player.getMaxAirSupply() && world.getRandom().nextInt(5) > 0) {
@@ -73,20 +69,6 @@ public class DivingArmorItem extends ArmorItemCoFH {
             //                Utils.addPotionEffectNoEvent(player, new EffectInstance(Effects.WATER_BREATHING, AIR_DURATION, 0, false, false, true));
             //            }
         }
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-
-        consumer.accept(new IClientItemExtensions() {
-
-            @Override
-            @Nonnull
-            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-
-                return armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.FEET ? _default : ArmorFullSuitModel.INSTANCE.get();
-            }
-        });
     }
 
 }

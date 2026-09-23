@@ -1,32 +1,40 @@
 {
   "variants": {
     "facing=north,active=false": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher"
     },
     "facing=south,active=false": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher",
       "y": 180
     },
     "facing=west,active=false": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher",
       "y": 270
     },
     "facing=east,active=false": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher",
       "y": 90
     },
     "facing=north,active=true": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher_active"
     },
     "facing=south,active=true": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher_active",
       "y": 180
     },
     "facing=west,active=true": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher_active",
       "y": 270
     },
     "facing=east,active=true": {
+      "type": "thermal:underlay",
       "model": "thermal:block/device_fisher_active",
       "y": 90
     }

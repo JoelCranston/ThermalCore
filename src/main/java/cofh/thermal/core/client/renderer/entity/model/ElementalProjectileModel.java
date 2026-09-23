@@ -1,6 +1,7 @@
 package cofh.thermal.core.client.renderer.entity.model;
 
-import net.minecraft.client.model.HierarchicalModel;
+import cofh.thermal.core.client.renderer.entity.ElementalProjectileRenderer.ElementalProjectileRenderState;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -9,18 +10,16 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
 
-public class ElementalProjectileModel<T extends Entity> extends HierarchicalModel<T> {
+public class ElementalProjectileModel extends EntityModel<ElementalProjectileRenderState> {
 
     public static final ModelLayerLocation PROJECTILE_LAYER = new ModelLayerLocation(Identifier.parse("thermal:elemental_projectile"), "main");
 
-    protected final ModelPart root;
     protected final ModelPart cube;
 
     public ElementalProjectileModel(ModelPart root) {
 
-        this.root = root;
+        super(root);
         this.cube = root.getChild("cube");
     }
 
@@ -38,16 +37,11 @@ public class ElementalProjectileModel<T extends Entity> extends HierarchicalMode
     }
 
     @Override
-    public ModelPart root() {
+    public void setupAnim(ElementalProjectileRenderState state) {
 
-        return this.root;
-    }
-
-    @Override
-    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-        this.cube.yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.cube.xRot = headPitch * ((float) Math.PI / 180F);
+        super.setupAnim(state);
+        this.cube.yRot = state.yRot * ((float) Math.PI / 180F);
+        this.cube.xRot = state.xRot * ((float) Math.PI / 180F);
     }
 
 }

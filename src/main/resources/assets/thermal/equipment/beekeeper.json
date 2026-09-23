@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "thermal:beekeeper"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "thermal:beekeeper"
+      }
+    ]
+  }
+}

@@ -3,10 +3,9 @@ package cofh.thermal.lib.util;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.thermal.core.common.block.entity.device.DevicePotionDiffuserBlockEntity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SpellParticleOption;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -25,7 +24,7 @@ public class ThermalProxyClient extends ThermalProxy {
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
-        ParticleOptions particleData = tile.isInstant() ? ParticleTypes.INSTANT_EFFECT : ParticleTypes.EFFECT;
+        ParticleType<SpellParticleOption> particleType = tile.isInstant() ? ParticleTypes.INSTANT_EFFECT : ParticleTypes.EFFECT;
         double speedY = 0;
 
         for (int i = 0; i < 4 * radius * radius; ++i) {
@@ -35,11 +34,8 @@ public class ThermalProxyClient extends ThermalProxy {
 
             double speedX = Math.cos(degrees) * speedMult;
             double speedZ = Math.sin(degrees) * speedMult;
-            Particle particle = Minecraft.getInstance().levelRenderer.addParticleInternal(particleData, particleData.getType().getOverrideLimiter(), vec.x + speedX * 0.1D, vec.y - (world.getRandom().nextDouble() + 0.5D), vec.z + speedZ * 0.1D, speedX, speedY, speedZ);
-            if (particle != null) {
-                float colorMult = 0.75F + world.getRandom().nextFloat() * 0.25F;
-                particle.setColor(r * colorMult, g * colorMult, b * colorMult);
-            }
+            float colorMult = 0.75F + world.getRandom().nextFloat() * 0.25F;
+            world.addParticle(SpellParticleOption.create(particleType, r * colorMult, g * colorMult, b * colorMult, 1.0F), vec.x + speedX * 0.1D, vec.y - (world.getRandom().nextDouble() + 0.5D), vec.z + speedZ * 0.1D, speedX, speedY, speedZ);
         }
     }
 

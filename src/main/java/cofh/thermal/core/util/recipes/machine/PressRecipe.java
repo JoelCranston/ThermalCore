@@ -31,14 +31,14 @@ public class PressRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<PressRecipe> getSerializer() {
 
         return PRESS_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<PressRecipe> getType() {
 
         return PRESS_RECIPE.get();
     }

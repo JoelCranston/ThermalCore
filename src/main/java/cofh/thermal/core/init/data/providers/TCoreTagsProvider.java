@@ -5,6 +5,7 @@ import cofh.lib.init.tags.DamageTypeTagsCoFH;
 import cofh.lib.init.tags.FluidTagsCoFH;
 import cofh.lib.init.tags.ItemTagsCoFH;
 import cofh.thermal.core.init.data.damage.TCoreDamageTypes;
+import cofh.thermal.core.init.registries.TCoreItems;
 import cofh.thermal.lib.util.references.ThermalTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -14,10 +15,9 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
@@ -29,9 +29,9 @@ public class TCoreTagsProvider {
 
     public static class Block extends BlockTagsProvider {
 
-        public Block(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        public Block(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
 
-            super(output, lookupProvider, ID_THERMAL, existingFileHelper);
+            super(output, lookupProvider, ID_THERMAL);
         }
 
         @SuppressWarnings ("unchecked")
@@ -213,11 +213,11 @@ public class TCoreTagsProvider {
 
     }
 
-    public static class Item extends ItemTagsProvider {
+    public static class Item extends BlockTagCopyingItemTagProvider {
 
-        public Item(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> pBlockTags, ExistingFileHelper existingFileHelper) {
+        public Item(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> pBlockTags) {
 
-            super(pOutput, pLookupProvider, pBlockTags, ID_THERMAL, existingFileHelper);
+            super(pOutput, pLookupProvider, pBlockTags, ID_THERMAL);
         }
 
         @SuppressWarnings ("unchecked")
@@ -438,15 +438,19 @@ public class TCoreTagsProvider {
 
             tag(ItemTagsCoFH.LOCKS).add(ITEMS.get(ID_LOCK));
             tag(ItemTagsCoFH.SECURABLE).add(ITEMS.get(ID_SATCHEL));
+
+            tag(TCoreItems.REPAIRS_BEEKEEPER_ARMOR).add(ITEMS.get("beekeeper_fabric"));
+            tag(TCoreItems.REPAIRS_DIVING_ARMOR).add(ITEMS.get("diving_fabric"));
+            tag(TCoreItems.REPAIRS_HAZMAT_ARMOR).add(ITEMS.get("hazmat_fabric"));
         }
 
     }
 
     public static class Fluid extends FluidTagsProvider {
 
-        public Fluid(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        public Fluid(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
 
-            super(output, lookupProvider, ID_THERMAL, existingFileHelper);
+            super(output, lookupProvider, ID_THERMAL);
         }
 
         @SuppressWarnings ("unchecked")
@@ -467,9 +471,9 @@ public class TCoreTagsProvider {
 
     public static class Entity extends EntityTypeTagsProvider {
 
-        public Entity(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        public Entity(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
 
-            super(output, lookupProvider, ID_THERMAL, existingFileHelper);
+            super(output, lookupProvider, ID_THERMAL);
         }
 
         @SuppressWarnings ("unchecked")
@@ -493,9 +497,9 @@ public class TCoreTagsProvider {
 
     public static class DamageType extends DamageTypeTagsProvider {
 
-        public DamageType(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        public DamageType(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
 
-            super(output, lookupProvider, ID_THERMAL, existingFileHelper);
+            super(output, lookupProvider, ID_THERMAL);
         }
 
         @SuppressWarnings ("unchecked")

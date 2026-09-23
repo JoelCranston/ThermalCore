@@ -1,17 +1,21 @@
 {
   "variants": {
     "facing=north": {
+      "type": "thermal:item_cell",
       "model": "thermal:block/item_cell"
     },
     "facing=east": {
+      "type": "thermal:item_cell",
       "model": "thermal:block/item_cell",
       "y": 90
     },
     "facing=south": {
+      "type": "thermal:item_cell",
       "model": "thermal:block/item_cell",
       "y": 180
     },
     "facing=west": {
+      "type": "thermal:item_cell",
       "model": "thermal:block/item_cell",
       "y": 270
     }

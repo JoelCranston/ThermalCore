@@ -21,7 +21,7 @@ import java.util.List;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 
-public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeSerializer<T> {
+public class MachineRecipeSerializer<T extends ThermalRecipe> {
 
     protected final int defaultEnergy;
     protected final IFactory<T> factory;
@@ -33,13 +33,16 @@ public class MachineRecipeSerializer<T extends ThermalRecipe> implements RecipeS
         this.defaultEnergy = defaultEnergy;
     }
 
-    @Override
+    public RecipeSerializer<T> toVanilla() {
+
+        return new RecipeSerializer<>(codec(), streamCodec());
+    }
+
     public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
 
         return streamCodec;
     }
 
-    @Override
     public MapCodec<T> codec() {
 
         return JsonMapCodec.INSTANCE

@@ -1,7 +1,7 @@
 package cofh.thermal.core.util.managers.machine;
 
 import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.CRUCIBLE_RECIPE;
 
@@ -23,10 +23,10 @@ public class CrucibleRecipeManager extends SingleItemRecipeManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(CRUCIBLE_RECIPE.get());
+        var recipes = recipeMap.byType(CRUCIBLE_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }

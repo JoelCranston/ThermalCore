@@ -7,7 +7,7 @@ import cofh.core.common.network.packet.server.TileConfigPacket;
 import cofh.core.util.helpers.GuiHelper;
 import cofh.thermal.core.common.inventory.storage.FluidCellMenu;
 import cofh.thermal.lib.client.gui.StorageCellScreen;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,15 +52,15 @@ public class FluidCellScreen extends StorageCellScreen<FluidCellMenu> {
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor pGuiGraphics, int mouseX, int mouseY) {
 
         String input = format(tile.amountInput);
         String output = format(tile.amountOutput);
 
-        pGuiGraphics.drawString(font, input, getCenteredOffset(input, 34), 42, 0x404040, false);
-        pGuiGraphics.drawString(font, output, getCenteredOffset(output, 142), 42, 0x404040, false);
+        drawString(pGuiGraphics, input, getCenteredOffset(input, 34), 42, 0x404040, false);
+        drawString(pGuiGraphics, output, getCenteredOffset(output, 142), 42, 0x404040, false);
 
-        super.renderLabels(pGuiGraphics, mouseX, mouseY);
+        super.extractLabels(pGuiGraphics, mouseX, mouseY);
     }
 
     // region ELEMENTS

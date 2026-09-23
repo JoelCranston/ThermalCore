@@ -30,14 +30,14 @@ public class SmelterRecycleRecipe extends SmelterRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<SmelterRecycleRecipe> getSerializer() {
 
         return SMELTER_RECYCLE_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<SmelterRecycleRecipe> getType() {
 
         return SMELTER_RECYCLE_RECIPE.get();
     }

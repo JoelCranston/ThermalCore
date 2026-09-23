@@ -2,6 +2,7 @@ package cofh.thermal.lib.util;
 
 import cofh.thermal.lib.util.managers.IManager;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class ThermalRecipeManagers {
 
     private static final ThermalRecipeManagers INSTANCE = new ThermalRecipeManagers();
 
-    private RecipeManager clientRecipeManager;
+    private RecipeMap clientRecipeMap;
     private RecipeManager serverRecipeManager;
     private final List<IManager> managers = new ArrayList<>();
 
@@ -19,14 +20,19 @@ public class ThermalRecipeManagers {
         return INSTANCE;
     }
 
-    public void setClientRecipeManager(RecipeManager recipeManager) {
+    public void setClientRecipeMap(RecipeMap recipeMap) {
 
-        this.clientRecipeManager = recipeManager;
+        this.clientRecipeMap = recipeMap;
     }
 
     public void setServerRecipeManager(RecipeManager recipeManager) {
 
         this.serverRecipeManager = recipeManager;
+    }
+
+    public RecipeMap getClientRecipeMap() {
+
+        return clientRecipeMap == null ? RecipeMap.EMPTY : clientRecipeMap;
     }
 
     public static void registerManager(IManager manager) {
@@ -49,17 +55,17 @@ public class ThermalRecipeManagers {
             return;
         }
         for (IManager sub : managers) {
-            sub.refresh(this.serverRecipeManager);
+            sub.refresh(this.serverRecipeManager.recipeMap());
         }
     }
 
     public void refreshClient() {
 
-        if (this.clientRecipeManager == null) {
+        if (this.clientRecipeMap == null) {
             return;
         }
         for (IManager sub : managers) {
-            sub.refresh(this.clientRecipeManager);
+            sub.refresh(this.clientRecipeMap);
         }
     }
     // endregion

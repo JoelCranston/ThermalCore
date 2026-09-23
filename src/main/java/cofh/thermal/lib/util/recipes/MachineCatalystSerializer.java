@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 
-public class MachineCatalystSerializer<T extends ThermalCatalyst> implements RecipeSerializer<T> {
+public class MachineCatalystSerializer<T extends ThermalCatalyst> {
 
     protected final IFactory<T> factory;
     protected final MapCodec<T> codec;
@@ -20,7 +20,7 @@ public class MachineCatalystSerializer<T extends ThermalCatalyst> implements Rec
 
         this.factory = factory;
         this.codec = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                        Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                         Codec.FLOAT.optionalFieldOf(PRIMARY_MOD, 1.0F).forGetter(recipe -> recipe.primaryMod),
                         Codec.FLOAT.optionalFieldOf(SECONDARY_MOD, 1.0F).forGetter(recipe -> recipe.secondaryMod),
                         Codec.FLOAT.optionalFieldOf(ENERGY_MOD, 1.0F).forGetter(recipe -> recipe.energyMod),
@@ -30,13 +30,16 @@ public class MachineCatalystSerializer<T extends ThermalCatalyst> implements Rec
         );
     }
 
-    @Override
+    public RecipeSerializer<T> toVanilla() {
+
+        return new RecipeSerializer<>(codec(), streamCodec());
+    }
+
     public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
 
         return streamCodec;
     }
 
-    @Override
     public MapCodec<T> codec() {
 
         return codec;

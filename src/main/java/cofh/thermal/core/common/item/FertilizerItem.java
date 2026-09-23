@@ -89,12 +89,12 @@ public class FertilizerItem extends ItemCoFH {
                 if (worldIn instanceof ServerLevel) {
                     boolean canUse = false;
                     for (int i = 0; i < strength; ++i) {
-                        canUse |= growable.isBonemealSuccess(worldIn, worldIn.random, pos, state);
+                        canUse |= growable.isBonemealSuccess(worldIn, worldIn.getRandom(), pos, state);
                     }
                     if (canUse) {
                         // TODO: Remove try/catch when Mojang fixes base issue.
                         try {
-                            growable.performBonemeal((ServerLevel) worldIn, worldIn.random, pos, state);
+                            growable.performBonemeal((ServerLevel) worldIn, worldIn.getRandom(), pos, state);
                         } catch (Exception e) {
                             // Vanilla issue causes bamboo to crash if grown close to world height
                             if (!(growable instanceof BambooStalkBlock)) {
@@ -131,15 +131,15 @@ public class FertilizerItem extends ItemCoFH {
                     Holder<Biome> holder = pLevel.getBiome(blockpos);
                     if (holder.is(BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL)) {
                         if (i == 0 && pClickedSide != null && pClickedSide.getAxis().isHorizontal()) {
-                            blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.WALL_CORALS).flatMap((p_204098_)
-                                    -> p_204098_.getRandomElement(pLevel.random)).map((p_204100_)
+                            blockstate = BuiltInRegistries.BLOCK.get(BlockTags.WALL_CORALS).flatMap((p_204098_)
+                                    -> p_204098_.getRandomElement(pLevel.getRandom())).map((p_204100_)
                                     -> p_204100_.value().defaultBlockState()).orElse(blockstate);
                             if (blockstate.hasProperty(BaseCoralWallFanBlock.FACING)) {
                                 blockstate = blockstate.setValue(BaseCoralWallFanBlock.FACING, pClickedSide);
                             }
                         } else if (randomsource.nextInt(4) == 0) {
-                            blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_)
-                                    -> p_204091_.getRandomElement(pLevel.random)).map((p_204095_)
+                            blockstate = BuiltInRegistries.BLOCK.get(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_)
+                                    -> p_204091_.getRandomElement(pLevel.getRandom())).map((p_204095_)
                                     -> p_204095_.value().defaultBlockState()).orElse(blockstate);
                         }
                     }
@@ -169,7 +169,7 @@ public class FertilizerItem extends ItemCoFH {
         boolean isPlant = world.getBlockState(pos.below()).canSustainPlant(world, pos.below(), Direction.UP, world.getBlockState(pos)).isTrue();
         AreaEffectCloud cloud = new AreaEffectCloud(world, pos.getX() + 0.5D, pos.getY() + (isPlant ? 0.0D : 1.0D), pos.getZ() + 0.5D);
         cloud.setRadius(1);
-        cloud.setParticle(ParticleTypes.HAPPY_VILLAGER);
+        cloud.setCustomParticle(ParticleTypes.HAPPY_VILLAGER);
         cloud.setDuration(CLOUD_DURATION);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick((1 + radius - cloud.getRadius()) / (float) cloud.getDuration());

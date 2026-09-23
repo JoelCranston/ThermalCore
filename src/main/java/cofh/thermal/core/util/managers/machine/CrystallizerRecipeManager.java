@@ -13,7 +13,7 @@ import cofh.thermal.lib.util.recipes.internal.IMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -54,15 +54,15 @@ public class CrystallizerRecipeManager extends AbstractManager implements IRecip
 
         switch (recipe.getInputItems().size()) {
             case 1 -> {
-                for (ItemStack firstInput : recipe.getInputItems().get(0).getItems()) {
+                for (ItemStack firstInput : getItems(recipe.getInputItems().get(0))) {
                     for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
                         addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(firstInput), singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
                     }
                 }
             }
             case 2 -> {
-                for (ItemStack firstInput : recipe.getInputItems().get(0).getItems()) {
-                    for (ItemStack secondInput : recipe.getInputItems().get(1).getItems()) {
+                for (ItemStack firstInput : getItems(recipe.getInputItems().get(0))) {
+                    for (ItemStack secondInput : getItems(recipe.getInputItems().get(1))) {
                         for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
                             addRecipe(recipe.getEnergy(), recipe.getXp(), asList(firstInput, secondInput), singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
                         }
@@ -159,10 +159,10 @@ public class CrystallizerRecipeManager extends AbstractManager implements IRecip
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(CRYSTALLIZER_RECIPE.get());
+        var recipes = recipeMap.byType(CRYSTALLIZER_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }

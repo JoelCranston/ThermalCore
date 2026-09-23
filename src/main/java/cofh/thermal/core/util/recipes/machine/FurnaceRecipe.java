@@ -35,19 +35,19 @@ public class FurnaceRecipe extends ThermalRecipe {
 
     public FurnaceRecipe(int energy, float experience, AbstractCookingRecipe recipe) {
 
-        this(energy, experience, recipe.getIngredients(), Collections.emptyList(), Collections.singletonList(recipe.result), Collections.singletonList(BASE_CHANCE_LOCKED), Collections.emptyList());
+        this(energy, experience, Collections.singletonList(recipe.input()), Collections.emptyList(), Collections.singletonList(recipe.result().create()), Collections.singletonList(BASE_CHANCE_LOCKED), Collections.emptyList());
     }
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<FurnaceRecipe> getSerializer() {
 
         return FURNACE_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<FurnaceRecipe> getType() {
 
         return FURNACE_RECIPE.get();
     }

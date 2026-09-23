@@ -32,13 +32,13 @@ public class HiveExtractorMapping extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<HiveExtractorMapping> getSerializer() {
 
         return HIVE_EXTRACTOR_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<HiveExtractorMapping> getType() {
 
         return HIVE_EXTRACTOR_MAPPING.get();
     }
@@ -61,64 +61,48 @@ public class HiveExtractorMapping extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<HiveExtractorMapping> {
+    public static final MapCodec<HiveExtractorMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+                    Block.CODEC.fieldOf(HIVE).forGetter(recipe -> recipe.hive),
+                    ItemStack.CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
+                    FluidStack.CODEC.fieldOf(FLUID).forGetter(recipe -> recipe.fluid)
+            ).apply(builder, HiveExtractorMapping::new)
+    );
 
-        public static final MapCodec<HiveExtractorMapping> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Block.CODEC.fieldOf(HIVE).forGetter(recipe -> recipe.hive),
-                        ItemStack.CODEC.fieldOf(ITEM).forGetter(recipe -> recipe.item),
-                        FluidStack.CODEC.fieldOf(FLUID).forGetter(recipe -> recipe.fluid)
-                ).apply(builder, HiveExtractorMapping::new)
-        );
+    public static final StreamCodec<RegistryFriendlyByteBuf, HiveExtractorMapping> STREAM_CODEC = StreamCodec.of(HiveExtractorMapping::toNetwork, HiveExtractorMapping::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, HiveExtractorMapping> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    //        @Override
+    //        public HiveExtractorMapping fromJson(ResourceLocation recipeId, JsonObject json) {
+    //
+    //            Block hive = Blocks.AIR;
+    //            ItemStack item = ItemStack.EMPTY;
+    //            FluidStack fluid = FluidStack.EMPTY;
+    //
+    //            if (json.has(HIVE)) {
+    //                hive = parseBlock(json.get(HIVE));
+    //            }
+    //            if (json.has(ITEM)) {
+    //                item = parseItemStack(json.get(ITEM));
+    //            }
+    //            if (json.has(FLUID)) {
+    //                fluid = parseFluidStack(json.get(FLUID));
+    //            }
+    //            return new HiveExtractorMapping(recipeId, hive, item, fluid);
+    //        }
 
-        @Override
-        public MapCodec<HiveExtractorMapping> codec() {
+    public static HiveExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            return CODEC;
-        }
+        Block hive = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
+        ItemStack item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
+        FluidStack fluid = FluidHelper.readFluidStack(buffer);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, HiveExtractorMapping> streamCodec() {
+        return new HiveExtractorMapping(hive, item, fluid);
+    }
 
-            return STREAM_CODEC;
-        }
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, HiveExtractorMapping recipe) {
 
-        //        @Override
-        //        public HiveExtractorMapping fromJson(ResourceLocation recipeId, JsonObject json) {
-        //
-        //            Block hive = Blocks.AIR;
-        //            ItemStack item = ItemStack.EMPTY;
-        //            FluidStack fluid = FluidStack.EMPTY;
-        //
-        //            if (json.has(HIVE)) {
-        //                hive = parseBlock(json.get(HIVE));
-        //            }
-        //            if (json.has(ITEM)) {
-        //                item = parseItemStack(json.get(ITEM));
-        //            }
-        //            if (json.has(FLUID)) {
-        //                fluid = parseFluidStack(json.get(FLUID));
-        //            }
-        //            return new HiveExtractorMapping(recipeId, hive, item, fluid);
-        //        }
-
-        public static HiveExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
-
-            Block hive = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
-            ItemStack item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
-            FluidStack fluid = FluidHelper.readFluidStack(buffer);
-
-            return new HiveExtractorMapping(hive, item, fluid);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, HiveExtractorMapping recipe) {
-
-            buffer.writeIdentifier(getRegistryName(recipe.hive));
-            ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.item);
-            FluidHelper.writeFluidStack(buffer, recipe.fluid);
-        }
-
+        buffer.writeIdentifier(getRegistryName(recipe.hive));
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.item);
+        FluidHelper.writeFluidStack(buffer, recipe.fluid);
     }
     // endregion
 }

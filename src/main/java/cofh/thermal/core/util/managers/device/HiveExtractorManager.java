@@ -4,7 +4,7 @@ import cofh.thermal.core.util.recipes.device.HiveExtractorMapping;
 import cofh.thermal.lib.util.managers.AbstractManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,10 +63,10 @@ public class HiveExtractorManager extends AbstractManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var mappings = recipeManager.getAllRecipesFor(HIVE_EXTRACTOR_MAPPING.get());
+        var mappings = recipeMap.byType(HIVE_EXTRACTOR_MAPPING.get());
         for (var entry : mappings) {
             addMapping(entry.value());
         }

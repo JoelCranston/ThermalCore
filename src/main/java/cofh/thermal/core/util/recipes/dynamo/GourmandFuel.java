@@ -33,14 +33,14 @@ public class GourmandFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<GourmandFuel> getSerializer() {
 
         return GOURMAND_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<GourmandFuel> getType() {
 
         return GOURMAND_FUEL.get();
     }

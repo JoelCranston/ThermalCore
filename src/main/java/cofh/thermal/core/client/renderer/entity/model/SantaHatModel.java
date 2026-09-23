@@ -1,14 +1,12 @@
 package cofh.thermal.core.client.renderer.entity.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
@@ -16,17 +14,15 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
-public class SantaHatModel<T extends Entity> extends EntityModel<T> {
+public class SantaHatModel extends EntityModel<EntityRenderState> {
 
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation HAT_LAYER = new ModelLayerLocation(Identifier.parse("thermal:santa_hat"), "main");
     public static final Identifier TEXTURE = Identifier.parse(ID_THERMAL + ":textures/entity/santa_hat.png");
 
-    private final ModelPart hat;
-
     public SantaHatModel(ModelPart root) {
 
-        this.hat = root.getChild("hat");
+        super(root);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -43,17 +39,6 @@ public class SantaHatModel<T extends Entity> extends EntityModel<T> {
                 PartPose.ZERO);
 
         return LayerDefinition.create(meshdefinition, 64, 32);
-    }
-
-    @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-
-        hat.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 
 }

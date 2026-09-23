@@ -51,7 +51,6 @@ import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentSt
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 import static cofh.thermal.lib.util.ThermalAugmentRules.createAllowValidator;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class SatchelItem extends InventoryContainerItemAugmentable implements IColorableItem, IFilterableItem, IMultiModeItem, ISecurableItem, MenuProvider {
 
@@ -63,7 +62,7 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
             BANNED_ITEMS.clear();
 
             for (String loc : itemLocs) {
-                Item item = BuiltInRegistries.ITEM.get(Identifier.parse(loc));
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(loc));
                 if (item != null) {
                     BANNED_ITEMS.add(item);
                 }
@@ -137,10 +136,10 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
             CompoundTag nbt = satchel.getOrCreateInvTag(container);
             int numSlots = satchel.getContainerSlots(container);
 
-            ListTag list = nbt.getList(TAG_ITEM_INV, TAG_COMPOUND);
+            ListTag list = nbt.getListOrEmpty(TAG_ITEM_INV);
             for (int i = list.size(); i > 0; --i) {
-                CompoundTag slotTag = list.getCompound(i);
-                int slot = slotTag.getByte(TAG_SLOT);
+                CompoundTag slotTag = list.getCompoundOrEmpty(i);
+                int slot = slotTag.getByteOr(TAG_SLOT, (byte) 0);
                 if (slot >= numSlots) {
                     Utils.dropItemStackIntoWorldWithRandomness(ItemStorageCoFH.loadItemStack(ProxyUtils.registryAccess(), slotTag), player.level(), player.position());
                 } else {
@@ -200,10 +199,10 @@ public class SatchelItem extends InventoryContainerItemAugmentable implements IC
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentString(subTag, augmentData, TAG_FILTER_TYPE);
         });
 

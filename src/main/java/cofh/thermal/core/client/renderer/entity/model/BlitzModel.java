@@ -1,6 +1,6 @@
 package cofh.thermal.core.client.renderer.entity.model;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -8,24 +8,22 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
 
-public class BlitzModel<T extends LivingEntity> extends HierarchicalModel<T> {
+public class BlitzModel extends EntityModel<LivingEntityRenderState> {
 
     public static final ModelLayerLocation BLITZ_LAYER = new ModelLayerLocation(Identifier.parse("thermal:blitz"), "main");
 
-    private final ModelPart root;
     private final ModelPart head;
     private final ModelPart[] body;
     private final ModelPart cyclone;
 
     public BlitzModel(ModelPart root) {
 
-        this.root = root;
+        super(root);
         this.head = root.getChild("head");
         this.body = new ModelPart[3];
         this.cyclone = root.getChild("cyclone");
@@ -67,22 +65,16 @@ public class BlitzModel<T extends LivingEntity> extends HierarchicalModel<T> {
     }
 
     @Override
-    public ModelPart root() {
+    public void setupAnim(LivingEntityRenderState state) {
 
-        return this.root;
-    }
-
-    @Override
-    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-        float partialTicks = ageInTicks - entityIn.tickCount;
+        super.setupAnim(state);
         for (int i = 0; i < this.body.length; ++i) {
-            this.body[i].yRot = (ageInTicks * (i + 1) * 10 - Mth.lerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot)) * (float) Math.PI / 180.0F;
+            this.body[i].yRot = (state.ageInTicks * (i + 1) * 10 - state.bodyRot) * (float) Math.PI / 180.0F;
         }
-        cyclone.yRot = (ageInTicks * 20 - Mth.lerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot)) * (float) Math.PI / 180.0F;
+        cyclone.yRot = (state.ageInTicks * 20 - state.bodyRot) * (float) Math.PI / 180.0F;
 
-        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float) Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float) Math.PI / 180F);
     }
 
 }

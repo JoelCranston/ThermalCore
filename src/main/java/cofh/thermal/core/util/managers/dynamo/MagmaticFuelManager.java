@@ -1,7 +1,7 @@
 package cofh.thermal.core.util.managers.dynamo;
 
 import cofh.thermal.lib.util.managers.SingleFluidFuelManager;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import static cofh.thermal.core.init.registries.TCoreRecipeTypes.MAGMATIC_FUEL;
 
@@ -22,10 +22,10 @@ public class MagmaticFuelManager extends SingleFluidFuelManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(MAGMATIC_FUEL.get());
+        var recipes = recipeMap.byType(MAGMATIC_FUEL.get());
         for (var entry : recipes) {
             addFuel(entry.value());
         }

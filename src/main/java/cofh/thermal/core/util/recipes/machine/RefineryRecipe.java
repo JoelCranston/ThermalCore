@@ -31,14 +31,14 @@ public class RefineryRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<RefineryRecipe> getSerializer() {
 
         return REFINERY_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<RefineryRecipe> getType() {
 
         return REFINERY_RECIPE.get();
     }

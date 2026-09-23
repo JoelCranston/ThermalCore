@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "thermal:item_cell",
+    "model": "thermal:block/item_cell"
+  }
+}

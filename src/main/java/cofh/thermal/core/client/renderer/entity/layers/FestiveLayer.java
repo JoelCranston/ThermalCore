@@ -4,39 +4,38 @@ import cofh.thermal.core.client.renderer.entity.model.SantaHatModel;
 import cofh.thermal.core.common.config.ThermalClientConfig;
 import cofh.thermal.core.util.HolidayHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.LivingEntity;
 
-public class FestiveLayer<T extends LivingEntity, M extends HierarchicalModel<T>> extends RenderLayer<T, M> {
+public class FestiveLayer<S extends LivingEntityRenderState, M extends EntityModel<? super S>> extends RenderLayer<S, M> {
 
-    protected SantaHatModel<T> santaHatModel;
+    protected SantaHatModel santaHatModel;
 
     protected float offset;
     protected float widthScale;
 
-    public FestiveLayer(EntityRendererProvider.Context ctx, RenderLayerParent<T, M> pRenderer) {
+    public FestiveLayer(EntityRendererProvider.Context ctx, RenderLayerParent<S, M> pRenderer) {
 
         this(ctx, pRenderer, 0.0F, 1.0F);
     }
 
-    public FestiveLayer(EntityRendererProvider.Context ctx, RenderLayerParent<T, M> pRenderer, float offset, float widthScale) {
+    public FestiveLayer(EntityRendererProvider.Context ctx, RenderLayerParent<S, M> pRenderer, float offset, float widthScale) {
 
         super(pRenderer);
-        this.santaHatModel = new SantaHatModel<>(ctx.getModelSet().bakeLayer(SantaHatModel.HAT_LAYER));
+        this.santaHatModel = new SantaHatModel(ctx.bakeLayer(SantaHatModel.HAT_LAYER));
 
         this.offset = offset;
         this.widthScale = widthScale;
     }
 
     @Override
-    public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+    public void submit(PoseStack pPoseStack, SubmitNodeCollector pCollector, int pPackedLight, S pState, float pNetHeadYaw, float pHeadPitch) {
 
         if (!ThermalClientConfig.festiveMobs.get() || !HolidayHelper.isChristmas(3, 2)) {
             return;
@@ -49,8 +48,7 @@ public class FestiveLayer<T extends LivingEntity, M extends HierarchicalModel<T>
         pPoseStack.mulPose(Axis.YP.rotationDegrees(pNetHeadYaw));
         pPoseStack.mulPose(Axis.XP.rotationDegrees(pHeadPitch));
 
-        VertexConsumer builder = pBuffer.getBuffer(santaHatModel.renderType(SantaHatModel.TEXTURE));
-        this.santaHatModel.renderToBuffer(pPoseStack, builder, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        pCollector.submitModel(this.santaHatModel, pState, pPoseStack, SantaHatModel.TEXTURE, pPackedLight, OverlayTexture.NO_OVERLAY, pState.outlineColor, null);
         pPoseStack.popPose();
     }
 

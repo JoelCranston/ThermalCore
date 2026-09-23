@@ -6,7 +6,7 @@ import cofh.thermal.lib.util.managers.AbstractManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.tuple.Triple;
@@ -39,7 +39,7 @@ public class FisherManager extends AbstractManager {
 
     public void addBoost(FisherBoost boost) {
 
-        for (ItemStack ingredient : boost.getIngredient().getItems()) {
+        for (ItemStack ingredient : getItems(boost.getIngredient())) {
             boostMap.put(makeNBTComparable(ingredient), Triple.of(boost.getLootTable(), boost.getOutputMod(), boost.getUseChance()));
         }
     }
@@ -62,10 +62,10 @@ public class FisherManager extends AbstractManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var boosts = recipeManager.getAllRecipesFor(FISHER_BOOST.get());
+        var boosts = recipeMap.byType(FISHER_BOOST.get());
         for (var entry : boosts) {
             addBoost(entry.value());
         }

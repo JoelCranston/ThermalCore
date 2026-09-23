@@ -6,23 +6,26 @@ import cofh.thermal.core.client.gui.device.DeviceRockGenScreen;
 import cofh.thermal.core.client.gui.device.DeviceTreeExtractorScreen;
 import cofh.thermal.core.compat.jei.device.RockGenCategory;
 import cofh.thermal.core.compat.jei.device.TreeExtractorCategory;
+import cofh.thermal.lib.util.ThermalRecipeManagers;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static cofh.lib.util.Constants.BASE_CHANCE;
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
@@ -43,16 +46,13 @@ public class TCoreJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
 
-        RecipeManager recipeManager = getRecipeManager();
-        if (recipeManager == null) {
-            // TODO: Log an error.
-            return;
-        }
+        RecipeMap recipeMap = ThermalRecipeManagers.instance().getClientRecipeMap();
+
         if (getFlag(ID_DEVICE_TREE_EXTRACTOR).get()) {
-            registration.addRecipes(TREE_EXTRACTOR_TYPE, recipeManager.getAllRecipesFor(TREE_EXTRACTOR_MAPPING.get()));
+            registration.addRecipes(TREE_EXTRACTOR_TYPE, List.copyOf(recipeMap.byType(TREE_EXTRACTOR_MAPPING.get())));
         }
         if (getFlag(ID_DEVICE_ROCK_GEN).get()) {
-            registration.addRecipes(ROCK_GEN_TYPE, recipeManager.getAllRecipesFor(ROCK_GEN_MAPPING.get()));
+            registration.addRecipes(ROCK_GEN_TYPE, List.copyOf(recipeMap.byType(ROCK_GEN_MAPPING.get())));
         }
     }
 
@@ -90,22 +90,12 @@ public class TCoreJeiPlugin implements IModPlugin {
     }
 
     // region HELPERS
-    private RecipeManager getRecipeManager() {
-
-        RecipeManager recipeManager = null;
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level != null) {
-            recipeManager = level.getRecipeManager();
-        }
-        return recipeManager;
-    }
-
-    public static IRecipeSlotTooltipCallback catalystTooltip() {
+    public static IRecipeSlotRichTooltipCallback catalystTooltip() {
 
         return (recipeSlotView, tooltip) -> tooltip.add(getTextComponent("info.cofh.optional_catalyst"));
     }
 
-    public static IRecipeSlotTooltipCallback defaultOutputTooltip(float baseChance) {
+    public static IRecipeSlotRichTooltipCallback defaultOutputTooltip(float baseChance) {
 
         return (recipeSlotView, tooltip) -> {
 
@@ -124,7 +114,7 @@ public class TCoreJeiPlugin implements IModPlugin {
         };
     }
 
-    public static IRecipeSlotTooltipCallback catalyzedOutputTooltip(float baseChance, boolean catalyzable) {
+    public static IRecipeSlotRichTooltipCallback catalyzedOutputTooltip(float baseChance, boolean catalyzable) {
 
         return (recipeSlotView, tooltip) -> {
 
@@ -143,11 +133,13 @@ public class TCoreJeiPlugin implements IModPlugin {
         };
     }
 
-    public static IRecipeSlotTooltipCallback defaultFluidTooltip() {
+    public static IRecipeSlotRichTooltipCallback defaultFluidTooltip() {
 
         return (recipeSlotView, tooltip) -> recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).ifPresent((ingredient) -> {
             if (FluidHelper.hasPotionTag(ingredient)) {
-                FluidHelper.addPotionTooltipStrings(ingredient, tooltip);
+                List<Component> lines = new ArrayList<>();
+                FluidHelper.addPotionTooltipStrings(ingredient, lines);
+                tooltip.addAll(lines);
             }
         });
     }

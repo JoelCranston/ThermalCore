@@ -33,14 +33,14 @@ public class StirlingFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<StirlingFuel> getSerializer() {
 
         return STIRLING_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<StirlingFuel> getType() {
 
         return STIRLING_FUEL.get();
     }

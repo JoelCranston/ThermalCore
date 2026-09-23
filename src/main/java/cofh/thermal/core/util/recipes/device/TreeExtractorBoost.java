@@ -30,13 +30,13 @@ public class TreeExtractorBoost extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<TreeExtractorBoost> getSerializer() {
 
         return TREE_EXTRACTOR_BOOST_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<TreeExtractorBoost> getType() {
 
         return TREE_EXTRACTOR_BOOST.get();
     }
@@ -59,68 +59,52 @@ public class TreeExtractorBoost extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<TreeExtractorBoost> {
+    public static final MapCodec<TreeExtractorBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+                    Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                    Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
+                    Codec.INT.optionalFieldOf(CYCLES, TreeExtractorManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)
+            ).apply(builder, TreeExtractorBoost::new)
+    );
 
-        public static final MapCodec<TreeExtractorBoost> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
-                        Codec.FLOAT.optionalFieldOf(OUTPUT_MOD, 1.0F).forGetter(recipe -> recipe.outputMod),
-                        Codec.INT.optionalFieldOf(CYCLES, TreeExtractorManager.instance().getDefaultEnergy()).forGetter(recipe -> recipe.cycles)
-                ).apply(builder, TreeExtractorBoost::new)
-        );
+    public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorBoost> STREAM_CODEC = StreamCodec.of(TreeExtractorBoost::toNetwork, TreeExtractorBoost::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorBoost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    //        @Override
+    //        public TreeExtractorBoost fromJson(ResourceLocation recipeId, JsonObject json) {
+    //
+    //            Ingredient ingredient;
+    //            float outputMod = 1.0F;
+    //            int cycles = TreeExtractorManager.instance().getDefaultEnergy();
+    //
+    //            /* INPUT */
+    //            ingredient = parseIngredient(json.get(INGREDIENT));
+    //
+    //            if (json.has(OUTPUT)) {
+    //                outputMod = json.get(OUTPUT).getAsFloat();
+    //            } else if (json.has(OUTPUT_MOD)) {
+    //                outputMod = json.get(OUTPUT_MOD).getAsFloat();
+    //            }
+    //            if (json.has(CYCLES)) {
+    //                cycles = json.get(CYCLES).getAsInt();
+    //            }
+    //            return new TreeExtractorBoost(recipeId, ingredient, outputMod, cycles);
+    //        }
 
-        @Override
-        public MapCodec<TreeExtractorBoost> codec() {
+    public static TreeExtractorBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
 
-            return CODEC;
-        }
+        Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, TreeExtractorBoost> streamCodec() {
+        float outputMod = buffer.readFloat();
+        int cycles = buffer.readInt();
 
-            return STREAM_CODEC;
-        }
+        return new TreeExtractorBoost(ingredient, outputMod, cycles);
+    }
 
-        //        @Override
-        //        public TreeExtractorBoost fromJson(ResourceLocation recipeId, JsonObject json) {
-        //
-        //            Ingredient ingredient;
-        //            float outputMod = 1.0F;
-        //            int cycles = TreeExtractorManager.instance().getDefaultEnergy();
-        //
-        //            /* INPUT */
-        //            ingredient = parseIngredient(json.get(INGREDIENT));
-        //
-        //            if (json.has(OUTPUT)) {
-        //                outputMod = json.get(OUTPUT).getAsFloat();
-        //            } else if (json.has(OUTPUT_MOD)) {
-        //                outputMod = json.get(OUTPUT_MOD).getAsFloat();
-        //            }
-        //            if (json.has(CYCLES)) {
-        //                cycles = json.get(CYCLES).getAsInt();
-        //            }
-        //            return new TreeExtractorBoost(recipeId, ingredient, outputMod, cycles);
-        //        }
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, TreeExtractorBoost recipe) {
 
-        public static TreeExtractorBoost fromNetwork(RegistryFriendlyByteBuf buffer) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 
-            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-
-            float outputMod = buffer.readFloat();
-            int cycles = buffer.readInt();
-
-            return new TreeExtractorBoost(ingredient, outputMod, cycles);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, TreeExtractorBoost recipe) {
-
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-
-            buffer.writeFloat(recipe.outputMod);
-            buffer.writeInt(recipe.cycles);
-        }
-
+        buffer.writeFloat(recipe.outputMod);
+        buffer.writeInt(recipe.cycles);
     }
     // endregion
 }

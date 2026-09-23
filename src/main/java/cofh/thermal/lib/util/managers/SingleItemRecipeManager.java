@@ -43,12 +43,12 @@ public abstract class SingleItemRecipeManager extends AbstractManager implements
 
         if (!recipe.getInputFluids().isEmpty()) {
             for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
-                for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+                for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                     addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids(), type);
                 }
             }
         } else {
-            for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+            for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                 addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.emptyList(), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids(), type);
             }
         }
@@ -178,7 +178,7 @@ public abstract class SingleItemRecipeManager extends AbstractManager implements
 
         public void addCatalyst(ThermalCatalyst catalyst) {
 
-            for (ItemStack ingredient : catalyst.getIngredient().getItems()) {
+            for (ItemStack ingredient : getItems(catalyst.getIngredient())) {
                 addCatalyst(ingredient, catalyst.getPrimaryMod(), catalyst.getSecondaryMod(), catalyst.getEnergyMod(), catalyst.getMinChance(), catalyst.getUseChance());
             }
         }

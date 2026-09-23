@@ -15,6 +15,7 @@ import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.lib.common.inventory.SimpleItemInv;
 import cofh.lib.util.Utils;
 import cofh.thermal.core.common.config.ThermalCoreConfig;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -27,8 +28,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +44,6 @@ import static cofh.core.init.CoreEntityDataSerializers.FLUID_STACK_DATA_SERIALIZ
 import static cofh.core.util.helpers.AugmentableHelper.*;
 import static cofh.core.util.helpers.ItemHelper.cloneStack;
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AugmentableMinecart extends AbstractMinecartCoFH implements IStorageCallback, IFilterable {
 
@@ -69,8 +72,8 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
 
     protected boolean attemptFluidHandlerInteraction(Player player, InteractionHand hand) {
 
-        var handler = getCapability(Capabilities.FluidHandler.ENTITY, null);
-        return handler != null && FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand);
+        var handler = getCapability(Capabilities.Fluid.ENTITY, null);
+        return handler != null && FluidHelper.interactWithHandler(player.getItemInHand(hand), IFluidHandler.of(handler), player, hand);
     }
 
     @Override
@@ -80,7 +83,7 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
 
         CompoundTag nbt = ItemHelper.getCustomData(stack);
         if (nbt.contains(TAG_AUGMENTS)) {
-            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), nbt.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
+            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), nbt.getListOrEmpty(TAG_AUGMENTS), invSize() - augSize());
         }
         updateAugmentState();
 
@@ -104,27 +107,31 @@ public abstract class AugmentableMinecart extends AbstractMinecartCoFH implement
         return super.createItemStackTag(stack);
     }
 
+    @SuppressWarnings ("deprecation")
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(ValueInput input) {
 
-        super.readAdditionalSaveData(compound);
+        super.readAdditionalSaveData(input);
 
+        CompoundTag compound = input.read(MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
         inventory.read(ProxyUtils.registryAccess(), compound);
 
         if (compound.contains(TAG_AUGMENTS)) {
-            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), compound.getList(TAG_AUGMENTS, TAG_COMPOUND), invSize() - augSize());
+            inventory.readSlotsUnordered(ProxyUtils.registryAccess(), compound.getListOrEmpty(TAG_AUGMENTS), invSize() - augSize());
         }
         updateAugmentState();
         filter.read(ProxyUtils.registryAccess(), compound);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(ValueOutput output) {
 
-        super.addAdditionalSaveData(compound);
+        super.addAdditionalSaveData(output);
 
+        CompoundTag compound = new CompoundTag();
         inventory.write(ProxyUtils.registryAccess(), compound);
         filter.write(ProxyUtils.registryAccess(), compound);
+        output.store(compound);
     }
 
     // region HELPERS

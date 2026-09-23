@@ -31,14 +31,14 @@ public class PulverizerRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends PulverizerRecipe> getSerializer() {
 
         return PULVERIZER_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends PulverizerRecipe> getType() {
 
         return PULVERIZER_RECIPE.get();
     }

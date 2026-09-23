@@ -19,7 +19,7 @@ import java.util.List;
 
 import static cofh.lib.util.recipes.RecipeJsonUtils.*;
 
-public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerializer<T> {
+public class DynamoFuelSerializer<T extends ThermalFuel> {
 
     protected final int defaultEnergy;
     protected final int minEnergy;
@@ -35,13 +35,16 @@ public class DynamoFuelSerializer<T extends ThermalFuel> implements RecipeSerial
         this.maxEnergy = maxEnergy;
     }
 
-    @Override
+    public RecipeSerializer<T> toVanilla() {
+
+        return new RecipeSerializer<>(codec(), streamCodec());
+    }
+
     public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
 
         return streamCodec;
     }
 
-    @Override
     public MapCodec<T> codec() {
 
         return JsonMapCodec.INSTANCE

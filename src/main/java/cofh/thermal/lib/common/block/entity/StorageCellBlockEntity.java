@@ -9,13 +9,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_HORIZONTAL;
 import static cofh.lib.util.constants.NBTTags.*;
@@ -118,9 +118,9 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ValueInput valueInput) {
 
-        super.onDataPacket(net, pkt, registries);
+        super.onDataPacket(net, valueInput);
 
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
         if (level != null) {
@@ -239,12 +239,12 @@ public abstract class StorageCellBlockEntity extends AugmentableBlockEntity impl
 
         super.loadAdditional(nbt, registries);
 
-        reconfigControl.setFacing(Direction.from3DDataValue(nbt.getByte(TAG_FACING)));
+        reconfigControl.setFacing(Direction.from3DDataValue(nbt.getByteOr(TAG_FACING, (byte) 0)));
         reconfigControl.read(nbt);
         transferControl.read(nbt);
 
-        amountInput = nbt.getInt(TAG_AMOUNT_IN);
-        amountOutput = nbt.getInt(TAG_AMOUNT_OUT);
+        amountInput = nbt.getIntOr(TAG_AMOUNT_IN, 0);
+        amountOutput = nbt.getIntOr(TAG_AMOUNT_OUT, 0);
 
         updateTrackers(false);
         updateHandlers();

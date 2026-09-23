@@ -3,8 +3,9 @@ package cofh.thermal.core.util.managers.machine;
 import cofh.thermal.core.ThermalCore;
 import cofh.thermal.core.util.recipes.machine.SawmillRecipe;
 import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -50,17 +51,17 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(SAWMILL_RECIPE.get());
+        var recipes = recipeMap.byType(SAWMILL_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }
 
         if (defaultLogRecipes) {
             ThermalCore.LOG.debug("Adding default Log processing recipes to the Sawmill...");
-            createConvertedRecipes(recipeManager);
+            createConvertedRecipes(recipeMap);
             for (var recipe : getConvertedRecipes()) {
                 addRecipe(recipe.value());
             }
@@ -76,10 +77,10 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
         return convertedRecipes;
     }
 
-    protected void createConvertedRecipes(RecipeManager recipeManager) {
+    protected void createConvertedRecipes(RecipeMap recipeMap) {
 
-        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
-            if (recipe.value() instanceof ShapelessRecipe shapeless && recipe.value().getResultItem(RegistryAccess.EMPTY).is(ItemTags.PLANKS)) {
+        for (var recipe : recipeMap.byType(RecipeType.CRAFTING)) {
+            if (recipe.value() instanceof ShapelessRecipe shapeless && shapeless.result() != null && shapeless.result().create().is(ItemTags.PLANKS)) {
                 createConvertedRecipe(shapeless);
             }
         }
@@ -87,13 +88,13 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
 
     protected boolean createConvertedRecipe(ShapelessRecipe recipe) {
 
-        if (recipe.isSpecial() || recipe.getIngredients().size() > 1) {
+        if (recipe.isSpecial() || recipe.ingredients.size() > 1) {
             return false;
         }
-        Ingredient log = recipe.getIngredients().get(0);
-        ItemStack plank = recipe.getResultItem(RegistryAccess.EMPTY);
+        Ingredient log = recipe.ingredients.get(0);
+        ItemStack plank = recipe.result().create();
 
-        for (ItemStack logStack : log.getItems()) {
+        for (ItemStack logStack : getItems(log)) {
             if (!logStack.is(ItemTags.LOGS) || validRecipe(logStack)) {
                 return false;
             }
@@ -107,7 +108,7 @@ public class SawmillRecipeManager extends SingleItemRecipeManager {
 
     protected RecipeHolder<SawmillRecipe> convert(Ingredient log, ItemStack planks) {
 
-        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "sawmill_" + log.hashCode()),
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "sawmill_" + log.hashCode())),
                 new SawmillRecipe(getDefaultEnergy() / 2, 0.15F,
                         Collections.singletonList(log),
                         Collections.emptyList(), // no fluid input

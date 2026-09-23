@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -67,7 +67,7 @@ public class BlizzProjectile extends ElementalProjectile {
         if (entity.isOnFire()) {
             entity.clearFire();
         }
-        if (entity.hurt(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
+        if (entity.hurtOrSimulate(this.damageSource(), getDamage(entity)) && entity instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(CHILLED, getEffectDuration(entity), getEffectAmplifier(entity), false, false));
         }
     }
@@ -88,7 +88,7 @@ public class BlizzProjectile extends ElementalProjectile {
 
         AreaEffectCloud cloud = new AreaEffectCloud(level, getX(), getY(), getZ());
         cloud.setRadius(1);
-        cloud.setParticle(FROST.get());
+        cloud.setCustomParticle(FROST.get());
         cloud.setDuration(CLOUD_DURATION);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick((effectRadius - cloud.getRadius()) / (float) cloud.getDuration());

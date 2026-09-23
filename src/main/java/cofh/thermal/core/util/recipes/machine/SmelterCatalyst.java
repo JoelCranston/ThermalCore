@@ -19,14 +19,14 @@ public class SmelterCatalyst extends ThermalCatalyst {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<SmelterCatalyst> getSerializer() {
 
         return SMELTER_CATALYST_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<SmelterCatalyst> getType() {
 
         return SMELTER_CATALYST.get();
     }

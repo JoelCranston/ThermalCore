@@ -247,8 +247,8 @@ public class DeviceRockGenBlockEntity extends DeviceBlockEntity implements ITick
         process = buffer.readInt();
         adjLava = buffer.readInt();
 
-        below = BuiltInRegistries.BLOCK.get(Identifier.parse(buffer.readUtf()));
-        adjacent = BuiltInRegistries.BLOCK.get(Identifier.parse(buffer.readUtf()));
+        below = BuiltInRegistries.BLOCK.getValue(Identifier.parse(buffer.readUtf()));
+        adjacent = BuiltInRegistries.BLOCK.getValue(Identifier.parse(buffer.readUtf()));
     }
     // endregion
 
@@ -258,12 +258,12 @@ public class DeviceRockGenBlockEntity extends DeviceBlockEntity implements ITick
 
         super.loadAdditional(nbt, registries);
 
-        process = nbt.getInt(TAG_PROCESS);
-        processMax = nbt.getInt(TAG_PROCESS_MAX);
-        adjLava = nbt.getInt("Lava");
+        process = nbt.getIntOr(TAG_PROCESS, 0);
+        processMax = nbt.getIntOr(TAG_PROCESS_MAX, 0);
+        adjLava = nbt.getIntOr("Lava", 0);
 
-        below = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("Below")));
-        adjacent = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("Adjacent")));
+        below = BuiltInRegistries.BLOCK.getValue(Identifier.parse(nbt.getStringOr("Below", "")));
+        adjacent = BuiltInRegistries.BLOCK.getValue(Identifier.parse(nbt.getStringOr("Adjacent", "")));
     }
 
     @Override

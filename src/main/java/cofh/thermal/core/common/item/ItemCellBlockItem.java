@@ -8,15 +8,12 @@ import net.minecraft.world.level.block.Block;
 
 import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class ItemCellBlockItem extends BlockItemAugmentable {
 
     public ItemCellBlockItem(Block blockIn, Properties builder) {
 
-        super(blockIn, builder);
-
-        setEnchantability(5);
+        super(blockIn, builder.enchantable(5));
     }
 
     //    @Override
@@ -28,10 +25,10 @@ public class ItemCellBlockItem extends BlockItemAugmentable {
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_STORAGE);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_ITEM_CREATIVE);

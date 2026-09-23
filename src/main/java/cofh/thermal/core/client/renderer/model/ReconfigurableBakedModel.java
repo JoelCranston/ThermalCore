@@ -1,31 +1,23 @@
 package cofh.thermal.core.client.renderer.model;
 
 import cofh.core.client.renderer.model.ModelUtils;
+import cofh.core.client.renderer.model.ModelUtils.WrappedBakedModelBuilder;
 import cofh.core.util.helpers.ItemHelper;
-import cofh.lib.client.renderer.block.model.RetexturedBakedQuad;
 import cofh.lib.util.crafting.ComparableItemStack;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.model.data.ModelData;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,12 +26,12 @@ import static cofh.thermal.core.client.ThermalTextures.*;
 import static cofh.thermal.lib.util.Constants.DEFAULT_MACHINE_SIDES_RAW;
 import static net.minecraft.core.Direction.*;
 
-public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDynamicBakedModel {
+public class ReconfigurableBakedModel extends UnderlayBakedModel {
 
     private static final Int2ObjectMap<BakedQuad[]> SIDE_QUAD_CACHE = new Int2ObjectOpenHashMap<>();
 
     private static final Int2ObjectMap<BakedQuad[]> ITEM_QUAD_CACHE = new Int2ObjectOpenHashMap<>();
-    private static final Map<List<Integer>, BakedModel> MODEL_CACHE = new Object2ObjectOpenHashMap<>();
+    private static final Map<List<Integer>, BlockStateModelPart> MODEL_CACHE = new Object2ObjectOpenHashMap<>();
 
     public static void clearCache() {
 
@@ -49,18 +41,17 @@ public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDyn
         MODEL_CACHE.clear();
     }
 
-    public ReconfigurableBakedModel(BakedModel originalModel) {
+    public ReconfigurableBakedModel(BlockStateModel originalModel) {
 
         super(originalModel);
     }
 
     @Override
-    @Nonnull
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType renderType) {
+    protected void addQuads(WrappedBakedModelBuilder builder, BlockState state, Direction side, ModelData extraData) {
 
-        LinkedList<BakedQuad> quads = new LinkedList<>(originalModel.getQuads(state, side, rand, extraData, renderType));
-        if (side == null || quads.isEmpty()) {
-            return quads;
+        List<BakedQuad> quads = builder.getQuads(side);
+        if (quads.isEmpty()) {
+            return;
         }
         BakedQuad baseQuad = quads.get(0);
         int sideIndex = side.get3DDataValue();
@@ -69,7 +60,7 @@ public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDyn
         byte[] sideConfigRaw = extraData.get(ModelUtils.SIDES);
         if (sideConfigRaw == null) {
             // This shouldn't happen, but playing it safe.
-            return quads;
+            return;
         }
         int configHash = Arrays.hashCode(sideConfigRaw);
         BakedQuad[] cachedSideQuads = SIDE_QUAD_CACHE.get(configHash);
@@ -77,65 +68,54 @@ public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDyn
             cachedSideQuads = new BakedQuad[6];
         }
         if (cachedSideQuads[sideIndex] == null) {
-            cachedSideQuads[sideIndex] = new RetexturedBakedQuad(baseQuad, getConfigTexture(sideConfigRaw[sideIndex]));
+            cachedSideQuads[sideIndex] = ModelUtils.retexture(baseQuad, getConfigTexture(sideConfigRaw[sideIndex]));
             SIDE_QUAD_CACHE.put(configHash, cachedSideQuads);
         }
-        quads.add(cachedSideQuads[sideIndex]);
+        builder.addFaceQuad(side, cachedSideQuads[sideIndex]);
 
         // FLUID
-        return super.addUnderlayQuads(quads, state, side, rand, extraData, renderType);
+        super.addUnderlayQuads(builder, state, side, extraData);
     }
 
-    @Override
-    public ItemOverrides getOverrides() {
+    public static BlockStateModelPart forItem(ItemStack stack, BlockStateModelPart model) {
 
-        return overrideList;
-    }
+        CompoundTag tag = ItemHelper.getBlockEntityData(stack);
+        byte[] sideConfigRaw = getSideConfigRaw(tag);
+        int itemHash = new ComparableItemStack(stack).hashCode();
+        int configHash = Arrays.hashCode(sideConfigRaw);
 
-    private final ItemOverrides overrideList = new ItemOverrides() {
+        BlockStateModelPart ret = MODEL_CACHE.get(Arrays.asList(itemHash, configHash));
+        if (ret == null) {
+            WrappedBakedModelBuilder builder = new WrappedBakedModelBuilder(model);
 
-        @Nullable
-        @Override
-        public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int seed) {
+            // SIDES
+            BakedQuad[] cachedQuads = ITEM_QUAD_CACHE.get(configHash);
+            if (cachedQuads == null || cachedQuads.length < 6) {
+                cachedQuads = new BakedQuad[6];
 
-            CompoundTag tag = ItemHelper.getBlockEntityData(stack);
-            byte[] sideConfigRaw = getSideConfigRaw(tag);
-            int itemHash = new ComparableItemStack(stack).hashCode();
-            int configHash = Arrays.hashCode(sideConfigRaw);
-
-            BakedModel ret = MODEL_CACHE.get(Arrays.asList(itemHash, configHash));
-            if (ret == null) {
-                ModelUtils.WrappedBakedModelBuilder builder = new ModelUtils.WrappedBakedModelBuilder(model);
-
-                // SIDES
-                BakedQuad[] cachedQuads = ITEM_QUAD_CACHE.get(configHash);
-                if (cachedQuads == null || cachedQuads.length < 6) {
-                    cachedQuads = new BakedQuad[6];
-
-                    cachedQuads[0] = new RetexturedBakedQuad(builder.getQuads(DOWN).get(0), getConfigTexture(sideConfigRaw[0]));
-                    cachedQuads[1] = new RetexturedBakedQuad(builder.getQuads(UP).get(0), getConfigTexture(sideConfigRaw[1]));
-                    cachedQuads[2] = new RetexturedBakedQuad(builder.getQuads(NORTH).get(0), getConfigTexture(sideConfigRaw[2]));
-                    cachedQuads[3] = new RetexturedBakedQuad(builder.getQuads(SOUTH).get(0), getConfigTexture(sideConfigRaw[3]));
-                    cachedQuads[4] = new RetexturedBakedQuad(builder.getQuads(WEST).get(0), getConfigTexture(sideConfigRaw[4]));
-                    cachedQuads[5] = new RetexturedBakedQuad(builder.getQuads(EAST).get(0), getConfigTexture(sideConfigRaw[5]));
-                    ITEM_QUAD_CACHE.put(configHash, cachedQuads);
-                }
-                builder.addFaceQuad(DOWN, cachedQuads[0]);
-                builder.addFaceQuad(UP, cachedQuads[1]);
-                builder.addFaceQuad(NORTH, cachedQuads[2]);
-                builder.addFaceQuad(SOUTH, cachedQuads[3]);
-                builder.addFaceQuad(WEST, cachedQuads[4]);
-                builder.addFaceQuad(EAST, cachedQuads[5]);
-
-                ret = builder.build();
-                MODEL_CACHE.put(Arrays.asList(itemHash, configHash), ret);
+                cachedQuads[0] = ModelUtils.retexture(builder.getQuads(DOWN).get(0), getConfigTexture(sideConfigRaw[0]));
+                cachedQuads[1] = ModelUtils.retexture(builder.getQuads(UP).get(0), getConfigTexture(sideConfigRaw[1]));
+                cachedQuads[2] = ModelUtils.retexture(builder.getQuads(NORTH).get(0), getConfigTexture(sideConfigRaw[2]));
+                cachedQuads[3] = ModelUtils.retexture(builder.getQuads(SOUTH).get(0), getConfigTexture(sideConfigRaw[3]));
+                cachedQuads[4] = ModelUtils.retexture(builder.getQuads(WEST).get(0), getConfigTexture(sideConfigRaw[4]));
+                cachedQuads[5] = ModelUtils.retexture(builder.getQuads(EAST).get(0), getConfigTexture(sideConfigRaw[5]));
+                ITEM_QUAD_CACHE.put(configHash, cachedQuads);
             }
-            return ret;
+            builder.addFaceQuad(DOWN, cachedQuads[0]);
+            builder.addFaceQuad(UP, cachedQuads[1]);
+            builder.addFaceQuad(NORTH, cachedQuads[2]);
+            builder.addFaceQuad(SOUTH, cachedQuads[3]);
+            builder.addFaceQuad(WEST, cachedQuads[4]);
+            builder.addFaceQuad(EAST, cachedQuads[5]);
+
+            ret = builder.build();
+            MODEL_CACHE.put(Arrays.asList(itemHash, configHash), ret);
         }
-    };
+        return ret;
+    }
 
     // region HELPERS
-    private TextureAtlasSprite getConfigTexture(byte side) {
+    private static TextureAtlasSprite getConfigTexture(byte side) {
 
         switch (side) {
             case 1:
@@ -151,12 +131,12 @@ public class ReconfigurableBakedModel extends UnderlayBakedModel implements IDyn
         }
     }
 
-    private byte[] getSideConfigRaw(CompoundTag tag) {
+    private static byte[] getSideConfigRaw(CompoundTag tag) {
 
         if (tag == null) {
             return DEFAULT_MACHINE_SIDES_RAW;
         }
-        byte[] ret = tag.getByteArray(TAG_SIDES);
+        byte[] ret = tag.getByteArray(TAG_SIDES).orElse(DEFAULT_MACHINE_SIDES_RAW);
         return ret.length == 0 ? DEFAULT_MACHINE_SIDES_RAW : ret;
     }
     // endregion

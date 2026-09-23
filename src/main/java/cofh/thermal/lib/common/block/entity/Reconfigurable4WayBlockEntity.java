@@ -15,16 +15,17 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -219,9 +220,9 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ValueInput valueInput) {
 
-        super.onDataPacket(net, pkt, registries);
+        super.onDataPacket(net, valueInput);
 
         if (level != null) {
             level.getModelDataManager().requestRefresh(this);
@@ -271,12 +272,12 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
 
         super.loadAdditional(nbt, registries);
 
-        reconfigControl.setFacing(Direction.from3DDataValue(nbt.getByte(TAG_FACING)));
+        reconfigControl.setFacing(Direction.from3DDataValue(nbt.getByteOr(TAG_FACING, (byte) 0)));
         reconfigControl.read(nbt);
         transferControl.read(nbt);
 
-        inputTracker = nbt.getInt(TAG_TRACK_IN);
-        outputTracker = nbt.getInt(TAG_TRACK_OUT);
+        inputTracker = nbt.getIntOr(TAG_TRACK_IN, 0);
+        outputTracker = nbt.getIntOr(TAG_TRACK_OUT, 0);
 
         updateHandlers();
     }
@@ -341,13 +342,13 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
     // endregion
 
     // region CAPABILITIES
-    protected IItemHandler inputItemCap = null;
-    protected IItemHandler outputItemCap = null;
-    protected IItemHandler ioItemCap = null;
+    protected ResourceHandler<ItemResource> inputItemCap = null;
+    protected ResourceHandler<ItemResource> outputItemCap = null;
+    protected ResourceHandler<ItemResource> ioItemCap = null;
 
-    protected IFluidHandler inputFluidCap = null;
-    protected IFluidHandler outputFluidCap = null;
-    protected IFluidHandler ioFluidCap = null;
+    protected ResourceHandler<FluidResource> inputFluidCap = null;
+    protected ResourceHandler<FluidResource> outputFluidCap = null;
+    protected ResourceHandler<FluidResource> ioFluidCap = null;
 
     protected void updateHandlers() {
 
@@ -365,7 +366,7 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
     }
 
     @Override
-    public IItemHandler getItemHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<ItemResource> getItemHandlerCapability(@Nullable Direction side) {
 
         if (side == null) {
             return super.getItemHandlerCapability(side);
@@ -389,7 +390,7 @@ public abstract class Reconfigurable4WayBlockEntity extends AugmentableBlockEnti
     }
 
     @Override
-    public IFluidHandler getFluidHandlerCapability(@Nullable Direction side) {
+    public ResourceHandler<FluidResource> getFluidHandlerCapability(@Nullable Direction side) {
 
         if (side == null) {
             return super.getFluidHandlerCapability(side);

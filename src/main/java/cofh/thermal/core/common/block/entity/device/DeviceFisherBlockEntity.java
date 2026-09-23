@@ -34,7 +34,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -208,8 +209,8 @@ public class DeviceFisherBlockEntity extends DeviceBlockEntity implements ITicka
 
         super.loadAdditional(nbt, registries);
 
-        process = nbt.getInt(TAG_PROCESS);
-        valid = nbt.getBoolean(TAG_VALID);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
+        valid = nbt.getBooleanOr(TAG_VALID, false);
     }
 
     @Override
@@ -319,7 +320,7 @@ public class DeviceFisherBlockEntity extends DeviceBlockEntity implements ITicka
     }
 
     @Override
-    public IItemHandler getItemHandlerCapability(@javax.annotation.Nullable Direction side) {
+    public ResourceHandler<ItemResource> getItemHandlerCapability(@javax.annotation.Nullable Direction side) {
 
         if (itemCap == null && inventory.hasAccessibleSlots()) {
             itemCap = inventory.getHandler(INPUT_OUTPUT);

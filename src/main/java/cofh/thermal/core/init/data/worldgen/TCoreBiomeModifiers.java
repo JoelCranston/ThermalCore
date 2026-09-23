@@ -7,6 +7,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.util.random.Weighted;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -14,8 +15,6 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-
-import java.util.List;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.lib.util.helpers.DatapackHelper.holderSetUnion;
@@ -46,15 +45,15 @@ public class TCoreBiomeModifiers {
 
         var caveBiomes = holderSetUnion(isDripstoneCaves, isLushCaves);
 
-        registerMob(context, BASALZ_SPAWN_BASALT_DELTAS, isBasaltDelta, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 50, 2, 4)));
-        registerMob(context, BASALZ_SPAWN_CAVES, caveBiomes, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 25, 1, 3)));
-        registerMob(context, BASALZ_SPAWN_PEAKS, isStonyPeaks, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 35, 1, 3)));
+        registerMob(context, BASALZ_SPAWN_BASALT_DELTAS, isBasaltDelta, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 2, 4), 50));
+        registerMob(context, BASALZ_SPAWN_CAVES, caveBiomes, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 1, 3), 25));
+        registerMob(context, BASALZ_SPAWN_PEAKS, isStonyPeaks, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BASALZ.get(), 1, 3), 35));
 
-        registerMob(context, BLITZ_SPAWN_BADLANDS, isBadlandsTag, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 35, 1, 3)));
-        registerMob(context, BLITZ_SPAWN_SANDY, isSandyTag, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 25, 1, 3)));
-        registerMob(context, BLITZ_SPAWN_SAVANNA, isSavannaTag, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 50, 2, 4)));
+        registerMob(context, BLITZ_SPAWN_BADLANDS, isBadlandsTag, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 1, 3), 35));
+        registerMob(context, BLITZ_SPAWN_SANDY, isSandyTag, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 1, 3), 25));
+        registerMob(context, BLITZ_SPAWN_SAVANNA, isSavannaTag, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BLITZ.get(), 2, 4), 50));
 
-        registerMob(context, BLIZZ_SPAWN_SNOWY, isSnowyTag, List.of(new MobSpawnSettings.SpawnerData(TCoreEntities.BLIZZ.get(), 50, 1, 4)));
+        registerMob(context, BLIZZ_SPAWN_SNOWY, isSnowyTag, new Weighted<>(new MobSpawnSettings.SpawnerData(TCoreEntities.BLIZZ.get(), 1, 4), 50));
     }
 
     // region HELPERS
@@ -63,9 +62,9 @@ public class TCoreBiomeModifiers {
         return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Identifier.fromNamespaceAndPath(ID_THERMAL, name));
     }
 
-    private static void registerMob(BootstrapContext<BiomeModifier> context, ResourceKey<BiomeModifier> biomeMod, HolderSet<Biome> biomes, List<MobSpawnSettings.SpawnerData> spawners) {
+    private static void registerMob(BootstrapContext<BiomeModifier> context, ResourceKey<BiomeModifier> biomeMod, HolderSet<Biome> biomes, Weighted<MobSpawnSettings.SpawnerData> spawner) {
 
-        context.register(biomeMod, new BiomeModifiers.AddSpawnsBiomeModifier(biomes, spawners));
+        context.register(biomeMod, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(biomes, spawner));
     }
     // endregion
 

@@ -9,22 +9,25 @@ import cofh.lib.common.block.TntBlockCoFH;
 import cofh.lib.common.item.ArmorMaterialCoFH;
 import cofh.thermal.core.common.item.*;
 import cofh.thermal.lib.common.item.AugmentItem;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.food.Foods;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.FlagManager.getFlag;
-import static cofh.lib.util.Utils.itemProperties;
+import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 import static cofh.lib.util.constants.NBTTags.*;
-import static cofh.thermal.core.ThermalCore.ARMOR_MATERIALS;
 import static cofh.thermal.core.ThermalCore.BLOCKS;
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.core.init.registries.TCoreEntities.*;
@@ -106,20 +109,20 @@ public class TCoreItems {
         itemsTab(registerItem("cinnabar_dust"));
         itemsTab(registerItem("niter"));
         itemsTab(registerItem("niter_dust"));
-        itemsTab(registerItem("sulfur", () -> new ItemCoFH(itemProperties()).setBurnTime(1200)));
-        itemsTab(registerItem("sulfur_dust", () -> new ItemCoFH(itemProperties()).setBurnTime(1200)));
+        itemsTab(registerItem("sulfur", id -> new ItemCoFH(itemProperties(id)).setBurnTime(1200)));
+        itemsTab(registerItem("sulfur_dust", id -> new ItemCoFH(itemProperties(id)).setBurnTime(1200)));
 
         itemsTab(registerItem("sawdust"));
-        itemsTab(registerItem("coal_coke", () -> new ItemCoFH(itemProperties()).setBurnTime(3200)));
-        itemsTab(registerItem("bitumen", () -> new ItemCoFH(itemProperties()).setBurnTime(1600)));
-        itemsTab(registerItem("tar", () -> new ItemCoFH(itemProperties()).setBurnTime(800)));
-        itemsTab(registerItem("rosin", () -> new ItemCoFH(itemProperties()).setBurnTime(800)));
+        itemsTab(registerItem("coal_coke", id -> new ItemCoFH(itemProperties(id)).setBurnTime(3200)));
+        itemsTab(registerItem("bitumen", id -> new ItemCoFH(itemProperties(id)).setBurnTime(1600)));
+        itemsTab(registerItem("tar", id -> new ItemCoFH(itemProperties(id)).setBurnTime(800)));
+        itemsTab(registerItem("rosin", id -> new ItemCoFH(itemProperties(id)).setBurnTime(800)));
         itemsTab(registerItem("rubber"));
         itemsTab(registerItem("cured_rubber"));
         itemsTab(registerItem("slag"));
         itemsTab(registerItem("rich_slag"));
 
-        foodsTab(registerItem("syrup_bottle", () -> new HoneyBottleItem(itemProperties().craftRemainder(GLASS_BOTTLE).food(Foods.HONEY_BOTTLE).stacksTo(16))));
+        foodsTab(registerItem("syrup_bottle", id -> new ItemCoFH(itemProperties(id).craftRemainder(GLASS_BOTTLE).food(Foods.HONEY_BOTTLE, Consumables.HONEY_BOTTLE).usingConvertsTo(GLASS_BOTTLE).stacksTo(16))));
 
         //        registerItem("biomass");
         //        registerItem("rich_biomass");
@@ -141,10 +144,10 @@ public class TCoreItems {
         itemsTab(registerItem("redstone_servo"));
         itemsTab(registerItem("rf_coil"));
 
-        itemsTab(registerItem("drill_head", () -> new ItemCoFH(itemProperties())), getFlag(FLAG_TOOL_COMPONENTS));
-        itemsTab(registerItem("saw_blade", () -> new ItemCoFH(itemProperties())), getFlag(FLAG_TOOL_COMPONENTS));
+        itemsTab(registerItem("drill_head", id -> new ItemCoFH(itemProperties(id))), getFlag(FLAG_TOOL_COMPONENTS));
+        itemsTab(registerItem("saw_blade", id -> new ItemCoFH(itemProperties(id))), getFlag(FLAG_TOOL_COMPONENTS));
 
-        registerItem("laser_diode", () -> new ItemCoFH(itemProperties()));//.setShowInGroups(getFeature(FLAG_TOOL_COMPONENTS))); // TODO: Implement
+        registerItem("laser_diode", id -> new ItemCoFH(itemProperties(id)));//.setShowInGroups(getFeature(FLAG_TOOL_COMPONENTS))); // TODO: Implement
     }
 
     private static void registerMaterials() {
@@ -170,22 +173,22 @@ public class TCoreItems {
 
     private static void registerTools() {
 
-        toolsTab(registerItem(ID_WRENCH, () -> new WrenchItem(itemProperties().stacksTo(1))));
-        toolsTab(registerItem(ID_REDPRINT, () -> new RedprintItem(itemProperties().stacksTo(1))));
-        toolsTab(registerItem(ID_RF_POTATO, () -> new EnergyContainerItem(itemProperties().stacksTo(1), 100000, 40) {
+        toolsTab(registerItem(ID_WRENCH, id -> new WrenchItem(itemProperties(id).stacksTo(1))));
+        toolsTab(registerItem(ID_REDPRINT, id -> new RedprintItem(itemProperties(id).stacksTo(1))));
+        toolsTab(registerItem(ID_RF_POTATO, id -> new EnergyContainerItem(itemProperties(id).stacksTo(1), 100000, 40) {
         }));
-        toolsTab(registerItem(ID_XP_CRYSTAL, () -> new XpCrystalItem(itemProperties().stacksTo(1), 10000)));
-        toolsTab(registerItem(ID_LOCK, () -> new LockItem(itemProperties())));
-        toolsTab(registerItem(ID_SATCHEL, () -> new SatchelItem(itemProperties().stacksTo(1), 9)));
-        toolsTab(registerItem(ID_DETONATOR, () -> new DetonatorItem(itemProperties().stacksTo(1))));
+        toolsTab(registerItem(ID_XP_CRYSTAL, id -> new XpCrystalItem(itemProperties(id).stacksTo(1), 10000)));
+        toolsTab(registerItem(ID_LOCK, id -> new LockItem(itemProperties(id))));
+        toolsTab(registerItem(ID_SATCHEL, id -> new SatchelItem(itemProperties(id).stacksTo(1), 9)));
+        toolsTab(registerItem(ID_DETONATOR, id -> new DetonatorItem(itemProperties(id).stacksTo(1))));
 
-        toolsTab(60, registerItem(ID_FLORB, () -> new FlorbItem(itemProperties(), BUCKET_VOLUME, (e) -> !e.getFluid().defaultFluidState().createLegacyBlock().isAir())));
-        toolsTab(60, registerItem("earth_charge", () -> new EarthChargeItem(itemProperties())));
-        toolsTab(60, registerItem("ice_charge", () -> new IceChargeItem(itemProperties())));
-        toolsTab(60, registerItem("lightning_charge", () -> new LightningChargeItem(itemProperties())));
+        toolsTab(60, registerItem(ID_FLORB, id -> new FlorbItem(itemProperties(id), BUCKET_VOLUME, (e) -> !e.getFluid().defaultFluidState().createLegacyBlock().isAir())));
+        toolsTab(60, registerItem("earth_charge", id -> new EarthChargeItem(itemProperties(id))));
+        toolsTab(60, registerItem("ice_charge", id -> new IceChargeItem(itemProperties(id))));
+        toolsTab(60, registerItem("lightning_charge", id -> new LightningChargeItem(itemProperties(id))));
 
-        toolsTab(80, registerItem("compost", () -> new FertilizerItem(itemProperties(), 2)));
-        toolsTab(80, registerItem("phytogro", () -> new FertilizerItem(itemProperties())));
+        toolsTab(80, registerItem("compost", id -> new FertilizerItem(itemProperties(id), 2)));
+        toolsTab(80, registerItem("phytogro", id -> new FertilizerItem(itemProperties(id))));
         // toolsTab(registerItem("fluxed_phytogro", () -> new FertilizerItem(properties(), 5)));
 
         toolsTab(90, registerItem("junk_net"), getFlag(ID_DEVICE_FISHER));
@@ -197,20 +200,20 @@ public class TCoreItems {
 
     private static void registerArmor() {
 
-        toolsTab(50, registerItem(ID_BEEKEEPER_HELMET, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_CHESTPLATE, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_LEGGINGS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
-        toolsTab(50, registerItem(ID_BEEKEEPER_BOOTS, () -> new BeekeeperArmorItem(BEEKEEPER, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(BEEKEEPER_DURABILITY)))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_HELMET, id -> new BeekeeperArmorItem(BEEKEEPER, ArmorType.HELMET, itemProperties(id))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_CHESTPLATE, id -> new BeekeeperArmorItem(BEEKEEPER, ArmorType.CHESTPLATE, itemProperties(id))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_LEGGINGS, id -> new BeekeeperArmorItem(BEEKEEPER, ArmorType.LEGGINGS, itemProperties(id))), getFlag(FLAG_BEEKEEPER_ARMOR));
+        toolsTab(50, registerItem(ID_BEEKEEPER_BOOTS, id -> new BeekeeperArmorItem(BEEKEEPER, ArmorType.BOOTS, itemProperties(id))), getFlag(FLAG_BEEKEEPER_ARMOR));
 
-        toolsTab(50, registerItem(ID_DIVING_HELMET, () -> new DivingArmorItem(DIVING, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_CHESTPLATE, () -> new DivingArmorItem(DIVING, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_LEGGINGS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
-        toolsTab(50, registerItem(ID_DIVING_BOOTS, () -> new DivingArmorItem(DIVING, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(DIVING_DURABILITY)))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_HELMET, id -> new DivingArmorItem(DIVING, ArmorType.HELMET, itemProperties(id))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_CHESTPLATE, id -> new DivingArmorItem(DIVING, ArmorType.CHESTPLATE, itemProperties(id))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_LEGGINGS, id -> new DivingArmorItem(DIVING, ArmorType.LEGGINGS, itemProperties(id))), getFlag(FLAG_DIVING_ARMOR));
+        toolsTab(50, registerItem(ID_DIVING_BOOTS, id -> new DivingArmorItem(DIVING, ArmorType.BOOTS, itemProperties(id))), getFlag(FLAG_DIVING_ARMOR));
 
-        toolsTab(50, registerItem(ID_HAZMAT_HELMET, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.HELMET, itemProperties().durability(ArmorItem.Type.HELMET.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_CHESTPLATE, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.CHESTPLATE, itemProperties().durability(ArmorItem.Type.CHESTPLATE.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_LEGGINGS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.LEGGINGS, itemProperties().durability(ArmorItem.Type.LEGGINGS.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
-        toolsTab(50, registerItem(ID_HAZMAT_BOOTS, () -> new HazmatArmorItem(HAZMAT, ArmorItem.Type.BOOTS, itemProperties().durability(ArmorItem.Type.BOOTS.getDurability(HAZMAT_DURABILITY)))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_HELMET, id -> new HazmatArmorItem(HAZMAT, ArmorType.HELMET, itemProperties(id))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_CHESTPLATE, id -> new HazmatArmorItem(HAZMAT, ArmorType.CHESTPLATE, itemProperties(id))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_LEGGINGS, id -> new HazmatArmorItem(HAZMAT, ArmorType.LEGGINGS, itemProperties(id))), getFlag(FLAG_HAZMAT_ARMOR));
+        toolsTab(50, registerItem(ID_HAZMAT_BOOTS, id -> new HazmatArmorItem(HAZMAT, ArmorType.BOOTS, itemProperties(id))), getFlag(FLAG_HAZMAT_ARMOR));
     }
 
     // region AUGMENTS
@@ -233,7 +236,7 @@ public class TCoreItems {
 
         for (int i = 1; i <= 3; ++i) {
             int tier = i;
-            itemsTab(registerItem("upgrade_augment_" + i, () -> new AugmentItem(itemProperties(),
+            itemsTab(registerItem("upgrade_augment_" + i, id -> new AugmentItem(itemProperties(id),
                     AugmentDataHelper.builder()
                             .type(TAG_AUGMENT_TYPE_UPGRADE)
                             .mod(TAG_AUGMENT_BASE_MOD, upgradeMods[tier])
@@ -243,17 +246,17 @@ public class TCoreItems {
 
     private static void registerFeatureAugments() {
 
-        itemsTab(registerItem("rs_control_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("rs_control_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .mod(TAG_AUGMENT_FEATURE_RS_CONTROL, 1.0F)
                         .build())), getFlag(FLAG_RS_CONTROL_AUGMENT));
 
-        itemsTab(registerItem("side_config_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("side_config_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .mod(TAG_AUGMENT_FEATURE_SIDE_CONFIG, 1.0F)
                         .build())), getFlag(FLAG_SIDE_CONFIG_AUGMENT));
 
-        itemsTab(registerItem("xp_storage_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("xp_storage_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .mod(TAG_AUGMENT_FEATURE_XP_STORAGE, 1.0F)
                         .build())), getFlag(FLAG_XP_STORAGE_AUGMENT));
@@ -261,28 +264,28 @@ public class TCoreItems {
 
     private static void registerStorageAugments() {
 
-        itemsTab(registerItem("rf_coil_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("rf_coil_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_RF)
                         .mod(TAG_AUGMENT_RF_STORAGE, 4.0F)
                         .mod(TAG_AUGMENT_RF_XFER, 4.0F)
                         .build())), getFlag(FLAG_STORAGE_AUGMENTS));
 
-        itemsTab(registerItem("rf_coil_storage_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("rf_coil_storage_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_RF)
                         .mod(TAG_AUGMENT_RF_STORAGE, 6.0F)
                         .mod(TAG_AUGMENT_RF_XFER, 2.0F)
                         .build())), getFlag(FLAG_STORAGE_AUGMENTS));
 
-        itemsTab(registerItem("rf_coil_xfer_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("rf_coil_xfer_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_RF)
                         .mod(TAG_AUGMENT_RF_STORAGE, 2.0F)
                         .mod(TAG_AUGMENT_RF_XFER, 6.0F)
                         .build())), getFlag(FLAG_STORAGE_AUGMENTS));
 
-        itemsTab(registerItem("rf_coil_creative_augment", () -> new AugmentItem(itemProperties().rarity(Rarity.EPIC),
+        itemsTab(registerItem("rf_coil_creative_augment", id -> new AugmentItem(itemProperties(id).rarity(Rarity.EPIC),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_RF)
                         .mod(TAG_AUGMENT_RF_STORAGE, 16.0F)
@@ -290,13 +293,13 @@ public class TCoreItems {
                         .mod(TAG_AUGMENT_RF_CREATIVE, 1.0F)
                         .build())), getFlag(FLAG_CREATIVE_STORAGE_AUGMENTS));
 
-        itemsTab(registerItem("fluid_tank_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("fluid_tank_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_FLUID)
                         .mod(TAG_AUGMENT_FLUID_STORAGE, 4.0F)
                         .build())), getFlag(FLAG_STORAGE_AUGMENTS));
 
-        itemsTab(registerItem("fluid_tank_creative_augment", () -> new AugmentItem(itemProperties().rarity(Rarity.EPIC),
+        itemsTab(registerItem("fluid_tank_creative_augment", id -> new AugmentItem(itemProperties(id).rarity(Rarity.EPIC),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_FLUID)
                         .mod(TAG_AUGMENT_FLUID_STORAGE, 16.0F)
@@ -306,13 +309,13 @@ public class TCoreItems {
 
     private static void registerFilterAugments() {
 
-        itemsTab(registerItem("item_filter_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("item_filter_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_FILTER)
                         .feature(TAG_FILTER_TYPE, FilterRegistry.ITEM_FILTER_TYPE)
                         .build())), getFlag(FLAG_FILTER_AUGMENTS));
 
-        itemsTab(registerItem("fluid_filter_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("fluid_filter_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_FILTER)
                         .feature(TAG_FILTER_TYPE, FilterRegistry.FLUID_FILTER_TYPE)
@@ -327,53 +330,53 @@ public class TCoreItems {
 
     private static void registerMachineAugments() {
 
-        itemsTab(registerItem("machine_speed_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_speed_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_POWER, 1.0F)
                         .mod(TAG_AUGMENT_MACHINE_ENERGY, 1.1F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_efficiency_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_efficiency_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_SPEED, -0.1F)
                         .mod(TAG_AUGMENT_MACHINE_ENERGY, 0.9F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_efficiency_creative_augment", () -> new AugmentItem(itemProperties().rarity(Rarity.EPIC),
+        itemsTab(registerItem("machine_efficiency_creative_augment", id -> new AugmentItem(itemProperties(id).rarity(Rarity.EPIC),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_ENERGY, 0.0F)
                         .build())), getFlag(FLAG_CREATIVE_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_output_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_output_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_SECONDARY, 0.15F)
                         .mod(TAG_AUGMENT_MACHINE_ENERGY, 1.25F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_catalyst_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_catalyst_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_CATALYST, 0.8F)
                         .mod(TAG_AUGMENT_MACHINE_ENERGY, 1.25F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_catalyst_creative_augment", () -> new AugmentItem(itemProperties().rarity(Rarity.EPIC),
+        itemsTab(registerItem("machine_catalyst_creative_augment", id -> new AugmentItem(itemProperties(id).rarity(Rarity.EPIC),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_MACHINE_CATALYST, 0.0F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_cycle_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_cycle_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_FEATURE_CYCLE_PROCESS, 1.0F)
                         .build())), getFlag(FLAG_MACHINE_AUGMENTS));
 
-        itemsTab(registerItem("machine_null_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("machine_null_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_MACHINE)
                         .mod(TAG_AUGMENT_FEATURE_SECONDARY_NULL, 1.0F)
@@ -382,20 +385,20 @@ public class TCoreItems {
 
     private static void registerDynamoAugments() {
 
-        itemsTab(registerItem("dynamo_output_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("dynamo_output_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_DYNAMO)
                         .mod(TAG_AUGMENT_DYNAMO_POWER, 1.0F)
                         .mod(TAG_AUGMENT_DYNAMO_ENERGY, 0.9F)
                         .build())), getFlag(FLAG_DYNAMO_AUGMENTS));
 
-        itemsTab(registerItem("dynamo_fuel_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("dynamo_fuel_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_DYNAMO)
                         .mod(TAG_AUGMENT_DYNAMO_ENERGY, 1.1F)
                         .build())), getFlag(FLAG_DYNAMO_AUGMENTS));
 
-        itemsTab(registerItem("dynamo_throttle_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("dynamo_throttle_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_DYNAMO)
                         .mod(TAG_AUGMENT_DYNAMO_THROTTLE, 1.0F)
@@ -404,7 +407,7 @@ public class TCoreItems {
 
     private static void registerAreaAugments() {
 
-        itemsTab(registerItem("area_radius_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("area_radius_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_AREA_EFFECT)
                         .mod(TAG_AUGMENT_RADIUS, 1.0F)
@@ -413,14 +416,14 @@ public class TCoreItems {
 
     private static void registerPotionAugments() {
 
-        itemsTab(registerItem("potion_amplifier_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("potion_amplifier_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_POTION)
                         .mod(TAG_AUGMENT_POTION_AMPLIFIER, 1.0F)
                         .mod(TAG_AUGMENT_POTION_DURATION, -0.25F)
                         .build())), getFlag(FLAG_POTION_AUGMENTS));
 
-        itemsTab(registerItem("potion_duration_augment", () -> new AugmentItem(itemProperties(),
+        itemsTab(registerItem("potion_duration_augment", id -> new AugmentItem(itemProperties(id),
                 AugmentDataHelper.builder()
                         .type(TAG_AUGMENT_TYPE_POTION)
                         .mod(TAG_AUGMENT_POTION_DURATION, 1.0F)
@@ -430,9 +433,9 @@ public class TCoreItems {
 
     private static void registerSpawnEggs() {
 
-        itemsTab(registerItem("basalz_spawn_egg", () -> new SpawnEggItemCoFH(BASALZ::get, 0x363840, 0x080407, itemProperties())));
-        itemsTab(registerItem("blizz_spawn_egg", () -> new SpawnEggItemCoFH(BLIZZ::get, 0xD8DBE5, 0x91D9FC, itemProperties())));
-        itemsTab(registerItem("blitz_spawn_egg", () -> new SpawnEggItemCoFH(BLITZ::get, 0xC9EEFF, 0xFFD97E, itemProperties())));
+        itemsTab(registerItem("basalz_spawn_egg", id -> new SpawnEggItemCoFH(BASALZ::get, 0x363840, 0x080407, itemProperties(id))));
+        itemsTab(registerItem("blizz_spawn_egg", id -> new SpawnEggItemCoFH(BLIZZ::get, 0xD8DBE5, 0x91D9FC, itemProperties(id))));
+        itemsTab(registerItem("blitz_spawn_egg", id -> new SpawnEggItemCoFH(BLITZ::get, 0xC9EEFF, 0xFFD97E, itemProperties(id))));
     }
     // endregion
 
@@ -440,8 +443,12 @@ public class TCoreItems {
     private static final int DIVING_DURABILITY = 12;
     private static final int HAZMAT_DURABILITY = 6;
 
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BEEKEEPER = ARMOR_MATERIALS.register("beekeeper", () -> ArmorMaterialCoFH.create(new int[]{1, 2, 3, 1}, 16, SoundEvents.ARMOR_EQUIP_ELYTRA, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("beekeeper_fabric"))));
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DIVING = ARMOR_MATERIALS.register("diving", () -> ArmorMaterialCoFH.create(new int[]{1, 4, 5, 2}, 20, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("diving_fabric"))));
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HAZMAT = ARMOR_MATERIALS.register("hazmat", () -> ArmorMaterialCoFH.create(new int[]{1, 4, 5, 2}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(ITEMS.get("hazmat_fabric"))));
+    public static final TagKey<Item> REPAIRS_BEEKEEPER_ARMOR = ItemTags.create(Identifier.fromNamespaceAndPath(ID_THERMAL, "repairs_beekeeper_armor"));
+    public static final TagKey<Item> REPAIRS_DIVING_ARMOR = ItemTags.create(Identifier.fromNamespaceAndPath(ID_THERMAL, "repairs_diving_armor"));
+    public static final TagKey<Item> REPAIRS_HAZMAT_ARMOR = ItemTags.create(Identifier.fromNamespaceAndPath(ID_THERMAL, "repairs_hazmat_armor"));
+
+    public static final ArmorMaterial BEEKEEPER = ArmorMaterialCoFH.create(BEEKEEPER_DURABILITY, new int[]{1, 2, 3, 1}, 16, SoundEvents.ARMOR_EQUIP_ELYTRA, 0.0F, 0.0F, REPAIRS_BEEKEEPER_ARMOR, ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(ID_THERMAL, "beekeeper")));
+    public static final ArmorMaterial DIVING = ArmorMaterialCoFH.create(DIVING_DURABILITY, new int[]{1, 4, 5, 2}, 20, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, REPAIRS_DIVING_ARMOR, ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(ID_THERMAL, "diving")));
+    public static final ArmorMaterial HAZMAT = ArmorMaterialCoFH.create(HAZMAT_DURABILITY, new int[]{1, 4, 5, 2}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, REPAIRS_HAZMAT_ARMOR, ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(ID_THERMAL, "hazmat")));
 
 }

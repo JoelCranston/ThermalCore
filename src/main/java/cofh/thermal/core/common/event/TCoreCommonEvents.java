@@ -6,6 +6,7 @@ import cofh.thermal.core.common.inventory.storage.SatchelMenu;
 import cofh.thermal.core.common.item.DivingArmorItem;
 import cofh.thermal.core.common.item.SatchelItem;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 

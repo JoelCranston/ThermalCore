@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -213,8 +213,8 @@ public class EnergyCellBlockEntity extends StorageCellBlockEntity implements ITi
     // endregion
 
     // region CAPABILITIES
-    protected IEnergyStorage inputEnergyCap = null;
-    protected IEnergyStorage outputEnergyCap = null;
+    protected EnergyHandler inputEnergyCap = null;
+    protected EnergyHandler outputEnergyCap = null;
 
     @Override
     protected void updateHandlers() {
@@ -222,10 +222,12 @@ public class EnergyCellBlockEntity extends StorageCellBlockEntity implements ITi
         energyCap = energyStorage;
         inputEnergyCap = new EnergyHandlerRestrictionWrapper(energyStorage, true, false);
         outputEnergyCap = new EnergyHandlerRestrictionWrapper(energyStorage, false, true);
+
+        invalidateCapabilities();
     }
 
     @Override
-    public IEnergyStorage getEnergyCapability(@Nullable Direction side) {
+    public EnergyHandler getEnergyCapability(@Nullable Direction side) {
 
         if (side == null) {
             return energyCap;

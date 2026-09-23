@@ -18,12 +18,14 @@ import cofh.thermal.lib.util.recipes.internal.SimpleMachineRecipe;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -91,7 +93,7 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
     public void addRecipe(ThermalRecipe recipe) {
 
         if (!recipe.getInputItems().isEmpty()) {
-            for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+            for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
                 for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
                     addRecipe(recipe.getEnergy(), recipe.getXp(), singletonList(recipeInput), singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
                 }
@@ -200,10 +202,10 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(BOTTLER_RECIPE.get());
+        var recipes = recipeMap.byType(BOTTLER_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }
@@ -278,9 +280,9 @@ public class BottlerRecipeManager extends AbstractManager implements IRecipeMana
 
     protected BottlerRecipeNBT convert(int energy, float experience, @Nonnull ItemStack inputItem, @Nonnull FluidStack inputFluid, @Nonnull ItemStack outputItem) {
 
-        convertedRecipes.add(new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "bottler_" + getName(outputItem)),
+        convertedRecipes.add(new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "bottler_" + getName(outputItem))),
                 new BottlerRecipe(energy, experience,
-                        singletonList(Ingredient.of(inputItem)),
+                        singletonList(Ingredient.of(inputItem.getItem())),
                         singletonList(FluidIngredient.of(inputFluid).setAmount(inputFluid.getAmount())),
                         singletonList(outputItem),
                         emptyList(),

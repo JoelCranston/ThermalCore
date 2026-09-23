@@ -1,8 +1,9 @@
 package cofh.thermal.core.client.renderer.entity;
 
 import cofh.thermal.core.common.entity.projectile.BlitzProjectile;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;
@@ -16,13 +17,13 @@ public class BlitzProjectileRenderer extends ElementalProjectileRenderer<BlitzPr
         super(ctx);
     }
 
-    protected RenderType getRenderType(BlitzProjectile entityIn) {
+    protected RenderType getRenderType(ElementalProjectileRenderState state) {
 
-        return RenderType.entityTranslucent(TEXTURE);
+        return RenderTypes.entityTranslucent(TEXTURE);
     }
 
     @Override
-    public Identifier getTextureLocation(BlitzProjectile entity) {
+    public Identifier getTextureLocation(ElementalProjectileRenderState state) {
 
         return TEXTURE;
     }

@@ -7,6 +7,7 @@ import cofh.thermal.lib.util.recipes.internal.BaseMachineRecipe;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.material.Fluid;
@@ -22,6 +23,8 @@ import java.util.stream.IntStream;
 
 import static cofh.core.util.helpers.ItemHelper.itemsEqual;
 import static cofh.lib.util.Constants.BASE_CHANCE_LOCKED;
+import static cofh.thermal.lib.util.managers.AbstractManager.getItems;
+import static cofh.thermal.lib.util.managers.AbstractManager.getResultItem;
 import static cofh.thermal.lib.util.managers.AbstractManager.makeComparable;
 
 public class CrafterRecipe extends BaseMachineRecipe {
@@ -37,13 +40,14 @@ public class CrafterRecipe extends BaseMachineRecipe {
 
         super(energy, 0);
 
-        ingredients = recipe.getIngredients();
+        ingredients = recipe.placementInfo().ingredients();
 
         for (Ingredient ing : ingredients) {
-            for (ItemStack stack : ing.getItems()) {
+            for (ItemStack stack : getItems(ing)) {
                 validItems.add(makeComparable(stack));
-                if (stack.hasCraftingRemainingItem()) {
-                    validItems.add(makeComparable(stack.getCraftingRemainingItem()));
+                ItemStackTemplate remainder = stack.getItem().getCraftingRemainder(stack);
+                if (remainder != null) {
+                    validItems.add(makeComparable(remainder.create()));
                 }
                 FluidUtil.getFluidContained(stack).ifPresent(fluidStack -> {
                     if (!fluidStack.isEmpty()) {
@@ -52,7 +56,7 @@ public class CrafterRecipe extends BaseMachineRecipe {
                 });
             }
         }
-        outputItems.add(recipe.getResultItem(registryAccess));
+        outputItems.add(getResultItem(recipe));
         outputItemChances.add(BASE_CHANCE_LOCKED);
     }
 
@@ -92,7 +96,7 @@ public class CrafterRecipe extends BaseMachineRecipe {
                 if (ing.isEmpty()) {
                     ++found;
                 } else {
-                    for (ItemStack stack : ing.getItems()) {
+                    for (ItemStack stack : getItems(ing)) {
                         FluidStack fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
                         if (FluidHelper.fluidsEqual(storedFluid, fluid) && storedFluidAmount - retFluid >= fluid.getAmount()) {
                             retFluid += fluid.getAmount();
@@ -120,7 +124,7 @@ public class CrafterRecipe extends BaseMachineRecipe {
                 if (ing.isEmpty()) {
                     ++found;
                 } else {
-                    for (ItemStack stack : ing.getItems()) {
+                    for (ItemStack stack : getItems(ing)) {
                         int curFound = found;
                         for (int j = 0; j < retItems.length; ++j) {
                             ItemStack inSlot = inventory.inputSlots().get(j).getItemStack();

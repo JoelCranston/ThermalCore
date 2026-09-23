@@ -30,16 +30,13 @@ import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
 import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidContainerItem {
 
     public FluidCellBlockItem(Block blockIn, Properties builder) {
 
-        super(blockIn, builder);
-
-        setEnchantability(5);
+        super(blockIn, builder.enchantable(5));
     }
 
     @Override
@@ -63,10 +60,10 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
         ItemHelper.mutateCustomData(container, tag -> {
-            if (!tag.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
+            if (!tag.contains(TAG_PROPERTIES)) {
                 return;
             }
-            CompoundTag subTag = tag.getCompound(TAG_PROPERTIES);
+            CompoundTag subTag = tag.getCompoundOrEmpty(TAG_PROPERTIES);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_STORAGE);
             setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_CREATIVE);
@@ -96,7 +93,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
 
     private static CompoundTag tankTag(CompoundTag blockTag) {
 
-        ListTag tanks = blockTag.getList(TAG_TANK_INV, TAG_COMPOUND);
+        ListTag tanks = blockTag.getListOrEmpty(TAG_TANK_INV);
         if (tanks.isEmpty()) {
             CompoundTag tag = new CompoundTag();
             tag.putByte(TAG_TANK, (byte) 0);
@@ -104,14 +101,14 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
             tanks.add(tag);
             blockTag.put(TAG_TANK_INV, tanks);
         }
-        return tanks.getCompound(0);
+        return tanks.getCompoundOrEmpty(0);
     }
 
     @Override
     public FluidStack getFluid(ItemStack container) {
 
         CompoundTag tag = getTankTag(container);
-        return FluidStack.parseOptional(ProxyUtils.registryAccess(), tag);
+        return FluidHelper.parseOptional(ProxyUtils.registryAccess(), tag);
     }
 
     @Override
@@ -123,7 +120,7 @@ public class FluidCellBlockItem extends BlockItemAugmentable implements IFluidCo
         }
         float base = getPropertyWithDefault(container, TAG_AUGMENT_BASE_MOD, 1.0F);
         float mod = getPropertyWithDefault(container, TAG_AUGMENT_FLUID_STORAGE, 1.0F);
-        return getMaxStored(container, Math.round(tag.getInt(TAG_CAPACITY) * mod * base));
+        return getMaxStored(container, Math.round(tag.getIntOr(TAG_CAPACITY, 0) * mod * base));
     }
 
     @Override

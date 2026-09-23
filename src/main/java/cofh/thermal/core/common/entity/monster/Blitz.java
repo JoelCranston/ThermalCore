@@ -9,15 +9,16 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -31,7 +32,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -47,7 +47,7 @@ public class Blitz extends Monster {
 
     private static final EntityDataAccessor<Byte> ANGRY = SynchedEntityData.defineId(Blitz.class, EntityDataSerializers.BYTE);
 
-    public static boolean canSpawn(EntityType<Blitz> entityType, ServerLevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource rand) {
+    public static boolean canSpawn(EntityType<Blitz> entityType, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource rand) {
 
         return getFlag(FLAG_MOB_BLITZ).get() && Monster.checkMonsterSpawnRules(entityType, world, reason, pos, rand);
     }
@@ -130,9 +130,9 @@ public class Blitz extends Monster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 
-        return super.hurt(source, source.is(DamageTypeTagsCoFH.IS_EARTH) ? amount + 3 : amount);
+        return super.hurtServer(level, source, source.is(DamageTypeTagsCoFH.IS_EARTH) ? amount + 3 : amount);
     }
 
     @Override
@@ -142,21 +142,21 @@ public class Blitz extends Monster {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float damageMultiplier, DamageSource source) {
 
         return false;
     }
 
     @Override
-    public ItemStack getPickedResult(HitResult target) {
+    public ItemStack getPickResult() {
 
         return new ItemStack(ITEMS.get("blitz_spawn_egg"));
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
 
-        return source.is(DamageTypeTags.IS_LIGHTNING) || super.isInvulnerableTo(source);
+        return source.is(DamageTypeTags.IS_LIGHTNING) || super.isInvulnerableTo(level, source);
     }
 
     // region ANGER MANAGEMENT
@@ -238,7 +238,7 @@ public class Blitz extends Monster {
                 if (distSqr < 4.0) {
                     if (attackTime <= 0) {
                         attackTime = 20;
-                        blitz.doHurtTarget(target);
+                        blitz.doHurtTarget(getServerLevel(blitz), target);
                     }
                 } else if (distSqr < 576.0) {
                     if (attackTime <= 0) {

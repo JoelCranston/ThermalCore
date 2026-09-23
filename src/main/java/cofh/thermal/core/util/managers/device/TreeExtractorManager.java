@@ -6,7 +6,7 @@ import cofh.thermal.core.util.recipes.device.TreeExtractorMapping;
 import cofh.thermal.lib.util.managers.AbstractManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class TreeExtractorManager extends AbstractManager {
 
     public void addBoost(TreeExtractorBoost boost) {
 
-        for (ItemStack ingredient : boost.getIngredient().getItems()) {
+        for (ItemStack ingredient : getItems(boost.getIngredient())) {
             boostMap.put(makeNBTComparable(ingredient), Pair.of(boost.getCycles(), boost.getOutputMod()));
         }
     }
@@ -72,13 +72,13 @@ public class TreeExtractorManager extends AbstractManager {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        for (var mapping : recipeManager.getAllRecipesFor(TREE_EXTRACTOR_MAPPING.get())) {
+        for (var mapping : recipeMap.byType(TREE_EXTRACTOR_MAPPING.get())) {
             recipes.add(mapping.value());
         }
-        for (var boost : recipeManager.getAllRecipesFor(TREE_EXTRACTOR_BOOST.get())) {
+        for (var boost : recipeMap.byType(TREE_EXTRACTOR_BOOST.get())) {
             addBoost(boost.value());
         }
     }

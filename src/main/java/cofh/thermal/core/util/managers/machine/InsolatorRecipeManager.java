@@ -4,7 +4,7 @@ import cofh.thermal.lib.util.managers.SingleItemRecipeManager;
 import cofh.thermal.lib.util.recipes.IMachineInventory;
 import cofh.thermal.lib.util.recipes.internal.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -75,14 +75,14 @@ public class InsolatorRecipeManager extends SingleItemRecipeManager.Catalyzed {
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(INSOLATOR_RECIPE.get());
+        var recipes = recipeMap.byType(INSOLATOR_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }
-        var catalysts = recipeManager.getAllRecipesFor(INSOLATOR_CATALYST.get());
+        var catalysts = recipeMap.byType(INSOLATOR_CATALYST.get());
         for (var entry : catalysts) {
             addCatalyst(entry.value());
         }

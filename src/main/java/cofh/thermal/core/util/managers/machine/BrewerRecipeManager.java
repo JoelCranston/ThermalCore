@@ -19,7 +19,9 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +31,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -77,7 +79,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
 
     public void addRecipe(ThermalRecipe recipe) {
 
-        for (ItemStack recipeInput : recipe.getInputItems().get(0).getItems()) {
+        for (ItemStack recipeInput : getItems(recipe.getInputItems().get(0))) {
             for (FluidStack fluidInput : recipe.getInputFluids().get(0).getFluids()) {
                 addRecipe(recipe.getEnergy(), recipe.getXp(), Collections.singletonList(recipeInput), Collections.singletonList(fluidInput), recipe.getOutputItems(), recipe.getOutputItemChances(), recipe.getOutputFluids());
             }
@@ -157,10 +159,10 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
 
     // region IManager
     @Override
-    public void refresh(RecipeManager recipeManager) {
+    public void refresh(RecipeMap recipeMap) {
 
         clear();
-        var recipes = recipeManager.getAllRecipesFor(BREWER_RECIPE.get());
+        var recipes = recipeMap.byType(BREWER_RECIPE.get());
         for (var entry : recipes) {
             addRecipe(entry.value());
         }
@@ -199,7 +201,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
                 reagents.add(stack);
             }
         }
-        for (Holder<Potion> inputPotion : BuiltInRegistries.POTION.holders().toList()) {
+        for (Holder<Potion> inputPotion : BuiltInRegistries.POTION.listElements().toList()) {
             ItemStack input = PotionContents.createItemStack(Items.POTION, inputPotion);
             for (ItemStack reagent : reagents) {
                 ItemStack output = brewing.mix(reagent, input);
@@ -226,7 +228,7 @@ public class BrewerRecipeManager extends AbstractManager implements IRecipeManag
 
     protected RecipeHolder<BrewerRecipe> convert(Holder<Potion> inputPotion, Ingredient reagent, Holder<Potion> outputPotion) {
 
-        return new RecipeHolder<>(Identifier.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode() + "_" + outputPotion.hashCode()),
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(ID_THERMAL, "brewer_" + inputPotion.hashCode() + "_" + outputPotion.hashCode())),
                 new BrewerRecipe(defaultEnergy, 0.0F,
                         Collections.singletonList(reagent),
                         Collections.singletonList(FluidIngredient.of(PotionFluid.getPotionAsFluid(defaultPotion, inputPotion))),

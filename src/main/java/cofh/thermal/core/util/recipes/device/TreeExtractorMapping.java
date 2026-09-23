@@ -46,13 +46,13 @@ public class TreeExtractorMapping extends SerializableRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<TreeExtractorMapping> getSerializer() {
 
         return TREE_EXTRACTOR_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<TreeExtractorMapping> getType() {
 
         return TREE_EXTRACTOR_MAPPING.get();
     }
@@ -100,106 +100,92 @@ public class TreeExtractorMapping extends SerializableRecipe {
     // endregion
 
     // region SERIALIZER
-    public static class Serializer implements RecipeSerializer<TreeExtractorMapping> {
+    public static final MapCodec<TreeExtractorMapping> CODEC = JsonMapCodec.INSTANCE
+            .flatXmap(json -> {
+                try {
+                    return DataResult.success(fromJson(json));
+                } catch (JsonParseException e) {
+                    return DataResult.error(e::getMessage);
+                }
+            }, recipe -> DataResult.success(toJson(recipe)));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+    public static final StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> STREAM_CODEC = StreamCodec.of(TreeExtractorMapping::toNetwork, TreeExtractorMapping::fromNetwork);
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, TreeExtractorMapping> streamCodec() {
+    public static TreeExtractorMapping fromJson(JsonObject json) {
 
-            return STREAM_CODEC;
+        BlockIngredient logs = BlockIngredient.EMPTY;
+        BlockIngredient leaves = BlockIngredient.EMPTY;
+        Block sapling = Blocks.AIR;
+        FluidStack fluid = FluidStack.EMPTY;
+        int minLeaves = 3;
+        int maxLeaves = 3;
+        int minHeight = 3;
+        int maxHeight = 3;
+
+        if (json.has(TRUNK)) {
+            logs = getAsBlockIngredient(json, TRUNK);
         }
 
-        @Override
-        public MapCodec<TreeExtractorMapping> codec() {
-
-            return JsonMapCodec.INSTANCE
-                    .flatXmap(json -> {
-                        try {
-                            return DataResult.success(fromJson(json));
-                        } catch (JsonParseException e) {
-                            return DataResult.error(e::getMessage);
-                        }
-                    }, recipe -> DataResult.success(toJson(recipe)));
+        if (json.has(LEAF)) {
+            leaves = getAsBlockIngredient(json, LEAF);
+        } else if (json.has(LEAVES)) {
+            leaves = getAsBlockIngredient(json, LEAVES);
         }
 
-        public TreeExtractorMapping fromJson(JsonObject json) {
-
-            BlockIngredient logs = BlockIngredient.EMPTY;
-            BlockIngredient leaves = BlockIngredient.EMPTY;
-            Block sapling = Blocks.AIR;
-            FluidStack fluid = FluidStack.EMPTY;
-            int minLeaves = 3;
-            int maxLeaves = 3;
-            int minHeight = 3;
-            int maxHeight = 3;
-
-            if (json.has(TRUNK)) {
-                logs = getAsBlockIngredient(json, TRUNK);
-            }
-
-            if (json.has(LEAF)) {
-                leaves = getAsBlockIngredient(json, LEAF);
-            } else if (json.has(LEAVES)) {
-                leaves = getAsBlockIngredient(json, LEAVES);
-            }
-
-            if (json.has(SAPLING)) {
-                sapling = parseBlock(json.get(SAPLING));
-            }
-
-            if (json.has(RESULT)) {
-                fluid = parseFluidStack(json.get(RESULT));
-            } else if (json.has(FLUID)) {
-                fluid = parseFluidStack(json.get(FLUID));
-            }
-
-            if (json.has(MIN_HEIGHT)) {
-                minHeight = json.get(MIN_HEIGHT).getAsInt();
-            }
-            if (json.has(MAX_HEIGHT)) {
-                maxHeight = json.get(MAX_HEIGHT).getAsInt();
-            }
-            if (json.has(MIN_LEAVES)) {
-                minLeaves = json.get(MIN_LEAVES).getAsInt();
-            }
-            if (json.has(MAX_LEAVES)) {
-                maxLeaves = json.get(MAX_LEAVES).getAsInt();
-            }
-            return new TreeExtractorMapping(logs, leaves, sapling, fluid, minHeight, Math.max(maxHeight, minHeight), minLeaves, Math.max(maxLeaves, minLeaves));
+        if (json.has(SAPLING)) {
+            sapling = parseBlock(json.get(SAPLING));
         }
 
-        protected JsonObject toJson(TreeExtractorMapping mapping) {
-
-            return null;
+        if (json.has(RESULT)) {
+            fluid = parseFluidStack(json.get(RESULT));
+        } else if (json.has(FLUID)) {
+            fluid = parseFluidStack(json.get(FLUID));
         }
 
-        public static TreeExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
-
-            BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
-            BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
-            Block sapling = BuiltInRegistries.BLOCK.get(buffer.readIdentifier());
-            FluidStack fluid = FluidHelper.readFluidStack(buffer);
-            int minHeight = buffer.readInt();
-            int maxHeight = buffer.readInt();
-            int minLeaves = buffer.readInt();
-            int maxLeaves = buffer.readInt();
-
-            return new TreeExtractorMapping(logs, leaves, sapling, fluid, minHeight, maxHeight, minLeaves, maxLeaves);
+        if (json.has(MIN_HEIGHT)) {
+            minHeight = json.get(MIN_HEIGHT).getAsInt();
         }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buffer, TreeExtractorMapping recipe) {
-
-            recipe.trunk.toNetwork(buffer);
-            recipe.leaves.toNetwork(buffer);
-            buffer.writeIdentifier(Utils.getRegistryName(recipe.sapling));
-            FluidHelper.writeFluidStack(buffer, recipe.fluid);
-            buffer.writeInt(recipe.minHeight);
-            buffer.writeInt(recipe.maxHeight);
-            buffer.writeInt(recipe.minLeaves);
-            buffer.writeInt(recipe.maxLeaves);
+        if (json.has(MAX_HEIGHT)) {
+            maxHeight = json.get(MAX_HEIGHT).getAsInt();
         }
+        if (json.has(MIN_LEAVES)) {
+            minLeaves = json.get(MIN_LEAVES).getAsInt();
+        }
+        if (json.has(MAX_LEAVES)) {
+            maxLeaves = json.get(MAX_LEAVES).getAsInt();
+        }
+        return new TreeExtractorMapping(logs, leaves, sapling, fluid, minHeight, Math.max(maxHeight, minHeight), minLeaves, Math.max(maxLeaves, minLeaves));
+    }
 
+    protected static JsonObject toJson(TreeExtractorMapping mapping) {
+
+        return null;
+    }
+
+    public static TreeExtractorMapping fromNetwork(RegistryFriendlyByteBuf buffer) {
+
+        BlockIngredient logs = BlockIngredient.fromNetwork(buffer);
+        BlockIngredient leaves = BlockIngredient.fromNetwork(buffer);
+        Block sapling = BuiltInRegistries.BLOCK.getValue(buffer.readIdentifier());
+        FluidStack fluid = FluidHelper.readFluidStack(buffer);
+        int minHeight = buffer.readInt();
+        int maxHeight = buffer.readInt();
+        int minLeaves = buffer.readInt();
+        int maxLeaves = buffer.readInt();
+
+        return new TreeExtractorMapping(logs, leaves, sapling, fluid, minHeight, maxHeight, minLeaves, maxLeaves);
+    }
+
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, TreeExtractorMapping recipe) {
+
+        recipe.trunk.toNetwork(buffer);
+        recipe.leaves.toNetwork(buffer);
+        buffer.writeIdentifier(Utils.getRegistryName(recipe.sapling));
+        FluidHelper.writeFluidStack(buffer, recipe.fluid);
+        buffer.writeInt(recipe.minHeight);
+        buffer.writeInt(recipe.maxHeight);
+        buffer.writeInt(recipe.minLeaves);
+        buffer.writeInt(recipe.maxLeaves);
     }
     // endregion
 }

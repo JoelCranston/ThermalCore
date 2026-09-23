@@ -33,14 +33,14 @@ public class DisenchantmentFuel extends ThermalFuel {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<DisenchantmentFuel> getSerializer() {
 
         return DISENCHANTMENT_FUEL_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<DisenchantmentFuel> getType() {
 
         return DISENCHANTMENT_FUEL.get();
     }

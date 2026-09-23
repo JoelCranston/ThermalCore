@@ -31,14 +31,14 @@ public class ChillerRecipe extends ThermalRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<ChillerRecipe> getSerializer() {
 
         return CHILLER_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<ChillerRecipe> getType() {
 
         return CHILLER_RECIPE.get();
     }

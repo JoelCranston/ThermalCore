@@ -3,6 +3,7 @@ package cofh.thermal.lib.compat.jei;
 import cofh.lib.util.helpers.StringHelper;
 import cofh.thermal.lib.util.recipes.ThermalRecipe;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -10,13 +11,11 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
@@ -67,9 +66,15 @@ public abstract class ThermalRecipeCategory<T extends RecipeHolder<? extends The
     }
 
     @Override
-    public IDrawable getBackground() {
+    public int getWidth() {
 
-        return background;
+        return background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+
+        return background.getHeight();
     }
 
     @Override
@@ -79,7 +84,9 @@ public abstract class ThermalRecipeCategory<T extends RecipeHolder<? extends The
     }
 
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+
+        background.draw(guiGraphics);
 
         int energyY = recipe.value().getXp() > 0 ? ENERGY_Y : ENERGY_Y + 8;
 
@@ -93,9 +100,7 @@ public abstract class ThermalRecipeCategory<T extends RecipeHolder<? extends The
     }
 
     @Override
-    public List<Component> getTooltipStrings(T recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-
-        List<Component> tooltip = new ArrayList<>();
+    public void getTooltip(ITooltipBuilder tooltip, T recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
 
         int energyY = recipe.value().getXp() > 0 ? ENERGY_Y : ENERGY_Y + 8;
 
@@ -105,7 +110,6 @@ public abstract class ThermalRecipeCategory<T extends RecipeHolder<? extends The
         if (recipe.value().getXp() > 0 && mouseX > XP_X && mouseX < XP_X + xp.getWidth() - 1 && mouseY > XP_Y && mouseY < XP_Y + xp.getHeight() - 1) {
             tooltip.add(Component.literal("" + recipe.value().getXp()).append(" " + localize("info.cofh.unit_xp")));
         }
-        return tooltip;
     }
     // endregion
 }

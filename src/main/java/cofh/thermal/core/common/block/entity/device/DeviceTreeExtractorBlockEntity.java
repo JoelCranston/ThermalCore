@@ -21,7 +21,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -197,9 +197,9 @@ public class DeviceTreeExtractorBlockEntity extends DeviceBlockEntity implements
 
     // region NETWORK
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ValueInput valueInput) {
 
-        super.onDataPacket(net, pkt, registries);
+        super.onDataPacket(net, valueInput);
 
         if (level != null) {
             level.getModelDataManager().requestRefresh(this);
@@ -270,10 +270,10 @@ public class DeviceTreeExtractorBlockEntity extends DeviceBlockEntity implements
 
         super.loadAdditional(nbt, registries);
 
-        boostCycles = nbt.getInt(TAG_BOOST_CYCLES);
-        boostMax = nbt.getInt(TAG_BOOST_MAX);
-        boostMult = nbt.getFloat(TAG_BOOST_MULT);
-        process = nbt.getInt(TAG_PROCESS);
+        boostCycles = nbt.getIntOr(TAG_BOOST_CYCLES, 0);
+        boostMax = nbt.getIntOr(TAG_BOOST_MAX, 0);
+        boostMult = nbt.getFloatOr(TAG_BOOST_MULT, 0.0F);
+        process = nbt.getIntOr(TAG_PROCESS, 0);
     }
 
     @Override
@@ -340,13 +340,13 @@ public class DeviceTreeExtractorBlockEntity extends DeviceBlockEntity implements
     protected TreeInfo detectTreeDirection(TreeExtractorMapping[] recipes, BlockPos base, Direction growth) {
 
         // Traverse tree to find logs
-        int min = level.getMinBuildHeight();
-        int max = level.getMaxBuildHeight();
+        int min = level.getMinY();
+        int max = level.getMaxY();
         List<BlockPos> logs = new ArrayList<>();
         logs.add(base.immutable());
         BlockPos.MutableBlockPos cursor = base.mutable();
         scan:
-        while (cursor.getY() < max && cursor.getY() > min) {
+        while (cursor.getY() <= max && cursor.getY() > min) {
             cursor.move(growth);
             for (Vec3i offset : TRUNK_SEARCH) {
                 cursor.move(offset);

@@ -30,14 +30,14 @@ public class PulverizerRecycleRecipe extends PulverizerRecipe {
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<PulverizerRecycleRecipe> getSerializer() {
 
         return PULVERIZER_RECYCLE_RECIPE_SERIALIZER.get();
     }
 
     @Nonnull
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<PulverizerRecycleRecipe> getType() {
 
         return PULVERIZER_RECYCLE_RECIPE.get();
     }

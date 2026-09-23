@@ -1,6 +1,6 @@
 package cofh.thermal.lib.util.managers;
 
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 public interface IManager {
 
@@ -8,6 +8,6 @@ public interface IManager {
 
     }
 
-    void refresh(RecipeManager recipeManager);
+    void refresh(RecipeMap recipeMap);
 
 }
