@@ -10,9 +10,11 @@ import cofh.thermal.lib.util.references.ThermalTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.*;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
@@ -440,18 +442,25 @@ public class TCoreTagsProvider {
             tag(ItemTagsCoFH.SECURABLE).add(ITEMS.get(ID_SATCHEL));
 
             // Referenced by compat recipes; empty unless another mod provides the material.
+            tag(ItemTagsCoFH.DUSTS_BRONZE);
+            tag(ItemTagsCoFH.DUSTS_CONSTANTAN);
+            tag(ItemTagsCoFH.DUSTS_ELECTRUM);
+            tag(ItemTagsCoFH.DUSTS_INVAR);
             tag(ItemTagsCoFH.DUSTS_LEAD);
             tag(ItemTagsCoFH.DUSTS_SILVER);
             tag(ItemTagsCoFH.DUSTS_TIN);
             tag(ItemTagsCoFH.GEARS_BRONZE);
             tag(ItemTagsCoFH.GEARS_CONSTANTAN);
             tag(ItemTagsCoFH.GEARS_ELECTRUM);
+            tag(ItemTagsCoFH.GEARS_INVAR);
             tag(ItemTagsCoFH.GEARS_LEAD);
             tag(ItemTagsCoFH.GEARS_NICKEL);
             tag(ItemTagsCoFH.GEARS_SILVER);
             tag(ItemTagsCoFH.GEARS_TIN);
             tag(ItemTagsCoFH.GEMS_RUBY);
             tag(ItemTagsCoFH.GEMS_SAPPHIRE);
+            tag(ItemTagsCoFH.INGOTS_BRONZE);
+            tag(ItemTagsCoFH.INGOTS_CONSTANTAN);
             tag(ItemTagsCoFH.INGOTS_ELECTRUM);
             tag(ItemTagsCoFH.INGOTS_INVAR);
             tag(ItemTagsCoFH.INGOTS_LEAD);
@@ -459,11 +468,19 @@ public class TCoreTagsProvider {
             tag(ItemTagsCoFH.INGOTS_TIN);
             tag(ItemTagsCoFH.NUGGETS_LEAD);
             tag(ItemTagsCoFH.NUGGETS_TIN);
+            tag(ItemTagsCoFH.ORES_APATITE);
+            tag(ItemTagsCoFH.ORES_CINNABAR);
+            tag(ItemTagsCoFH.ORES_NITER);
+            tag(ItemTagsCoFH.ORES_RUBY);
+            tag(ItemTagsCoFH.ORES_SAPPHIRE);
+            tag(ItemTagsCoFH.ORES_SULFUR);
+            tag(ItemTagsCoFH.PLATES_BRONZE);
             tag(ItemTagsCoFH.PLATES_CONSTANTAN);
             tag(ItemTagsCoFH.PLATES_ELECTRUM);
             tag(ItemTagsCoFH.PLATES_INVAR);
             tag(ItemTagsCoFH.PLATES_LEAD);
             tag(ItemTagsCoFH.PLATES_SILVER);
+            tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "storage_blocks/quartz")));
 
             tag(TCoreItems.REPAIRS_BEEKEEPER_ARMOR).add(ITEMS.get("beekeeper_fabric"));
             tag(TCoreItems.REPAIRS_DIVING_ARMOR).add(ITEMS.get("diving_fabric"));

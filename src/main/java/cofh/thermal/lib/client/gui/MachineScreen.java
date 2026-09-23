@@ -20,6 +20,12 @@ public class MachineScreen<T extends ContainerMenuCoFH> extends AugmentableTileS
         this.tile = tile;
     }
 
+    public MachineScreen(T container, Inventory inv, Reconfigurable4WayBlockEntity tile, Component titleIn, int imageWidth, int imageHeight) {
+
+        super(container, inv, tile, titleIn, imageWidth, imageHeight);
+        this.tile = tile;
+    }
+
     @Override
     public void init() {
 

@@ -20,7 +20,7 @@ public class MachineCatalystSerializer<T extends ThermalCatalyst> {
 
         this.factory = factory;
         this.codec = RecordCodecBuilder.mapCodec(builder -> builder.group(
-                        Ingredient.CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
+                        INGREDIENT_CODEC.fieldOf(INGREDIENT).forGetter(recipe -> recipe.ingredient),
                         Codec.FLOAT.optionalFieldOf(PRIMARY_MOD, 1.0F).forGetter(recipe -> recipe.primaryMod),
                         Codec.FLOAT.optionalFieldOf(SECONDARY_MOD, 1.0F).forGetter(recipe -> recipe.secondaryMod),
                         Codec.FLOAT.optionalFieldOf(ENERGY_MOD, 1.0F).forGetter(recipe -> recipe.energyMod),

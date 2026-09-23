@@ -30,6 +30,12 @@ public class AugmentableTileScreen<T extends ContainerMenuCoFH> extends Containe
         this.tile = tile;
     }
 
+    public AugmentableTileScreen(T container, Inventory inv, AugmentableBlockEntity tile, Component titleIn, int imageWidth, int imageHeight) {
+
+        super(container, inv, titleIn, imageWidth, imageHeight);
+        this.tile = tile;
+    }
+
     @Override
     public void init() {
 
